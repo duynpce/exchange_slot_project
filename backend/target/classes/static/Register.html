@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Form</title>
+    <link rel="icon" href="image/Favicon.png">
+    <link rel="stylesheet" href = "style.css">
+</head>
+<body>
+    <div class="Register">
+            <h1 id = "Form"> Register Form </h1>
+            <form>
+                <label class = "label" for = "username"> Username </label>
+                <input type = "text" id = "username" required>
+                <br>
+                <label class = "label" for = "password"> Password </label>
+                <input type = "password" id = "password" required>
+                <br>
+                <label class = "label" for = "email"> Email </label>
+                <input type = "email" placeholder="abc123@gmail.com" id = "email" required>
+                <br>
+                <div class = "bday_rows">
+                    <div class = "bday_cols">
+                        <label class = "label" for="bday"> Birthday</label>
+                        <input type="date" id = "bday" required>
+                    </div>
+
+                    <div class = "bday_cols">
+                        <label class = "gender" for = "male"> Male: </label>
+                        <input type = "radio" id = "male" value = "male" name = "gender">
+                        <label class = "gender" for = "female"> Female: </label>
+                        <input type = "radio" id = "female" value="female" name = "gender">
+                    </div>
+                </div>
+                <div class = "phone">
+                    <label class = "label" for ="tel"> Phone Number</label>
+                    <input type = "tel" id = "tel" placeholder="+84123456789" pattern="^\+84[0-9]{9}$" required>
+                </div>
+                <div class = "reset">
+                    <label class = "label" for = "major"> Major </label>
+                    <select>
+                        <option value = "SE"> Software Engineering</option>
+                        <option value = "GD"> Graphic Designer</option>
+                        <option value = "AI"> Artificial Intelliengence</option>
+                        <option value = "FIN"> Financial</option>
+                        <option value = "EN"> English Studying</option>
+                    </select>
+                    <input type= "reset" id = "reset">
+                </div>
+                <div id = "submit">
+                     <input type = "submit">
+                </div>
+            </form>
+        </div>
+</body>
+</html>

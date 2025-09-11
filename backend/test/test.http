@@ -1,0 +1,3 @@
+###
+GET http://localhost:8080/account/resetPassword?accountId=2&newPassword=password
+Accept: application/json

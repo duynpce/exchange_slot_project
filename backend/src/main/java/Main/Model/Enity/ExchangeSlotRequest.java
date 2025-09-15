@@ -24,6 +24,15 @@ public class ExchangeSlotRequest {
     @Column(name = "subject_code", length = 5)
     private String subjectCode;
 
+    public ExchangeSlotRequest(){}
+
+    public ExchangeSlotRequest(String studentCode, String slot, String classCode, String subjectCode){
+        this.studentCode = studentCode;
+        this.slot = slot;
+        this.classCode = classCode;
+        this.subjectCode = subjectCode;
+    }
+
 
     public int getID() {
         return ID;

@@ -1,9 +1,10 @@
 package Main.Service;
 
-import Main.DTO.ExchangeClassRequestDTO;
+import Main.DTO.ResponseDTO;
 import Main.Model.Enity.ExchangeClassRequest;
 import Main.Repository.ExchangeClassRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -22,22 +23,20 @@ public class ExchangeClassRequestService {/// temporary
         return exchangeClassRequestRepository.findByClassCode(classCode);
     }
 
+    public boolean add(ExchangeClassRequest exchangeClassRequest) {
 
-    public ExchangeClassRequestDTO Add(ExchangeClassRequest exchangeClassRequest){
-        ExchangeClassRequestDTO exchangeClassRequestDTO = new ExchangeClassRequestDTO();
-        exchangeClassRequestDTO.setExchangeSuccessfully(exchangeClassRequestRepository.existsByStudentCode(exchangeClassRequest.getStudentCode()));
+       try{
+           exchangeClassRequestRepository.save(exchangeClassRequest);/// save return entity when success, throw exception if failed
+       } catch (DataIntegrityViolationException e) {
+           return  false;
+       }
 
-        if(exchangeClassRequestDTO.getExchangeSuccessfully()){
-
-            exchangeClassRequestDTO.setError("existed request");
-            exchangeClassRequestDTO.setMessage("if you want to create new request, please delete the old one");
-        }
-        else {
-            exchangeClassRequestDTO.setError("no error");
-            exchangeClassRequestDTO.setMessage("request added successfully");
-        }
-
-        return exchangeClassRequestDTO;
+        return  true;
     }
+
+    public boolean delete (ExchangeClassRequest exchangeClassRequest){
+        return exchangeClassRequestRepository.deleteByStudentCode(exchangeClassRequest.getStudentCode()) == 1;
+    }
+
 
 }

@@ -20,6 +20,13 @@ public class ExchangeClassRequest {
     @Column(name = "class_code", length = 15)
     private String classCode;
 
+    public ExchangeClassRequest(){}
+
+    public ExchangeClassRequest(String studentCode, String slot, String classCode){
+        this.studentCode = studentCode;
+        this.slot = slot;
+        this.classCode = classCode;
+    }
 
     public int getID() {
         return ID;

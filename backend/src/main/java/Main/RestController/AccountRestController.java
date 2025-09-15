@@ -24,17 +24,30 @@ public class AccountRestController {
 
 
 
+//    @GetMapping("/login")
+//    public LoginDTO login(Account account) {
+//
+//
+//        boolean loginSuccess = accountService.login(account);
+//
+//        if(loginSuccess){
+//            return new LoginDTO(utility.getRefreshToken(account.getUserName()), utility.getAccessToken(account.getUserName()),"login success");
+//        }
+//
+//        return  new LoginDTO("no refresh token", "no access token", "login failed");
+//    }
+
     @GetMapping("/login")
-    public LoginDTO login(Account account) {
+    public String login(Account account) {
 
 
         boolean loginSuccess = accountService.login(account);
 
         if(loginSuccess){
-            return new LoginDTO(utility.getRefreshToken(account.getUserName()), utility.getAccessToken(account.getUserName()),"login success");
+            return "login success";
         }
 
-        return  new LoginDTO("no refresh token", "no access token", "login failed");
+        return  "login failed";
     }
 
     @GetMapping("/register")

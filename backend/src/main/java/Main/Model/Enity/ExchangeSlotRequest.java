@@ -9,7 +9,7 @@ public class ExchangeSlotRequest {
 
     @Id
     @Column(name ="exchange_slot_request_id")
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+        @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int ID;
 
     @Column(name = "student_code", length = 10)
@@ -24,14 +24,6 @@ public class ExchangeSlotRequest {
     @Column(name = "subject_code", length = 10)
     private String subjectCode;
 
-    public ExchangeSlotRequest(){}
-
-    public ExchangeSlotRequest(String studentCode, String slot, String classCode, String subjectCode){
-        this.studentCode = studentCode;
-        this.slot = slot;
-        this.classCode = classCode;
-        this.subjectCode = subjectCode;
-    }
 
 
     public int getID() {

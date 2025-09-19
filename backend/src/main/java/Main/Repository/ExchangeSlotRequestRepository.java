@@ -1,11 +1,13 @@
 package Main.Repository;
 
-import Main.Model.Enity.ExchangeClassRequest;
 import Main.Model.Enity.ExchangeSlotRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ExchangeSlotRequestRepository  extends JpaRepository<ExchangeSlotRequest,Integer> {
+public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlotRequest,Integer> {
     List<ExchangeSlotRequest> findByClassCode(String classCode);
-}//co loi
+    List<ExchangeSlotRequest> findBySubjectCode(String subjectCode);
+    List<ExchangeSlotRequest> findByClassCodeAndSubjectCode(String classCode,String subjectCode);
+    boolean existsByStudentCodeAndSubjectCode(String studentCode, String subjectCode);
+}

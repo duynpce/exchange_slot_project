@@ -24,30 +24,17 @@ public class AccountRestController {
 
 
 
-//    @GetMapping("/login")
-//    public LoginDTO login(Account account) {
-//
-//
-//        boolean loginSuccess = accountService.login(account);
-//
-//        if(loginSuccess){
-//            return new LoginDTO(utility.getRefreshToken(account.getUserName()), utility.getAccessToken(account.getUserName()),"login success");
-//        }
-//
-//        return  new LoginDTO("no refresh token", "no access token", "login failed");
-//    }
-
     @GetMapping("/login")
-    public String login(Account account) {
+    public LoginDTO login(Account account) {
 
 
         boolean loginSuccess = accountService.login(account);
 
         if(loginSuccess){
-            return "login success";
+            return new LoginDTO(utility.getRefreshToken(account.getUserName()), utility.getAccessToken(account.getUserName()),"login success");
         }
 
-        return  "login failed";
+        return  new LoginDTO("no refresh token", "no access token", "login failed");
     }
 
     @GetMapping("/register")
@@ -60,8 +47,7 @@ public class AccountRestController {
     }
 
     @GetMapping("/resetPassword")
-    public String resetPassword(Account account, String newPassword){/// account ID is temp
-
+    public String resetPassword(Account account , String newPassword){/// account ID is temp
         boolean loginSuccess = accountService.resetPassword(account,newPassword);
 
         if(loginSuccess){
@@ -69,7 +55,6 @@ public class AccountRestController {
         }
 
         return "reset failed";
-
     }
 
 

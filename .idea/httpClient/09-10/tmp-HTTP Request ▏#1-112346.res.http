@@ -1,0 +1,15 @@
+// Status: 400, time: 11ms, size: 112 B
+### HTTP Request ▏#1
+GET http://localhost:8080/account/resetPassword?accountID=2&newPassword=newpassword HTTP/1.1
+connection: close
+content-type: application/json
+date: Wed, 10 Sep 2025 04:23:46 GMT
+transfer-encoding: chunked
+
+{
+  "timestamp": "2025-09-10T04:23:46.626+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/account/resetPassword"
+}
+>> D:\java_file\springboot\project\Exchange_Student_Project\.idea\httpClient\09-10\HTTP Request ▏#1\2025-09-10T112346.json

@@ -1,0 +1,16 @@
+// Status: 200, time: 19ms, size: 67 B
+### HTTP Request ▏#1
+GET http://192.168.56.1:8080/exchangeClass?classCode=se2151 HTTP/1.1
+content-type: application/json
+date: Thu, 18 Sep 2025 02:47:11 GMT
+transfer-encoding: chunked
+
+[
+  {
+    "studentCode": "si9387",
+    "slot": "1,2",
+    "classCode": "se2151",
+    "id": 1
+  }
+]
+>> D:\java_file\springboot\project\real_project\Exchange_Student_Project\.idea\httpClient\09-18\HTTP Request ▏#1\2025-09-18T094711.json

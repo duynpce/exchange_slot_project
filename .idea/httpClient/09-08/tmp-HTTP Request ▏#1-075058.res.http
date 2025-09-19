@@ -1,0 +1,17 @@
+// Status: 404, time: 239ms, size: 94 B
+### HTTP Request ▏#1
+GET http://localhost:8080/login?userName=duynp2006&password=password HTTP/1.1
+content-type: application/json
+date: Mon, 08 Sep 2025 00:50:58 GMT
+transfer-encoding: chunked
+vary: Origin
+vary: Access-Control-Request-Method
+vary: Access-Control-Request-Headers
+
+{
+  "timestamp": "2025-09-08T00:50:58.242+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "path": "/login"
+}
+>> D:\java_file\springboot\project\Exchange_Student_Project\.idea\httpClient\09-08\HTTP Request ▏#1\2025-09-08T075058.json

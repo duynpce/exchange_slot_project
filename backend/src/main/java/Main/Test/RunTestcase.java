@@ -27,9 +27,9 @@ public class RunTestcase {
     @Autowired
     AccountService accountService;
 
-    private final String accountFile = "D:\\GithubRepository\\exchange_slot_project\\backend\\src\\test\\testFolder\\TestAccount.txt";
-    private final String classRequestFile = "D:\\GithubRepository\\exchange_slot_project\\backend\\src\\test\\testFolder\\TestClassRequest.txt";
-    private final String slotRequestFile = "D:\\GithubRepository\\exchange_slot_project\\backend\\src\\test\\testFolder\\TestSlotRequest.txt";
+    private final String accountFile = "D:\\GithubRepository\\exchange_slot_project\\backend\\src\\test\\java\\TestAccount.txt";
+    private final String classRequestFile = "D:\\GithubRepository\\exchange_slot_project\\backend\\src\\test\\java\\TestClassRequest.txt";
+    private final String slotRequestFile = "D:\\GithubRepository\\exchange_slot_project\\backend\\src\\test\\java\\TestSlotRequest.txt";
 
     public String getAccountFile() {
         return accountFile;

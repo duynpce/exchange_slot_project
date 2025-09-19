@@ -1,0 +1,9 @@
+// Status: 200, time: 213ms, size: 2 B
+### HTTP Request ▏#1
+GET http://localhost:8080/Request/find?classCode=SE2002 HTTP/1.1
+content-type: application/json
+date: Thu, 04 Sep 2025 17:24:02 GMT
+transfer-encoding: chunked
+
+[]
+>> D:\java_file\springboot\project\Exchange_Student_Project\.idea\httpClient\09-05\HTTP Request ▏#1\2025-09-05T002402.json

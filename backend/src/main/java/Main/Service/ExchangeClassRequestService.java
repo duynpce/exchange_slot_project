@@ -4,7 +4,6 @@ import Main.DTO.ResponseDTO;
 import Main.Model.Enity.ExchangeClassRequest;
 import Main.Repository.ExchangeClassRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -23,20 +22,19 @@ public class ExchangeClassRequestService {/// temporary
         return exchangeClassRequestRepository.findByClassCode(classCode);
     }
 
-    public boolean add(ExchangeClassRequest exchangeClassRequest) {
 
-       try{
-           exchangeClassRequestRepository.save(exchangeClassRequest);/// save return entity when success, throw exception if failed
-       } catch (DataIntegrityViolationException e) {
-           return  false;
-       }
+    public boolean add(ExchangeClassRequest exchangeClassRequest){
+        boolean alreadyExisted= exchangeClassRequestRepository.existsByStudentCode(exchangeClassRequest.getStudentCode());
+        if(alreadyExisted) return false; /// allow only one exchange Class request by student's code
 
-        return  true;
+        return exchangeClassRequestRepository.save(exchangeClassRequest).getID() != 0;///save return enity
     }
 
-    public boolean delete (ExchangeClassRequest exchangeClassRequest){
-        return exchangeClassRequestRepository.deleteByStudentCode(exchangeClassRequest.getStudentCode()) == 1;
-    }
+    public boolean delete(ExchangeClassRequest exchangeClassRequest){
+        ResponseDTO ResponseDTO = new ResponseDTO();
+        exchangeClassRequestRepository.delete(exchangeClassRequest);
 
+        return true; /// if delete failed --> throw exception --> global handler handle
+    }
 
 }

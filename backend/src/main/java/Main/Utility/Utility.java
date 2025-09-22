@@ -10,9 +10,9 @@ import java.util.Date;
 @Component
 public class Utility {
 
-        @Value("${jws.secret.login}")
-        private String secretKey;
-
+//        @Value("${jws.secret.login}")
+        private final String secretKey = "w4Jf9sK2q1Vx8hYp3Zt6uN0rL5bQ2cF7gHjK9LmN0A=";
+/// chua xong o day
     private String generateRefreshToken(String userName){
         long expiration = 60 *60 * 1000 * 24 * 7; ///7 day
 

@@ -5,6 +5,7 @@ public class ResponseDTO<T>{
     private String error;
     private String message;
     private T data;
+    private int httpStatus;
 
     public ResponseDTO() {
     }
@@ -46,5 +47,13 @@ public class ResponseDTO<T>{
 
     public T getData() {
         return data;
+    }
+
+    public int getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(int httpStatus) {
+        this.httpStatus = httpStatus;
     }
 }

@@ -25,6 +25,15 @@ public class ExchangeSlotRequest {
     private String subjectCode;
 
 
+    public ExchangeSlotRequest(){}
+
+    public ExchangeSlotRequest(String studentCode, String slot, String classCode, String subjectCode){
+        this.studentCode = studentCode;
+        this.slot = slot;
+        this.classCode = classCode;
+        this.subjectCode = subjectCode;
+    }
+
 
     public int getID() {
         return ID;

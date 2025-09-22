@@ -20,9 +20,10 @@ public class AccountService {
     AccountRepository accountRepository;
 
     public boolean register(Account account){
-        Optional<Account> checkUserName = accountRepository.findByUserName(account.getUserName());
-        Optional<Account> checkPhoneNumber = accountRepository.findByPhoneNumber(account.getPhoneNumber());
+        Optional<Account> checkUserName = accountRepository.findByUserName(account.getUserName());///error
+        Optional<Account> checkPhoneNumber = accountRepository.findByPhoneNumber(account.getPhoneNumber());//error
         if(checkUserName.isPresent() || checkPhoneNumber.isPresent()) return false;
+
 
         accountRepository.save(account);
         return true;
@@ -37,8 +38,9 @@ public class AccountService {
         return  false;
     }
 
-    public boolean resetPassword(Account account , String newPassword){
-        return accountRepository.resetPassword(account.getUserName(),newPassword) == 1;
+    public boolean resetPassword(Account accountWithNewPassWord){
+        return accountRepository.
+                resetPassword(accountWithNewPassWord.getUserName(),accountWithNewPassWord.getPassword()) == 1;
     }
 
 

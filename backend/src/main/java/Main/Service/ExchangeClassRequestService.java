@@ -30,9 +30,8 @@ public class ExchangeClassRequestService {/// temporary
         return exchangeClassRequestRepository.save(exchangeClassRequest).getID() != 0;///save return enity
     }
 
-    public boolean delete(ExchangeClassRequest exchangeClassRequest){
-        ResponseDTO ResponseDTO = new ResponseDTO();
-        exchangeClassRequestRepository.delete(exchangeClassRequest);
+    public boolean deleteById(int id){
+        exchangeClassRequestRepository.deleteById(id);
 
         return true; /// if delete failed --> throw exception --> global handler handle
     }

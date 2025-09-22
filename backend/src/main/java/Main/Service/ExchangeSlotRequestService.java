@@ -28,6 +28,10 @@ public class ExchangeSlotRequestService {
         return exchangeSlotRequestRepository.findByClassCodeAndSubjectCode(classCode,subjectCode);
     }
 
+    public List<ExchangeSlotRequest> findBySlot(String slot){
+        return exchangeSlotRequestRepository.findBySlot(slot);
+    }
+
     public boolean add(ExchangeSlotRequest exchangeSlotRequest){
         boolean alreadyExisted=
                 exchangeSlotRequestRepository.
@@ -40,8 +44,8 @@ public class ExchangeSlotRequestService {
 
     }
 
-    public boolean delete(ExchangeSlotRequest exchangeSlotRequest){
-        exchangeSlotRequestRepository.delete(exchangeSlotRequest);
+    public boolean deleteById(int id){
+        exchangeSlotRequestRepository.deleteById(id);
 
         return true;
     }

@@ -7,23 +7,23 @@ import jakarta.persistence.*;
 @Entity
 public class Account {
     @Id
-    @Column(name = "account_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // generate value , identity --> auto increment
-    private int accountID;
+    private int id;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private  String userName;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password",nullable = false)
     private  String password;
 
-    @Column(name = "user_phone_number")
+    @Column(name = "user_phone_number",nullable = false)
     private  String phoneNumber;
 
-    @Column(name = "account_name")
+    @Column(name = "account_name",nullable = false)
     private String accountName;
 
-    @Column(name = "student_code")
+    @Column(name = "student_code",nullable = false)
     private String studentCode;
 
     public Account(){
@@ -37,12 +37,12 @@ public class Account {
         this.studentCode = studentCode;
     }
 
-    public void setAccountID(int accountID) {
-        this.accountID = accountID;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getAccountID() {
-        return accountID;
+    public int getAccountId() {
+        return id;
     }
 
     public void setUserName(String userName) {
@@ -50,12 +50,10 @@ public class Account {
     }
 
     public String getUserName() {
-
         return userName;
     }
 
     public  void setPassword(String password){
-
         this.password = password;
     }
 

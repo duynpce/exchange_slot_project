@@ -17,7 +17,6 @@
         Optional <Account> findByPhoneNumber(String phoneNumber);
         Optional <Account> findByUserName(String userName);
         Optional <Account> findByAccountName(String accountName);
-
         @Modifying
         @Transactional
         @Query(value = "update accounts a set a.user_password = :newPassword where a.user_name = :user_name",nativeQuery = true)

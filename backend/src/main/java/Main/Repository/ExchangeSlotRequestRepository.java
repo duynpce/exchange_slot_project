@@ -9,5 +9,6 @@ public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlo
     List<ExchangeSlotRequest> findByClassCode(String classCode);
     List<ExchangeSlotRequest> findBySubjectCode(String subjectCode);
     List<ExchangeSlotRequest> findByClassCodeAndSubjectCode(String classCode,String subjectCode);
+    List<ExchangeSlotRequest> findBySlot(String slot);
     boolean existsByStudentCodeAndSubjectCode(String studentCode, String subjectCode);
 }

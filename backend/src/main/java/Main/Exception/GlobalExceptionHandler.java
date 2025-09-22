@@ -26,8 +26,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("violated constraint or existed data");
+        response.setMessage("the data could be null, violate the constraint of database or already existed");
+        response.setError("CONFLICT");
+        response.setHttpStatus(HttpStatus.CONFLICT.value());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
@@ -35,9 +36,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<ResponseDTO<String>> handleEmptyResultDataAccessException(EmptyResultDataAccessException e){
         ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("not found data");
+        response.setMessage("no such existed data found");
+        response.setError("NOT_FOUND");
+        response.setHttpStatus(HttpStatus.NOT_FOUND.value());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
@@ -46,8 +49,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("can't commit data");
+        response.setMessage("can't commit data to the database please check out the data");
+        response.setError("CONFLICT");
+        response.setHttpStatus(HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
@@ -57,8 +61,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("Wrong method called");
+        response.setMessage("no such method existed in this endpoint");
+        response.setError("METHOD_NOT_ALLOWED");
+        response.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
@@ -67,8 +72,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("unsupported file's type");
+        response.setMessage("do not support this type of file, support json only");
+        response.setError("UNSUPPORTED MEDIA TYPE");
+        response.setHttpStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(response);
     }
 
@@ -77,8 +83,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("can't return the type as client return");
+        response.setMessage("can't return the file's type of the client expected");
+        response.setError("NOT ACCEPTABLE");
+        response.setHttpStatus(HttpStatus.NOT_ACCEPTABLE.value());
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
     }
 
@@ -88,8 +95,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError(" having a Null pointer");
+        response.setMessage("null pointer from the required data");
+        response.setError("BAD REQUEST");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -98,8 +106,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("wrong parameter");
+        response.setMessage("wrong parameter to call a method");
+        response.setError("BAD REQUEST");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -108,8 +117,9 @@ public class GlobalExceptionHandler {
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError("lack of Path variable (variable from the url)");
+        response.setMessage("need a value from the url to run the method properly");
+        response.setError("BAD REQUEST");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

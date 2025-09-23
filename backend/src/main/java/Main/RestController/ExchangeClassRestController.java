@@ -2,6 +2,7 @@ package Main.RestController;
 
 
 import Main.DTO.ResponseDTO;
+import Main.Exception.ExchangeClassRequestException;
 import Main.Model.Enity.ExchangeClassRequest;
 import Main.Service.ExchangeClassRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/exchangeClass")
+@RequestMapping("/exchange-class")
 public class ExchangeClassRestController {
 
     @Autowired
@@ -22,43 +23,32 @@ public class ExchangeClassRestController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeClassRequest request) {
-        boolean success = exchangeClassRequestService.add(request);
+        boolean addSuccess = exchangeClassRequestService.add(request) ; // throw exception if failed
 
-        if (success) {
-            ResponseDTO<String> response = new ResponseDTO<>(true,"request added successfully",  "no error", "no data");
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        if(!addSuccess) {
+            throw new ExchangeClassRequestException("can not add for some internal errors",HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-            ResponseDTO<String> response = new ResponseDTO<>( false,"failed to add request", "already existed", "no data");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-
+        ResponseDTO<String> response = new ResponseDTO<>(true, "request added successfully", "no error", "no data");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable int id) {
-        boolean DeleteSuccess = exchangeClassRequestService.deleteById(id);
+        exchangeClassRequestService.deleteById(id); //throw exception if fail
 
-        if (DeleteSuccess) {
-            ResponseDTO<String> response = new ResponseDTO<>(true,"no error", "request deleted successfully"  , "no data");
-            return ResponseEntity.noContent().build();
-        }
-
-            ResponseDTO<String> response = new ResponseDTO<>(false, "not found", "delete failed" , "no data");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{classCode}")
     public ResponseEntity<ResponseDTO<List<ExchangeClassRequest>>> findByClassCode(@PathVariable String classCode) {
         List<ExchangeClassRequest> data = exchangeClassRequestService.findByClassCode(classCode);
 
-        if (data.isEmpty()) {
-            ResponseDTO<List<ExchangeClassRequest>> response = new ResponseDTO<>( false, "no data found","no request with that class code : " + classCode, null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
 
-        ResponseDTO<List<ExchangeClassRequest>> response = new ResponseDTO<>(true, "no error", "request found successfully", data);
-        return ResponseEntity.ok(response); // 200 OK
+        ResponseDTO<List<ExchangeClassRequest>> response =
+                new ResponseDTO<>(true, "request found successfully", "no error", data);
+
+        return ResponseEntity.ok(response);
     }
 
 

@@ -2,6 +2,7 @@ package Main.RestController;
 
 import Main.DTO.LoginDTO;
 import Main.DTO.ResponseDTO;
+import Main.Exception.AccountException;
 import Main.Model.Enity.Account;
 import Main.Repository.AccountRepository;
 import Main.Service.AccountService;
@@ -31,6 +32,16 @@ public class AccountRestController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<String>> register(@RequestBody Account account){/// sai
+        boolean emptyUserName = account.getUserName() == null;
+        boolean emptyPassword = account.getPassword() == null;
+        boolean emptyPhoneNumber = account.getPhoneNumber() == null;
+        boolean emptyStudentCode = account.getStudentCode() == null;
+        boolean emptyAccountName = account.getAccountName() == null;
+
+        if(emptyUserName || emptyPassword || emptyPhoneNumber || emptyStudentCode || emptyAccountName){
+            throw new AccountException("there's a null value assign to a not null field",HttpStatus.BAD_REQUEST);
+        }
+
         boolean registerSuccess = accountService.register(account);
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         responseDTO.setProcessSuccess(registerSuccess);
@@ -39,11 +50,8 @@ public class AccountRestController {
             responseDTO.setError("no error");
             responseDTO.setMessage("registered successfully");
             responseDTO.setHttpStatus(HttpStatus.CREATED.value());
-        }else{
-            responseDTO.setError("existed account or phone number or account name ");
-            responseDTO.setMessage("registered failed");
-            responseDTO.setHttpStatus(HttpStatus.CONFLICT.value());
         }
+
         responseDTO.setData("no data");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -52,6 +60,12 @@ public class AccountRestController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginDTO> login(@RequestBody Account account) {
+        boolean emptyUserName = account.getUserName() == null;
+        boolean emptyPassword = account.getPassword() == null;
+
+        if(emptyUserName || emptyPassword){
+            throw new AccountException("null password or username",HttpStatus.BAD_REQUEST);
+        }
 
         LoginDTO loginDTO;
         boolean loginSuccess = accountService.login(account);
@@ -68,6 +82,10 @@ public class AccountRestController {
     @PatchMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPassword(@RequestBody Account accountWithNewPassword){
 
+        boolean isValidPassword = utility.validatePassword(accountWithNewPassword.getPassword());
+
+        if(!isValidPassword) {throw new AccountException("invalid password", HttpStatus.BAD_REQUEST); }
+
         boolean resetPasswordSuccess = accountService.resetPassword(accountWithNewPassword);
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         responseDTO.setProcessSuccess(resetPasswordSuccess);
@@ -80,10 +98,7 @@ public class AccountRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
         }
 
-        responseDTO.setError("no existed account");
-        responseDTO.setMessage("reset failed");
-        responseDTO.setHttpStatus(HttpStatus.NOT_FOUND.value());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
+        throw new AccountException("no existed account", HttpStatus.NOT_FOUND);
 
     }
 

@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82b54f30-0462-4cfb-85bd-3a4a8e4a7f87" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/AccountException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/ExchangeClassRequestException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/ExchangeSlotRequestException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/AccountRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/AccountRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Utility/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Utility/Utility.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

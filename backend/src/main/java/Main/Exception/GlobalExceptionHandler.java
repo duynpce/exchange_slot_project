@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 
     /// DB exception
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ResponseDTO<String>> handleDataIntegrityViolation(DataIntegrityViolationException e){
+    public ResponseEntity<ResponseDTO<String>> handleDataIntegrityViolation(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<ResponseDTO<String>> handleEmptyResultDataAccessException(EmptyResultDataAccessException e){
+    public ResponseEntity<ResponseDTO<String>> handleEmptyResultDataAccessException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(TransactionSystemException.class)
-    public ResponseEntity<ResponseDTO<String>> handleTransactionSystemException(TransactionSystemException e){
+    public ResponseEntity<ResponseDTO<String>> handleTransactionSystemException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
 
     /// http exception
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ResponseDTO<String>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+    public ResponseEntity<ResponseDTO<String>> handleHttpRequestMethodNotSupportedException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ResponseDTO<String>> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e){
+    public ResponseEntity<ResponseDTO<String>> handleHttpMediaTypeNotSupportedException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ResponseEntity<ResponseDTO<String>> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e){
+    public ResponseEntity<ResponseDTO<String>> handleHttpMediaTypeNotAcceptableException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
 
     //general exception
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ResponseDTO<String>> handleNullPointerException(NullPointerException e){
+    public ResponseEntity<ResponseDTO<String>> handleNullPointerException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ResponseDTO<String>> handleIllegalArgumentException(IllegalArgumentException e){
+    public ResponseEntity<ResponseDTO<String>> handleIllegalArgumentException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -113,7 +113,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
-    public ResponseEntity<ResponseDTO<String>> handleMissingPathVariableException(MissingPathVariableException e){
+    public ResponseEntity<ResponseDTO<String>> handleMissingPathVariableException(){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
@@ -123,6 +123,38 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    /// custom exception
+    @ExceptionHandler(AccountException.class)
+    public ResponseEntity<ResponseDTO<String>>handleAccountException(AccountException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage(e.getMessage());
+        response.setError(e.getHttpStatus().getReasonPhrase());
+        response.setHttpStatus(e.getHttpStatus().value());
+        return ResponseEntity.status(e.getHttpStatus()).body(response);
+    }
 
+    @ExceptionHandler(ExchangeClassRequestException.class)
+    public ResponseEntity<ResponseDTO<String>>handleExchangeClassRequestException(ExchangeClassRequestException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage(e.getMessage());
+        response.setError(e.getHttpStatus().getReasonPhrase());
+        response.setHttpStatus(e.getHttpStatus().value());
+        return ResponseEntity.status(e.getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(ExchangeSlotRequestException.class)
+    public ResponseEntity<ResponseDTO<String>>handleExchangeSlotRequestException(ExchangeSlotRequestException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage(e.getMessage());
+        response.setError(e.getHttpStatus().getReasonPhrase());
+        response.setHttpStatus(e.getHttpStatus().value());
+        return ResponseEntity.status(e.getHttpStatus()).body(response);
+    }
 
 }

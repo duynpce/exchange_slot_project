@@ -11,13 +11,13 @@ public class ExchangeClassRequest {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int ID;
 
-    @Column(name = "student_code", length = 10)
+    @Column(name = "student_code", length = 10, nullable = false)
     private String studentCode;
 
     @Column(name = "current_slot", length = 3)
     private String slot;
 
-    @Column(name = "class_code", length = 15)
+    @Column(name = "class_code", length = 15, nullable = false)
     private String classCode;
 
     public ExchangeClassRequest(){}

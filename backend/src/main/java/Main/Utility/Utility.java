@@ -6,9 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 @Component
 public class Utility {
+
+    private static final String PASSWORD_PATTERN =
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$";
+    private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+
 
 //        @Value("${jws.secret.login}")
         private final String secretKey = "w4Jf9sK2q1Vx8hYp3Zt6uN0rL5bQ2cF7gHjK9LmN0A=";
@@ -43,6 +49,10 @@ public class Utility {
         return generateAccessToken(userName);
     }
 
+    public boolean validatePassword(String password){
+        if (password == null) return false;
+        return pattern.matcher(password).matches();
+    }
 
 
 }

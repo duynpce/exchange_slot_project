@@ -1,84 +1,97 @@
-body{
-    font-family: 'Times New Roman', Times, serif;
+body {
+  font-family: "Times New Roman", Times, serif;
 }
 
-#Welcome{
-    background-image: url(../../Image/Welcome.jpg);
-    color:white;
-    padding: 10px 20px;
-    text-align: center;
-    font-size: large;
-    background-size: cover;
-    background-position: center;
+#Welcome {
+  background-image: url(../../Image/Welcome.jpg);
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: large;
+  background-size: cover;
+  background-position: center;
 }
 
-#searching_row{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 10px 10px;
-    flex-wrap: wrap;
+#searching_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 10px;
+  flex-wrap: wrap;
 }
 
-#searching_input{
-    display: flex;
-    border:2px solid black;
-    border-radius: 10px;
-    padding: 5px 10px;
-    align-items: center;
+#searching_input {
+  display: flex;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 5px 10px;
+  align-items: center;
 }
 
-.searching_col{
-    display: flex;
-    align-items: center;
+.searching_col {
+  display: flex;
+  align-items: center;
 }
 
-#Add{
-    width:100px;
-    height:75px;
-    border-radius: 10px;
-    font-size: 25px;
-    margin: 0px 0px 0px 10px;
-    cursor:pointer;
-    color: white;
-    background-image: linear-gradient(to right, rgb(0, 247, 255), rgb(1, 31, 255));
-}
-
-#Search{
-  width:100px;
-  height:75px;
+#Add {
+  width: 100px;
+  height: 75px;
   border-radius: 10px;
   font-size: 25px;
   margin: 0px 0px 0px 10px;
-  cursor:pointer;
+  cursor: pointer;
   color: white;
-  background-image: linear-gradient(to right, rgb(0, 247, 255), rgb(1, 31, 255));
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 247, 255),
+    rgb(1, 31, 255)
+  );
+}
+
+#Search {
+  width: 100px;
+  height: 75px;
+  border-radius: 10px;
+  font-size: 25px;
+  margin: 0px 0px 0px 10px;
+  cursor: pointer;
+  color: white;
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 247, 255),
+    rgb(1, 31, 255)
+  );
   margin-left: 30px;
 }
 
-#Current,#Exchange{
-    width: 80px;
-    height: 20px;
-    margin: 0px 20px 0px 5px;
-    border-radius: 7px;
-    padding: 7px;
+#Current,
+#Exchange {
+  width: 80px;
+  height: 20px;
+  margin: 0px 20px 0px 5px;
+  border-radius: 7px;
+  padding: 7px;
 }
 
-.searching_col label{
-    display: inline-block;
-    margin: 10px;
-    font-size: 20px;
+.searching_col label {
+  display: inline-block;
+  margin: 10px;
+  font-size: 20px;
 }
 
-#searching_for{
-    margin-right: 20px;
+#searching_for {
+  margin-right: 20px;
 }
 
-#member{
+#member {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-image: linear-gradient(to right,  rgb(0, 247, 255), rgb(0, 76, 255));
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 247, 255),
+    rgb(0, 76, 255)
+  );
   margin-bottom: 5px;
   border: 3px solid rgb(0, 174, 255);
   position: sticky;
@@ -86,24 +99,25 @@ body{
   position: relative;
 }
 
-.member_col{
+.member_col {
   display: flex;
   align-items: center;
   margin: 0px 10px 0px 10px;
-  font-size:20px;
+  font-size: 20px;
   position: relative;
 }
 
-#member_welcome,#member_name{
+#member_welcome,
+#member_name {
   font-weight: bold;
 }
 
-#member_welcome{
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+#member_welcome {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin-left: 10px;
 }
 
-.addStudent{
+.addStudent {
   position: relative;
   background: white;
   border-radius: 10px;
@@ -111,169 +125,171 @@ body{
   transform: scale(1.2);
   transform-origin: center;
   top: 150px;
-  left:250px;
-  height:400px;
-  width:1000px;
+  left: 250px;
+  height: 400px;
+  width: 1000px;
 }
 
-.addStudent .closeMenu{
+.addStudent .closeMenu {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size:25px;
-  cursor:pointer;
-  color:red;
+  font-size: 25px;
+  cursor: pointer;
+  color: red;
 }
 
-.addStudent h2{
+.addStudent h2 {
   display: flex;
   justify-content: center;
 }
 
-.addStudent h3{
+.addStudent h3 {
   display: block;
-  margin-left:20px;
+  margin-left: 20px;
 }
 
-.Menu_row{
+.Menu_row {
   display: flex;
   align-items: center;
 }
 
-.Menu_col{
+.Menu_col {
   display: flex;
   align-items: center;
 }
 
-.Menu_col label{
+.Menu_col label {
   width: 100px;
   margin: 10px 0px 10px 30px;
 }
 
-.Menu_col input[type="text"]{
+.Menu_col input[type="text"] {
   border-radius: 5px;
-  height:25px;
+  height: 25px;
   padding-left: 10px;
 }
 
-#username,#Menu_current_class{
+#username,
+#Menu_current_class {
   margin-right: 150px;
 }
 
-#email, #zalo_number{
+#email,
+#zalo_number {
   border-radius: 5px;
-  height:25px;
+  height: 25px;
   padding-left: 10px;
 }
 
-input[type=email]{
-  margin-right:150px;
+input[type="email"] {
+  margin-right: 150px;
 }
 
-#Facebook{
+#Facebook {
   border-radius: 5px;
-  height:25px;
-  width:627px;
+  height: 25px;
+  width: 627px;
 }
 
-#FacebookLabel{
+#FacebookLabel {
   margin: 10px 10px 10px 30px;
 }
 
-input[type="checkbox"]{
-  margin-left:20px;
+input[type="checkbox"] {
+  margin-left: 20px;
   margin-right: 10px;
   width: 30px;
   height: 30px;
   accent-color: aqua;
 }
 
-.addStudent #Menu_submit{
-  width:85%;
+.addStudent #Menu_submit {
+  width: 85%;
   justify-content: center;
   margin: 10px 10px 10px 50px;
-  font-size:20px;
+  font-size: 20px;
   padding: 15px;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.25 ease-in-out;
 }
 
-.addStudent #Menu_submit:hover{
+.addStudent #Menu_submit:hover {
   transform: scale(1.05);
 }
 
-.addBackground{
+.addBackground {
   display: none;
-  top:0px;
-  left:0px;
+  top: 0px;
+  left: 0px;
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.user_menu{
+.user_menu {
   position: relative;
   display: inline-block;
 }
 
-#member .avatar{
+#member .avatar {
   display: inline-block;
   position: absolute;
   top: -12px;
-  right:35px;
+  right: 35px;
   font-size: 25px;
   cursor: pointer;
 }
 
-.dropdown{
+.dropdown {
   display: none;
   position: absolute;
   right: 0px;
   background-color: rgb(0, 76, 255);
   padding: 10px;
   border-radius: 7px;
-  top:25px;
+  top: 25px;
   border: 3px solid aqua;
 }
 
-.dropdown a{
+.dropdown a {
   display: block;
-  padding:7px;
-  color:white;
+  padding: 7px;
+  color: white;
   text-decoration: none;
 }
 
-.dropdown button{
-  width:100%;
-  height:30px;
-  font-size:15px;
+.dropdown button {
+  width: 100%;
+  height: 30px;
+  font-size: 15px;
   border-radius: 4px;
-  margin-top:4px;
+  margin-top: 4px;
   background-image: linear-gradient(to right, aquamarine, aqua);
   cursor: pointer;
 }
 
-.dropdown a:hover{
+.dropdown a:hover {
   background-color: rgb(30, 0, 255);
 }
 
 @media (max-width: 775px) {
   #searching_row {
-    flex-direction: column;   /* Đổi thành cột dọc */
-    align-items: stretch;     /* Căn full chiều ngang */
+    flex-direction: column; /* Đổi thành cột dọc */
+    align-items: stretch; /* Căn full chiều ngang */
   }
 
   #searching_row input[type="text"],
   #Add {
-    width: 100%;      
+    width: 100%;
     box-sizing: border-box;
     margin-top: 10px;
-    margin-left:0px;
+    margin-left: 0px;
   }
 
-  #Search{
+  #Search {
     width: 100%;
     box-sizing: border-box;
     margin-top: 10px;
@@ -281,78 +297,131 @@ input[type="checkbox"]{
     margin-bottom: 10px;
   }
   .searching_col {
-    flex-direction: column;   /* Label nằm trên input */
-    align-items: flex-start;  /* căn trái label */
+    flex-direction: column; /* Label nằm trên input */
+    align-items: flex-start; /* căn trái label */
     width: 100%;
   }
 
-  #searching_row input[type="text"]{
-    width:100px;
-    height:30px;
+  #searching_row input[type="text"] {
+    width: 100px;
+    height: 30px;
   }
 
-  #searching_row label{
-    margin:0px;
+  #searching_row label {
+    margin: 0px;
     font-size: 17px;
   }
-  
-  #searching_row h2{
+
+  #searching_row h2 {
     font-size: 22px;
   }
 
-  .Menu_row{
+  .Menu_row {
     flex-direction: row;
     align-items: stretch;
   }
 
-  .Menu_col{
+  .Menu_col {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .Menu_col label{
+  .Menu_col label {
     margin: 10px 0px 10px 45px;
   }
-  
+
   #username,
-  #Menu_current_class{
+  #Menu_current_class {
     margin-right: 100px;
     margin-left: 20px;
     box-sizing: border-box;
-    height:30px;
+    height: 30px;
   }
 
-  input[type = "tel"],input[type="email"]{
+  input[type="tel"],
+  input[type="email"] {
     margin-left: 20px;
     margin-bottom: 10px;
-    width:150px;
+    width: 150px;
   }
 
-  input[type="email"]{
+  input[type="email"] {
     margin-right: 65px;
   }
 
-  .Menu_col input[type="text"]{
-    width:150px;
+  .Menu_col input[type="text"] {
+    width: 150px;
   }
 
-  .addStudent #Menu_submit{
-    width:90%;
+  .addStudent #Menu_submit {
+    width: 90%;
     margin: 10px 10px 10px 25px;
   }
 
-  .addStudent{
-    height:525px;
+  .addStudent {
+    height: 525px;
     transform: scale(1);
-    top:100px;
-    left:10px;
-    width:490px;
+    top: 100px;
+    left: 10px;
+    width: 490px;
   }
 
-  #Facebook{
+  #Facebook {
     width: 298px;
     margin-top: 5px;
   }
 }
 
+#results_container {
+  margin: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
 
+#results_table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+#results_table th,
+#results_table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#results_table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+#pagination_controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+#pagination_controls button {
+  padding: 8px 16px;
+  margin: 0 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+}
+
+#pagination_controls button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+#page_info {
+  font-size: 18px;
+  font-weight: bold;
+}

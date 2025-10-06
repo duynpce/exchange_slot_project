@@ -11,7 +11,7 @@ Account object
         studentCode: String
     }
 
-POST /account/register
+POST /register
 
 description : tạo tài khoản mới
 URL Params: None
@@ -26,8 +26,7 @@ Data Params:
             studentCode: String,
         }
 
-Headers:
-    Content-Type: application/json
+Headers: Content-Type: application/json
 
 success response :
 
@@ -59,7 +58,7 @@ error response:
     }
 
 
-POST /account/login
+POST /login
 
 description : đăng nhập
 
@@ -113,7 +112,21 @@ error response :
     }
 
 
-PATCH /account/reset_password
+JWT login
+Headers:Content-Type: application/json
+
+URL Param: None
+
+Data Param (in header)
+{
+"Authorization" : "Bearer " + token(string)
+}
+
+success response : incomplete
+
+error responseL incomplete
+
+PATCH /reset_password
 
 description : đổi mật khẩu 
 
@@ -200,7 +213,8 @@ Error Response:
 Trường hợp studentCode đã tồn tại:
 
 HTTP Code: 409 CONFLICT
-    Content:
+    
+Content:
 
     {
         "processSuccess": false,
@@ -244,7 +258,6 @@ Success Response:
 Error Response:
 
     Khi không tìm thấy id:
-    
     HTTP Code: 404 NOT_FOUND
     Content:
     {
@@ -254,12 +267,13 @@ Error Response:
     "data": "no data"
     }
 
-GET /exchangeClass/{classCode}
+GET /exchangeClass/{classCode}/page/{page}
 
 Description: Lấy danh sách yêu cầu đổi lớp theo classCode.
 URL Params:
 
     classCode (string): mã lớp cần lấy
+    page: là trang số mấy
 
 Headers:
 
@@ -289,6 +303,245 @@ Error Response:
         "data": null
     }
 
+POST /exchangeSlot
+
+Description:
+Thêm một yêu cầu đổi ca học mới.
+
+URL Params:
+NONE
+
+Data Param:
+
+    {
+        "studentCode": "string",
+        "classCode": "string",
+        "slot": "string"
+    }
 
 
+Headers:
+Content-Type: application/json
+
+ Success Response:
+
+    HTTP Code: 201 CREATED 
+    Content:
+    {
+        "processSuccess": true,
+        "message": "slot request added successfully",
+        "error": "no error",
+        "data": "no data"
+    }
+
+Error Responses:
+
+Khi studentCode đã tồn tại yêu cầu đổi slot:
+    
+    HTTP Code: 409 CONFLICT
+    
+    Content:
+    {
+        "processSuccess": false,
+        "message": "already existed slot request for this student code",
+        "error": "CONFLICT",
+        "data": "no data"
+    }
+
+
+Khi có lỗi hệ thống (lỗi DB, exception nội bộ):
+
+    HTTP Code: 500 INTERNAL_SERVER_ERROR 
+    Content:
+    
+    {
+    "processSuccess": false,
+    "message": "can not add slot request due to internal errors",
+    "error": "INTERNAL_SERVER_ERROR",
+    "data": "no data"
+    }
+
+DELETE /exchangeSlot/{id}
+
+Description: Xóa một yêu cầu đổi slot theo id.
+
+URL Params:
+
+    id : int.
+
+Headers: Content-Type: application/json
+
+ Success Response:
+
+    HTTP Code: 204 NO CONTENT
+    
+    Content: (no body)
+
+ Error Response:
+
+Khi không tìm thấy slot request theo id:
+
+    HTTP Code: 404 NOT_FOUND
+    
+    Content: 
+    {
+        "processSuccess": false,
+        "message": "no slot request with id: {id}",
+        "error": "NOT_FOUND",
+        "data": "no data"
+    }
+
+GET /exchangeSlot/class/{classCode}/page/{page}
+
+Description: Lấy danh sách slot request theo mã lớp (classCode) và phân trang.
+
+URL Params:
+
+    classCode : string.
+    
+    page : int(>=0).
+
+Headers: Content-Type: application/json
+
+Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "slot request(s) found successfully",
+        "error": "no error",
+        "data": [
+        {
+        "id": 1,
+        "studentCode": "S123456",
+        "classCode": "CS101",
+        "slot": "3-4",
+        "createdAt": "2025-10-04T08:30:00Z"
+        },
+        ...
+        ]
+    }
+
+Error Response:
+
+Khi không có slot request nào cho classCode:
+    
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no slot request with class code: {classCode}",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+GET /exchangeSlot/subject/{subjectCode}/page/{page}
+
+Description:
+Lấy danh sách slot request theo mã môn học (subjectCode) và phân trang.
+
+URL Params:
+
+    subjectCode : String.
+    page : int.
+
+Headers: Content-Type: application/json
+
+Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "slot request(s) found successfully",
+        "error": "no error",
+        "data": [ ... ]
+    }
+
+Error Response:
+
+Khi không có slot request nào cho subjectCode:
+    
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no slot request with subject code: {subjectCode}",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+GET /exchangeSlot/slot/{slot}/page/{page}
+
+Description:
+Lấy danh sách slot request theo ca học (slot) và phân trang.
+
+URL Params:
+
+    slot :  String("1,2" or "3,4").
+    page : int(>=0).
+
+Headers:Content-Type: application/json
+
+Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "slot request(s) found successfully",
+        "error": "no error",
+        "data": [ ... ]
+    }
+
+Error Response:
+
+Khi không có slot request nào cho slot:
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no slot request with slot: {slot}",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+GET /exchangeSlot/subject_code&class_code?subjectCode=...&classCode=...&page=...
+
+Description:
+Lấy danh sách slot request theo subjectCode và classCode, có phân trang.
+
+Query(Data) Params:
+    
+    subjectCode (string)
+    classCode (string)
+    page (int)
+
+Headers: Content-Type: application/json
+
+Success Response:
+    
+    HTTP Code: 200 OK 
+    Content:
+    {
+        "processSuccess": true,
+        "message": "slot request(s) found successfully",
+        "error": "no error",
+        "data": [ ... ]
+    }
+
+Error Response:
+
+Không có dữ liệu phù hợp:
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no slot request with subject code: {subjectCode} and class code: {classCode}",
+        "error": "NOT_FOUND",
+        "data": null
+    }
 

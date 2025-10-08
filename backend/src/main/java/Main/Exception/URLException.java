@@ -2,13 +2,13 @@ package Main.Exception;
 
 import org.springframework.http.HttpStatus;
 
-public class ExchangeSlotRequestException extends RuntimeException{
+public class URLException extends RuntimeException{
     private HttpStatus httpStatus;
 
 
-    public ExchangeSlotRequestException(){}
+    public URLException(){}
 
-    public ExchangeSlotRequestException(String message, HttpStatus httpStatus){
+    public URLException(String message, HttpStatus httpStatus){
         super(message);
         this.httpStatus = httpStatus;
     }
@@ -25,6 +25,4 @@ public class ExchangeSlotRequestException extends RuntimeException{
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
-
-
 }

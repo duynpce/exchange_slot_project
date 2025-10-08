@@ -1,46 +1,58 @@
 package Main.RestController;
 
-import Main.DTO.LoginDTO;
+import Main.Config.UserDetailConfig;
+import Main.DTO.LoginResponseDTO;
+import Main.DTO.LoginRequestDTO;
+import Main.DTO.ResetPasswordDTO;
 import Main.DTO.ResponseDTO;
+import Main.Enum.Role;
 import Main.Exception.AccountException;
 import Main.Model.Enity.Account;
 import Main.Repository.AccountRepository;
 import Main.Service.AccountService;
+import Main.Utility.jwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import Main.Utility.Utility;
+import Main.Utility.util;
 
-import java.util.Optional;
+import java.util.Random;
+
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/")
 public class AccountRestController {
     @Autowired
     AccountService accountService;
 
     @Autowired
-   Utility utility;
+    jwtUtil jwtUtility;
+
+    @Autowired
+    util utility;
 
     @Autowired
     AccountRepository accountRepository;
 
-
-
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<String>> register(@RequestBody Account account){/// sai
-        boolean emptyUserName = account.getUserName() == null;
+    public ResponseEntity<ResponseDTO<String>> register(@RequestBody Account account){
+        boolean emptyUserName = account.getUsername() == null;
         boolean emptyPassword = account.getPassword() == null;
         boolean emptyPhoneNumber = account.getPhoneNumber() == null;
         boolean emptyStudentCode = account.getStudentCode() == null;
         boolean emptyAccountName = account.getAccountName() == null;
-
-        if(emptyUserName || emptyPassword || emptyPhoneNumber || emptyStudentCode || emptyAccountName){
+        boolean emptyRole = account.getRole() == null;
+        ///use validated here
+        if(emptyUserName || emptyPassword || emptyPhoneNumber || emptyStudentCode || emptyAccountName || emptyRole){
             throw new AccountException("there's a null value assign to a not null field",HttpStatus.BAD_REQUEST);
         }
+
+        boolean isValidPassword = utility.validatePassword(account.getPassword());
+
+        if(!isValidPassword) {throw new AccountException("invalid password", HttpStatus.BAD_REQUEST); }
 
         boolean registerSuccess = accountService.register(account);
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
@@ -59,34 +71,46 @@ public class AccountRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> login(@RequestBody Account account) {
-        boolean emptyUserName = account.getUserName() == null;
-        boolean emptyPassword = account.getPassword() == null;
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
+
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+
+        boolean emptyUserName = username == null;
+        boolean emptyPassword = password == null;
 
         if(emptyUserName || emptyPassword){
             throw new AccountException("null password or username",HttpStatus.BAD_REQUEST);
         }
 
-        LoginDTO loginDTO;
-        boolean loginSuccess = accountService.login(account);
+
+        LoginResponseDTO loginResponseDTO ;
+        Account foundAccount = accountService.findByUserName(username);
+
+        boolean loginSuccess = foundAccount != null;
 
         if(loginSuccess){
-            loginDTO =  new LoginDTO(utility.getRefreshToken(account.getUserName()), utility.getAccessToken(account.getUserName()),"login success");
-            return  ResponseEntity.status(HttpStatus.OK).body(loginDTO);
+            UserDetailConfig user = new UserDetailConfig(foundAccount);
+            String refreshToken = jwtUtility.getRefreshToken(user);
+            String accessToken = jwtUtility.getAccessToken(user);
+            loginResponseDTO =  new LoginResponseDTO(refreshToken,accessToken ,"login success");
+            return  ResponseEntity.status(HttpStatus.OK).body(loginResponseDTO);
         }
 
-        loginDTO = new LoginDTO("no refresh token", "no access token", "login failed, please check user name or password");
-        return  ResponseEntity.status(HttpStatus.OK).body(loginDTO);
+        loginResponseDTO = new LoginResponseDTO("no refresh token", "no access token", "login failed, please check user name or password");
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponseDTO);
     }
 
     @PatchMapping("/reset_password")
-    public ResponseEntity<ResponseDTO<String>> resetPassword(@RequestBody Account accountWithNewPassword){
+    public ResponseEntity<ResponseDTO<String>> resetPassword
+            (@RequestBody ResetPasswordDTO resetPasswordDTO){
 
-        boolean isValidPassword = utility.validatePassword(accountWithNewPassword.getPassword());
+        String newPassword = resetPasswordDTO.getNewPassword();
+        boolean isValidPassword = utility.validatePassword(newPassword);
 
         if(!isValidPassword) {throw new AccountException("invalid password", HttpStatus.BAD_REQUEST); }
 
-        boolean resetPasswordSuccess = accountService.resetPassword(accountWithNewPassword);
+        boolean resetPasswordSuccess = accountService.resetPassword(resetPasswordDTO);
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         responseDTO.setProcessSuccess(resetPasswordSuccess);
         responseDTO.setData("no data");
@@ -102,10 +126,16 @@ public class AccountRestController {
 
     }
 
-    @GetMapping("/test/{userName}")
-    public Account test(@PathVariable String userName){
-        Optional<Account> account = accountRepository.findByUserName(userName);;
-        return account.orElse(null);
+    @GetMapping ("/test/{username}/{password}") /// temporary for testing
+    public void test(@PathVariable String username, @PathVariable String password){
+        Random random = new Random();
+        Account account = new Account(
+                username, password ,
+                String.valueOf(random.nextInt(100000)),
+                String.valueOf(random.nextInt(100000)),
+                String.valueOf(random.nextInt(100000)),
+                Role.USER);
+        accountService.register(account);
     }
 
 }

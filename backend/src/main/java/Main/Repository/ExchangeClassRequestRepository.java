@@ -1,5 +1,6 @@
 package Main.Repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
@@ -10,8 +11,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface ExchangeClassRequestRepository extends JpaRepository<ExchangeClassRequest,Integer> {
-    List<ExchangeClassRequest> findByClassCode( String classCode);
-    public boolean existsByStudentCode(String studentCode);
+    List<ExchangeClassRequest> findByMajorClass_ClassCode(String classCode, Pageable page);
+    List<ExchangeClassRequest> findByMajorClass_Slot(String slot, Pageable page);
+
+    public boolean existsByAccount_StudentCode(String studentCode);
 
 
 }

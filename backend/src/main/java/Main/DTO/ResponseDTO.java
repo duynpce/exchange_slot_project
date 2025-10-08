@@ -45,7 +45,7 @@ public class ResponseDTO<T>{
         this.data = data;
     }
 
-    public T getData() {
+     public T getData() {
         return data;
     }
 

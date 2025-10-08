@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -15,6 +16,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.security.NoSuchAlgorithmException;
 
 
 @ControllerAdvice
@@ -89,7 +92,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
     }
 
-    //general exception
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ResponseDTO<String>> handleHttpMessageNotReadableException() {
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage("cannot read the data from client");
+        response.setError("NOT ACCEPTABLE");
+        response.setHttpStatus(HttpStatus.NOT_ACCEPTABLE.value());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+    }
+
+        //general exception
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ResponseDTO<String>> handleNullPointerException(){
         ResponseDTO<String> response = new ResponseDTO<>();
@@ -155,6 +169,29 @@ public class GlobalExceptionHandler {
         response.setError(e.getHttpStatus().getReasonPhrase());
         response.setHttpStatus(e.getHttpStatus().value());
         return ResponseEntity.status(e.getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(URLException.class)
+    public ResponseEntity<ResponseDTO<String>>handleURLException(URLException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage(e.getMessage());
+        response.setError(e.getHttpStatus().getReasonPhrase());
+        response.setHttpStatus(e.getHttpStatus().value());
+        return ResponseEntity.status(e.getHttpStatus()).body(response);
+    }
+
+    //config exception
+    @ExceptionHandler(NoSuchAlgorithmException.class)
+    public ResponseEntity<ResponseDTO<String>>handleNoSuchAlgorithmException(NoSuchAlgorithmException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage("no algorithms to hash");
+        response.setError("NoSuchAlgorithms");
+        response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(response);
     }
 
 }

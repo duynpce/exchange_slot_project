@@ -1,59 +1,38 @@
 package Main.Model.Enity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "exchange_class_request",catalog = "global_db" )
 public class ExchangeClassRequest {
 
     @Id
-    @Column(name ="exchange_class_request_id")
+    @Column(name = "id")
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private int ID;
+    private int id;
 
-    @Column(name = "student_code", length = 10, nullable = false)
-    private String studentCode;
+    @ManyToOne
+    @JoinColumn(name = "student_code", referencedColumnName = "student_code")
+    private Account account;
 
-    @Column(name = "current_slot", length = 3)
-    private String slot;
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "class_code", referencedColumnName = "class_code"),
+    })
+    private MajorClass majorClass;
 
-    @Column(name = "class_code", length = 15, nullable = false)
-    private String classCode;
+    @Column(name = "current_slot")
+    private String currentSlot;
+
 
     public ExchangeClassRequest(){}
 
-    public ExchangeClassRequest(String studentCode, String slot, String classCode){
-        this.studentCode = studentCode;
-        this.slot = slot;
-        this.classCode = classCode;
+    public ExchangeClassRequest(Account account,MajorClass majorClass ){
+        this.account = account;
+        this.majorClass = majorClass;
     }
 
 
-    public int getID() {
-        return ID;
-    }
-
-    public void setStudentCode(String studentCode) {
-        this.studentCode = studentCode;
-    }
-
-    public String getStudentCode() {
-        return studentCode;
-    }
-
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
-
-    public String getSlot() {
-        return slot;
-    }
-
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
-    }
-
-    public String getClassCode() {
-        return classCode;
-    }
 }

@@ -1,9 +1,12 @@
 package Main.Model.Enity;
 
 
+import Main.Enum.Role;
 import jakarta.persistence.*;
+import lombok.Data;
 
-@Table(name = "accounts", catalog = "users")
+@Data
+@Table(name = "accounts", catalog = "global_db")
 @Entity
 public class Account {
     @Id
@@ -11,10 +14,10 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // generate value , identity --> auto increment
     private int id;
 
-    @Column(name = "user_name", nullable = false)
-    private  String userName;
+    @Column(name = "username", nullable = false)
+    private  String username;
 
-    @Column(name = "user_password",nullable = false)
+    @Column(name = "passwords",nullable = false)
     private  String password;
 
     @Column(name = "user_phone_number",nullable = false)
@@ -26,62 +29,25 @@ public class Account {
     @Column(name = "student_code",nullable = false)
     private String studentCode;
 
+    @Column(name = "class_code")
+    private String classCode;
+
+    @Column(name = "roles", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public Account(){
 
     }
-    public  Account(String userName, String password, String phoneNumber, String accountName,String studentCode){
-        this.userName = userName;
+    public  Account(String username, String password, String phoneNumber
+            , String accountName,String studentCode, Role role){
+        this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountName = accountName;
         this.studentCode = studentCode;
+        this.role = role;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public int getAccountId() {
-        return id;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public  void setPassword(String password){
-        this.password = password;
-    }
-
-    public String getPassword() {
-
-        return password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getAccountName() {
-        return accountName;}
-
-    public void setStudentCode(String studentCode) {
-        this.studentCode = studentCode;
-    }
-
-    public String getStudentCode() {
-        return studentCode;
-    }
 }

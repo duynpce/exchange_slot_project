@@ -9,6 +9,7 @@ Account object
         phoneNumber: String
         accountName: String
         studentCode: String
+        classCode : String
     }
 
 POST /register
@@ -24,6 +25,8 @@ Data Params:
             phoneNumber: String,
             accountName: String,
             studentCode: String,
+            classCode : String,
+            role : String ("USER or "ADMIN")
         }
 
 Headers: Content-Type: application/json
@@ -67,7 +70,7 @@ URL Params: None
 URL Params:
 
     {
-        userName: String,
+        username: String,
         password: String,
     }
 
@@ -82,13 +85,6 @@ success response:
                 refresh token: string,
                 access token: String
                 message: "login sucess"
-            }
-        if not 
-        content:
-            {
-                refresh token: "no refresh token" ,
-                access token: "no access token",
-                message: "login failed  please check user name or password"
             }
 
 error response : 
@@ -110,6 +106,15 @@ error response :
         "message": "login failed",
         "httpStatus": 400
     }
+    or
+    khi sai mật 
+    content:
+            Http code : 403
+            {
+                refresh token: "no refresh token" ,
+                access token: "no access token",
+                message: "login failed  please check user name or password"
+            }
 
 
 JWT login
@@ -417,7 +422,6 @@ Success Response:
         "studentCode": "S123456",
         "classCode": "CS101",
         "slot": "3-4",
-        "createdAt": "2025-10-04T08:30:00Z"
         },
         ...
         ]

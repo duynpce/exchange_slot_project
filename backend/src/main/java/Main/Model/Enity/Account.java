@@ -29,8 +29,9 @@ public class Account {
     @Column(name = "student_code",nullable = false)
     private String studentCode;
 
-    @Column(name = "class_code")
-    private String classCode;
+    @ManyToOne
+    @JoinColumn(name = "class_code", referencedColumnName = "class_code")
+    private MajorClass majorClass;
 
     @Column(name = "roles", nullable = false)
     @Enumerated(EnumType.STRING)

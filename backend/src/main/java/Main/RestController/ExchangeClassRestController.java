@@ -1,18 +1,25 @@
 package Main.RestController;
 
 
+import Main.DTO.ExchangeClassRequestDTO;
 import Main.DTO.ResponseDTO;
 import Main.Exception.ExchangeClassRequestException;
 import Main.Exception.URLException;
+import Main.Model.Enity.Account;
 import Main.Model.Enity.ExchangeClassRequest;
+import Main.Model.Enity.MajorClass;
+import Main.Service.AccountService;
 import Main.Service.ExchangeClassRequestService;
+import Main.Service.MajorClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/exchange_class")
 public class ExchangeClassRestController {
@@ -20,13 +27,37 @@ public class ExchangeClassRestController {
     @Autowired
     ExchangeClassRequestService exchangeClassRequestService;
 
+    @Autowired
+    MajorClassService majorClassService;
 
+    @Autowired
+    AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeClassRequest request) {
-        boolean addSuccess = exchangeClassRequestService.add(request); // throw exception if failed
+    public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeClassRequestDTO request) {
+        final String classCode = request.getClassCode();
+        final String studentCode  = request.getStudentCode();
+        Optional<MajorClass> majorClass = majorClassService.findByClassCode(classCode);
 
+        boolean existsStudentCode = accountService.existsByStudentCode(studentCode);
 
+        if(majorClass.isEmpty()) {
+            throw new ExchangeClassRequestException
+                    ("no existing class with class code: " + classCode, HttpStatus.NOT_FOUND);
+        }
+
+        if(!existsStudentCode){
+            throw new ExchangeClassRequestException
+                    ("no existing student with student code: " + studentCode, HttpStatus.NOT_FOUND);
+        }
+
+        String currentSlot = majorClass.get().getSlot();
+        Account account = new Account();
+        account.setStudentCode(request.getStudentCode());
+
+        ExchangeClassRequest exchangeClass = new ExchangeClassRequest(account, majorClass.get() ,currentSlot);
+
+        boolean addSuccess = exchangeClassRequestService.add(exchangeClass); // throw exception if failed
         if(!addSuccess) {
             throw new ExchangeClassRequestException
                     ("can not add for some internal errors",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,6 +90,10 @@ public class ExchangeClassRestController {
 
         List<ExchangeClassRequest> data = exchangeClassRequestService.findByClassCode(classCode,page);
 
+        if(data.isEmpty()){
+            throw new ExchangeClassRequestException("no class request found", HttpStatus.NOT_FOUND);
+        }
+
         ResponseDTO<List<ExchangeClassRequest>> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);
 
@@ -74,6 +109,10 @@ public class ExchangeClassRestController {
         }
 
         List<ExchangeClassRequest> data = exchangeClassRequestService.findBySlot(slot, page);
+
+        if(data.isEmpty()){
+            throw new ExchangeClassRequestException("no class request found", HttpStatus.NOT_FOUND);
+        }
 
         ResponseDTO<List<ExchangeClassRequest>> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);

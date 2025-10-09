@@ -33,10 +33,11 @@ public class ExchangeSlotRequest {
 
     public ExchangeSlotRequest(){}
 
-    public ExchangeSlotRequest(MajorClass majorClass, Account account, Subject subject){
+    public ExchangeSlotRequest(MajorClass majorClass, Account account, Subject subject, String currentSlot){
        this.majorClass = majorClass;
        this.account = account;
        this.subject = subject;
+       this.currentSlot = currentSlot;
     }
 
 }

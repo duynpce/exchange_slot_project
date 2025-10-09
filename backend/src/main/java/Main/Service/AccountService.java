@@ -81,6 +81,11 @@ public class AccountService {
         return accountRepository.findByUsername(userName).orElse(null);
     }
 
+    public boolean existsByStudentCode(String studentCode){
+        return accountRepository.existsByStudentCode(studentCode);
+    }
+
+
 
 
 }

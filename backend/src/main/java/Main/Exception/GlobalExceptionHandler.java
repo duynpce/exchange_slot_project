@@ -1,6 +1,5 @@
 package Main.Exception;
 
-import Main.DTO.ErrorResponse;
 
 import Main.DTO.ResponseDTO;
 import jakarta.transaction.TransactionalException;

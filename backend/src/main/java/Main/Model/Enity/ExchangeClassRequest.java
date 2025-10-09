@@ -18,9 +18,7 @@ public class ExchangeClassRequest {
     private Account account;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "class_code", referencedColumnName = "class_code"),
-    })
+    @JoinColumn(name = "class_code", referencedColumnName = "class_code")
     private MajorClass majorClass;
 
     @Column(name = "current_slot")
@@ -29,9 +27,10 @@ public class ExchangeClassRequest {
 
     public ExchangeClassRequest(){}
 
-    public ExchangeClassRequest(Account account,MajorClass majorClass ){
+    public ExchangeClassRequest(Account account,MajorClass majorClass,String currentSlot){
         this.account = account;
         this.majorClass = majorClass;
+        this.currentSlot = currentSlot;
     }
 
 

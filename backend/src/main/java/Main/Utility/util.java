@@ -20,5 +20,4 @@ public class util {
         return pattern.matcher(password).matches();
     }
 
-
 }

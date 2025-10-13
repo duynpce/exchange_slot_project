@@ -11,6 +11,7 @@ import Main.Model.Enity.MajorClass;
 import Main.Service.AccountService;
 import Main.Service.ExchangeClassRequestService;
 import Main.Service.MajorClassService;
+import Main.Validator.ExchangeClassRequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,34 +29,12 @@ public class ExchangeClassRestController {
     ExchangeClassRequestService exchangeClassRequestService;
 
     @Autowired
-    MajorClassService majorClassService;
-
-    @Autowired
-    AccountService accountService;
+    ExchangeClassRequestValidator classRequestValidator;
 
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeClassRequestDTO request) {
-        final String classCode = request.getClassCode();
-        final String studentCode  = request.getStudentCode();
-        Optional<MajorClass> majorClass = majorClassService.findByClassCode(classCode);
 
-        boolean existsStudentCode = accountService.existsByStudentCode(studentCode);
-
-        if(majorClass.isEmpty()) {
-            throw new ExchangeClassRequestException
-                    ("no existing class with class code: " + classCode, HttpStatus.NOT_FOUND);
-        }
-
-        if(!existsStudentCode){
-            throw new ExchangeClassRequestException
-                    ("no existing student with student code: " + studentCode, HttpStatus.NOT_FOUND);
-        }
-
-        String currentSlot = majorClass.get().getSlot();
-        Account account = new Account();
-        account.setStudentCode(request.getStudentCode());
-
-        ExchangeClassRequest exchangeClass = new ExchangeClassRequest(account, majorClass.get() ,currentSlot);
+        ExchangeClassRequest exchangeClass = classRequestValidator.validateAddRequest(request);
 
         boolean addSuccess = exchangeClassRequestService.add(exchangeClass); // throw exception if failed
         if(!addSuccess) {

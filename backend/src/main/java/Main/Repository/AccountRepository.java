@@ -18,8 +18,8 @@
     public interface AccountRepository extends JpaRepository <Account,String>{
 //        Optional <Account> findByPhoneNumber(String phoneNumber);
 //        Optional <Account> findByAccountName(String accountName);
-//        Optional <Account> findByStudentCode(String studentCode);
 
+        Optional <Account> findByStudentCode(String studentCode);
         Optional <Account> findByUsername(String userName);
 
         boolean existsByPhoneNumber(String phoneNumber);

@@ -2,7 +2,7 @@ package Main.Exception;
 
 
 import Main.DTO.ResponseDTO;
-import jakarta.transaction.TransactionalException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -13,13 +13,13 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingPathVariableException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.security.NoSuchAlgorithmException;
 
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /// DB exception
@@ -134,6 +134,17 @@ public class GlobalExceptionHandler {
         response.setError("BAD REQUEST");
         response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ResponseDTO<String>> handleExpiredJwtException(){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage("access token expired");
+        response.setError("UNAUTHORIZED");
+        response.setHttpStatus(HttpStatus.UNAUTHORIZED.value());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     /// custom exception

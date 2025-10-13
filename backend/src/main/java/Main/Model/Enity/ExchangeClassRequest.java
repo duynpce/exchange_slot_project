@@ -1,9 +1,12 @@
 package Main.Model.Enity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "exchange_class_request",catalog = "global_db" )
 public class ExchangeClassRequest {
@@ -13,23 +16,51 @@ public class ExchangeClassRequest {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_code", referencedColumnName = "student_code")
-    private Account account;
+    @Column(name = "student_code" , nullable = false)
+    private String studentCode;
 
-    @ManyToOne
-    @JoinColumn(name = "class_code", referencedColumnName = "class_code")
-    private MajorClass majorClass;
+    @Column(name = "desired_class",length = 15, nullable = false)
+    private String desiredClassCode;
 
-    @Column(name = "current_slot")
+    @Column(name = "current_class",length = 15, nullable = false)
+    private String currentClassCode;
+
+    @Column(name = "desired_slot", length = 3, nullable = false)
+    private String desiredSlot;
+
+    @Column(name = "current_slot", length = 3, nullable = false)
     private String currentSlot;
 
+    /// those @ManyToOne --> indicate constraint or fk in db --> read-only --> for query data
+    @ManyToOne(fetch = FetchType.LAZY) //lazy --> only join table when needed , eager(default) --> always join table
+    @JoinColumn(name = "student_code", referencedColumnName = "student_code", insertable = false, updatable = false)
+    private Account account;
 
-    public ExchangeClassRequest(){}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "desired_class", referencedColumnName = "class_code", insertable = false, updatable = false)
+    private MajorClass desiredClass;
 
-    public ExchangeClassRequest(Account account,MajorClass majorClass,String currentSlot){
+    @ManyToOne(fetch =  FetchType.LAZY)
+    @JoinColumn(name = "current_class", referencedColumnName = "class_code", insertable = false,updatable = false)
+    private MajorClass currentClass;
+
+    //this constructor for query data
+    public ExchangeClassRequest(Account account, MajorClass desiredClass, MajorClass currentClass,
+                                 String desiredSlot, String currentSlot){
         this.account = account;
-        this.majorClass = majorClass;
+        this.desiredClass = desiredClass;
+        this.currentClass = currentClass;
+        this.desiredSlot = desiredSlot;
+        this.currentSlot = currentSlot;
+    }
+
+    //this constructor for insert data
+    public ExchangeClassRequest(String studentCode, String desiredClassCode,
+                                String currentClassCode, String desiredSlot, String currentSlot){
+        this.studentCode = studentCode;
+        this.desiredClassCode = desiredClassCode;
+        this.currentClassCode = currentClassCode;
+        this.desiredSlot = desiredSlot;
         this.currentSlot = currentSlot;
     }
 

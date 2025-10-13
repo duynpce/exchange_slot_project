@@ -12,7 +12,7 @@ import lombok.Data;
 public class MajorClass {
 
     @Id
-    @Column(name = "class_code", length = 15)
+    @Column(name = "class_code", length = 15, nullable = false)
     private String classCode;
 
     @Column(name = "slot", length = 3)

@@ -9,6 +9,7 @@ Account object
         phoneNumber: String
         accountName: String
         studentCode: String
+        classCode: String
     }
 
 POST /register
@@ -19,11 +20,12 @@ URL Params: None
 Data Params:
     
         {
-            userName: String,
+            username: String,
             password: String,
             phoneNumber: String,
             accountName: String,
             studentCode: String,
+            classCode: String
         }
 
 Headers: Content-Type: application/json
@@ -40,22 +42,42 @@ success response :
 
 
 error response:
+    
+khi có đã có field đã tồn tại
 
     {
         "processSuccess": false,
         "data": "no data",
-        "error": "existed user name or phone number or student code or account name",
+        "error": "existed field name" ,
         "message": "register failed",
         "httpStatus": 409
     }
-    or
+        sample:
+        {
+            "processSuccess": false,
+            "data": "no data",
+            "error": "existed username" ,
+            "message": "register failed",
+            "httpStatus": 409
+        }
+
+khi có null field
+    
     {
         "processSuccess": false,
         "data": "no data",
-        "error": "there's a null value assign to a not null field",
+        "error": "null field name",
         "message": "register failed",
         "httpStatus": 400
     }
+        sample:
+            {
+                "processSuccess": false,
+                "data": "no data",
+                "error": "null username",
+                "message": "register failed",
+                "httpStatus": 400
+            }
 
 
 POST /login
@@ -73,25 +95,27 @@ URL Params:
 
 Headers:Content-Type: application/json
 
-success response: 
-
+success response:
+        
     Http code : 200
-        if correct password and user's name 
         content:
             {
                 refresh token: string,
                 access token: String
                 message: "login sucess"
             }
-        if not 
-        content:
-            {
-                refresh token: "no refresh token" ,
-                access token: "no access token",
-                message: "login failed  please check user name or password"
-            }
 
 error response : 
+
+    sai mật khẩu
+    content:
+        {
+            "processSuccess": false,
+            "data": "no data",
+            "error": "unauthorizaed",
+            "message": "incorrect password",
+            "httpStatus": 400
+        }
 
     khi user name không tồn tại
     {
@@ -122,9 +146,21 @@ Data Param (in header)
 "Authorization" : "Bearer " + token(string)
 }
 
-success response : incomplete
+success response : none 
 
-error responseL incomplete
+error response:
+
+    khi chưa đăng nhập hoặc sai token
+    {
+        "error": "status 401 - unauthorized, invalid token or haven't logged in",
+        "message": "this action need authentication - please login to perform"
+    }
+
+    khi không có quyền truy cập
+    json
+    {
+        you do not have the authorization to access this endpoint
+    }
 
 PATCH /reset_password
 
@@ -136,7 +172,7 @@ Data Params:
 
     {
         userName: String,
-        password: String,
+        newPassword: String,
     }
 
 Headers:Content-Type: application/json
@@ -150,6 +186,9 @@ success response
 
 error response 
 
+    có giá trị là null thì vẫn thông báo như ở trên
+    
+    khi mật khẩu không hợp lệ
     {
     "processSuccess": false,
     "data": "no data",
@@ -157,7 +196,8 @@ error response
     "message": "reset failed",
     "httpStatus": 400
     }
-    or
+
+    khi không tìm thấy tài khoản
     {
     "processSuccess": false,
     "data": "no data",
@@ -173,8 +213,10 @@ ExchangeClassRequest object
     {
         "id": int,
         "studentCode": String,
-        "classCode": String,
-        "slot": String
+        "desiredClassCode": String,
+        "CurrentclassCode": String,
+        "desiredSlot" : String ("1,2" or "3.4")
+        "currentSlot": String ("1,2" or "3.4" and != desiredSlot)
     }
 
 POST /exchangeClass
@@ -187,8 +229,7 @@ Data Params:
 
     {
         "studentCode": "string",
-        "classCode": "string",
-        "slot": String
+        "desiredClassCode": "string",
     }
 
 
@@ -210,11 +251,11 @@ Content:
 
 Error Response:
 
-Trường hợp studentCode đã tồn tại:
+    các trường hợp null và không tồn tại xử lý như ở trên
 
-HTTP Code: 409 CONFLICT
-    
-Content:
+    Trường hợp studentCode đã tồn tại:
+    HTTP Code: 409 CONFLICT
+    Content:
 
     {
         "processSuccess": false,
@@ -224,10 +265,9 @@ Content:
     }
 
 
-Trường hợp lỗi hệ thống (DB, internal error):
-
-HTTP Code: 500 INTERNAL_SERVER_ERROR
-Content:
+    Trường hợp lỗi hệ thống (DB, internal error):
+    HTTP Code: 500 INTERNAL_SERVER_ERROR
+    Content:
 
     {
         "processSuccess": false,
@@ -315,8 +355,7 @@ Data Param:
 
     {
         "studentCode": "string",
-        "classCode": "string",
-        "slot": "string"
+        "desiredSlot": "string"
     }
 
 
@@ -338,6 +377,8 @@ Error Responses:
 
 Khi studentCode đã tồn tại yêu cầu đổi slot:
     
+    null và không tồn tại xử lý như ở trên
+
     HTTP Code: 409 CONFLICT
     
     Content:
@@ -349,11 +390,9 @@ Khi studentCode đã tồn tại yêu cầu đổi slot:
     }
 
 
-Khi có lỗi hệ thống (lỗi DB, exception nội bộ):
-
+    Khi có lỗi hệ thống (lỗi DB, exception nội bộ):
     HTTP Code: 500 INTERNAL_SERVER_ERROR 
     Content:
-    
     {
     "processSuccess": false,
     "message": "can not add slot request due to internal errors",
@@ -379,10 +418,8 @@ Headers: Content-Type: application/json
 
  Error Response:
 
-Khi không tìm thấy slot request theo id:
-
+    Khi không tìm thấy slot request theo id:
     HTTP Code: 404 NOT_FOUND
-    
     Content: 
     {
         "processSuccess": false,
@@ -399,7 +436,7 @@ URL Params:
 
     classCode : string.
     
-    page : int(>=0).
+    page : int(>=0). 
 
 Headers: Content-Type: application/json
 
@@ -425,8 +462,7 @@ Success Response:
 
 Error Response:
 
-Khi không có slot request nào cho classCode:
-    
+    Khi không có slot request nào cho classCode:
     HTTP Code: 404 NOT_FOUND
     Content:
     {
@@ -533,9 +569,8 @@ Success Response:
     }
 
 Error Response:
-
-Không có dữ liệu phù hợp:
-
+    
+    Không có dữ liệu phù hợp:
     HTTP Code: 404 NOT_FOUND
     Content:
     {

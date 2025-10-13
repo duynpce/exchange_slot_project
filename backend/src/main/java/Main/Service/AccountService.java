@@ -2,9 +2,9 @@ package Main.Service;
 
 
 import Main.DTO.LoginRequestDTO;
-import Main.DTO.LoginResponseDTO;
 import Main.DTO.ResetPasswordDTO;
 import Main.Exception.AccountException;
+import Main.Validator.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,25 +23,12 @@ public class AccountService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AccountValidator accountValidator;
+
 
     public boolean register(Account account){
-        boolean alreadyExistedUserName = accountRepository.existsByUsername(account.getUsername());
-        boolean alreadyExistedPhoneNumber = accountRepository.existsByPhoneNumber(account.getPhoneNumber());
-        boolean alreadyExistedStudentCode = accountRepository.existsByStudentCode(account.getStudentCode());
-        boolean alreadyExistedAccountName = accountRepository.existsByAccountName(account.getAccountName());
-
-        if(alreadyExistedUserName){
-            throw new AccountException("existed user name", HttpStatus.CONFLICT);
-        }
-        else if(alreadyExistedPhoneNumber){
-            throw new AccountException("existed phone number", HttpStatus.CONFLICT);
-        }
-        else if(alreadyExistedStudentCode){
-            throw new AccountException("existed student code", HttpStatus.CONFLICT);
-        }
-        else if(alreadyExistedAccountName){
-            throw new AccountException("existed account name", HttpStatus.CONFLICT);
-        }
+        accountValidator.validateRegister(account);
 
         String encryptedPassword = passwordEncoder.encode(account.getPassword());
         account.setPassword(encryptedPassword);
@@ -51,25 +38,24 @@ public class AccountService {
     }
 
     public  Account login(LoginRequestDTO loginRequest){
+        accountValidator.validateLogin(loginRequest);
+
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        Optional<Account> optionalAccount = accountRepository.findByUsername(username);
 
-        boolean hasFoundAccount = optionalAccount.isPresent();
-        if(hasFoundAccount) {
-            String encryptedPassword = optionalAccount.get().getPassword();
-            boolean correctPassword = passwordEncoder.matches(password,encryptedPassword );
+        Account account = accountRepository.findByUsername(username).get(); ///has validated by validator
+        String encryptedPassword = account.getPassword();
+        boolean correctPassword = passwordEncoder.matches(password,encryptedPassword );
 
-            if(correctPassword) {return optionalAccount.get();}
+        if(correctPassword) {return account;}
 
-           throw new AccountException("incorrect password" , HttpStatus.UNAUTHORIZED);
-        }
-
-        throw new AccountException("no account found with username " + username, HttpStatus.NOT_FOUND);
+        throw new AccountException("incorrect password" , HttpStatus.UNAUTHORIZED);
 
     }
 
     public boolean resetPassword(ResetPasswordDTO resetPasswordDTO){
+
+        accountValidator.validateResetPassword(resetPasswordDTO);
 
         String username = resetPasswordDTO.getUsername();
         String encryptedPassword = passwordEncoder.encode(resetPasswordDTO.getNewPassword());
@@ -81,10 +67,25 @@ public class AccountService {
         return accountRepository.findByUsername(userName).orElse(null);
     }
 
+    public Account findByStudentCode(String studentCode){
+        return  accountRepository.findByStudentCode(studentCode).orElse(null);
+    }
+
     public boolean existsByStudentCode(String studentCode){
         return accountRepository.existsByStudentCode(studentCode);
     }
 
+    public boolean existsByUsername(String username){
+        return accountRepository.existsByUsername(username);
+    }
+
+    public boolean existsByAccountName(String accountName){
+        return accountRepository.existsByAccountName(accountName);
+    }
+
+    public boolean existsByPhoneNumber(String phoneNumber){
+        return accountRepository.existsByPhoneNumber(phoneNumber);
+    }
 
 
 

@@ -1,11 +1,12 @@
 package Main.RestController;
 
+import Main.DTO.ExchangeSlotRequestDTO;
 import Main.DTO.ResponseDTO;
 import Main.Exception.ExchangeSlotRequestException;
 import Main.Exception.URLException;
-import Main.Model.Enity.ExchangeClassRequest;
 import Main.Model.Enity.ExchangeSlotRequest;
 import Main.Service.ExchangeSlotRequestService;
+import Main.Validator.ExchangeSlotRequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,15 @@ public class ExchangeSlotRestController {
     @Autowired
     ExchangeSlotRequestService exchangeSlotRequestService;
 
-
+    @Autowired
+    ExchangeSlotRequestValidator slotRequestValidator;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeSlotRequest request) {
-        boolean success = exchangeSlotRequestService.add(request);
+    public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeSlotRequestDTO request) {
+
+        ExchangeSlotRequest slotRequest = slotRequestValidator.validateAddRequest(request);
+
+        boolean success = exchangeSlotRequestService.add(slotRequest);
 
         if (!success) {
             throw new ExchangeSlotRequestException(
@@ -79,47 +84,47 @@ public class ExchangeSlotRestController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    /// for exchange subject request
+//    @GetMapping("/subject/{subjectCode}/page/{page}")/// add pagination to it please pageable page
+//    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findBySubjectCode
+//            (@PathVariable String subjectCode,
+//             @PathVariable int page) {
+//        if(page < 0){
+//            throw new URLException("page must be >= 0", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        List<ExchangeSlotRequest> result = exchangeSlotRequestService.findBySubjectCode(subjectCode,page);
+//
+//        ResponseDTO<List<ExchangeSlotRequest>> response = new ResponseDTO<>(
+//                true,
+//                "slot request(s) found successfully",
+//                "no error",
+//                result
+//        );
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 
-    @GetMapping("/subject/{subjectCode}/page/{page}")/// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findBySubjectCode
-            (@PathVariable String subjectCode,
-             @PathVariable int page) {
-        if(page < 0){
-            throw new URLException("page must be >= 0", HttpStatus.BAD_REQUEST);
-        }
-
-        List<ExchangeSlotRequest> result = exchangeSlotRequestService.findBySubjectCode(subjectCode,page);
-
-        ResponseDTO<List<ExchangeSlotRequest>> response = new ResponseDTO<>(
-                true,
-                "slot request(s) found successfully",
-                "no error",
-                result
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    @GetMapping("/subject_code&class_code/")/// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findBySubjectAndClassCode(
-            @RequestParam("subjectCode") String subjectCode,
-            @RequestParam("classCode") String classCode,
-            @RequestParam("page") int page
-    ) {
-        if(page < 0){
-            throw new URLException("page must be >= 0", HttpStatus.BAD_REQUEST);
-        }
-
-        List<ExchangeSlotRequest> result =
-                exchangeSlotRequestService.findByClassCodeAndSubjectCode(classCode, subjectCode, page);
-
-        ResponseDTO<List<ExchangeSlotRequest>> response = new ResponseDTO<>(
-                true,
-                "slot request(s) found successfully",
-                "no error",
-                result
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+//    @GetMapping("/subject_code&class_code/")/// add pagination to it please pageable page
+//    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findBySubjectAndClassCode(
+//            @RequestParam("subjectCode") String subjectCode,
+//            @RequestParam("classCode") String classCode,
+//            @RequestParam("page") int page
+//    ) {
+//        if(page < 0){
+//            throw new URLException("page must be >= 0", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        List<ExchangeSlotRequest> result =
+//                exchangeSlotRequestService.findByClassCodeAndSubjectCode(classCode, subjectCode, page);
+//
+//        ResponseDTO<List<ExchangeSlotRequest>> response = new ResponseDTO<>(
+//                true,
+//                "slot request(s) found successfully",
+//                "no error",
+//                result
+//        );
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 
     @GetMapping("/slot/{slot}/page/{page}") /// add pagination to it please pageable page
     public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findBySlot

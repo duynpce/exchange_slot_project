@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SecurityConfig {
 
     private final JWTAuthenticationConfig JWTauthenticationConfig;
+    private final AuthenticationEntryPointConfig authenticationEntryPointConfig;
+    private final AccessDeniedHandlerConfig accessDeniedHandlerConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -52,11 +54,17 @@ public class SecurityConfig {
                         (session -> session.
                                         sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ///disable session (default authentication of spring)
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login","/register","test/*/*").permitAll()
-                .anyRequest().authenticated()
+                        .requestMatchers("/login","/register").permitAll()
+                        .requestMatchers("/test-access-denied-handler").hasRole("ADMIN")
+                        .anyRequest().authenticated()
         )
-        .logout(LogoutConfigurer::permitAll)//login -> permitAll()
-        .addFilterBefore(JWTauthenticationConfig, UsernamePasswordAuthenticationFilter.class );
+                .logout(LogoutConfigurer::permitAll)//login -> permitAll()
+                .addFilterBefore(JWTauthenticationConfig, UsernamePasswordAuthenticationFilter.class )
+                .exceptionHandling(handle -> handle /// config exception handler
+                        .authenticationEntryPoint(authenticationEntryPointConfig)
+                        .accessDeniedHandler(accessDeniedHandlerConfig)
+                );
+
 
         return httpSecurity.build();
     }

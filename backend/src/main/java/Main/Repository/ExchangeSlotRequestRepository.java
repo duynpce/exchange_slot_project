@@ -3,14 +3,14 @@ package Main.Repository;
 import Main.Model.Enity.ExchangeSlotRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlotRequest,Integer> {
-    List<ExchangeSlotRequest> findByMajorClass_ClassCode(String classCode, Pageable pageable);
-    List<ExchangeSlotRequest> findBySubject_SubjectCode(String subjectCode, Pageable pageable);
-    List<ExchangeSlotRequest> findByMajorClass_ClassCodeAndSubject_SubjectCode(String classCode,String subjectCode, Pageable pageable);
-    List<ExchangeSlotRequest> findByMajorClass_Slot(String slot, Pageable pageable);
+    List<ExchangeSlotRequest> findByAccount_ClassCode(String classCode, Pageable pageable);
+    List<ExchangeSlotRequest> findByCurrentSlot(String slot, Pageable pageable);
 
-    boolean existsByAccount_StudentCodeAndSubject_SubjectCode(String studentCode, String subjectCode);
+    boolean existsByAccount_StudentCode(String studentCode);
 }

@@ -10,7 +10,5 @@ import lombok.NoArgsConstructor;
 public class ExchangeSlotRequestDTO {
 
     private String studentCode;
-    private String classCode;
-    private String currentSlot;
-    private String subjectCode;
+    private String desiredSlot;
 }

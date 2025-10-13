@@ -20,7 +20,7 @@ public class Account {
     @Column(name = "passwords",nullable = false)
     private  String password;
 
-    @Column(name = "user_phone_number",nullable = false)
+    @Column(name = "phone_number",nullable = false)
     private  String phoneNumber;
 
     @Column(name = "account_name",nullable = false)
@@ -29,8 +29,11 @@ public class Account {
     @Column(name = "student_code",nullable = false)
     private String studentCode;
 
+    @Column(name = "class_code",length = 15, nullable = false)
+    private String classCode;   
+
     @ManyToOne
-    @JoinColumn(name = "class_code", referencedColumnName = "class_code")
+    @JoinColumn(name = "class_code", referencedColumnName = "class_code", insertable = false, updatable = false)
     private MajorClass majorClass;
 
     @Column(name = "roles", nullable = false)
@@ -40,13 +43,28 @@ public class Account {
     public Account(){
 
     }
+
+    //for query data
     public  Account(String username, String password, String phoneNumber
-            , String accountName,String studentCode, Role role){
+            , String accountName,String studentCode, MajorClass majorClass,Role role){
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountName = accountName;
         this.studentCode = studentCode;
+        this.majorClass = majorClass;
+        this.role = role;
+    }
+
+    //for insert data
+    public Account(String username, String password, String phoneNumber
+            , String accountName,String studentCode, String classCode,Role role){
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.accountName = accountName;
+        this.studentCode = studentCode;
+        this.classCode = classCode;
         this.role = role;
     }
 

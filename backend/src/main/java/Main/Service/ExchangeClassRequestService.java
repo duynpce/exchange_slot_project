@@ -3,7 +3,6 @@ package Main.Service;
 import Main.Exception.ExchangeClassRequestException;
 import Main.Exception.ExchangeSlotRequestException;
 import Main.Model.Enity.ExchangeClassRequest;
-import Main.Model.Enity.ExchangeSlotRequest;
 import Main.Repository.ExchangeClassRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,7 +23,7 @@ public class ExchangeClassRequestService {/// temporary
 
     public boolean add(ExchangeClassRequest exchangeClassRequest) {
         boolean alreadyExisted = exchangeClassRequestRepository.
-                existsByAccount_StudentCode(exchangeClassRequest.getAccount().getStudentCode());
+                existsByAccount_StudentCode(exchangeClassRequest.getStudentCode());
         if (alreadyExisted) {
             throw new ExchangeClassRequestException("already existed request for this student code", HttpStatus.CONFLICT);
         }
@@ -45,28 +44,32 @@ public class ExchangeClassRequestService {/// temporary
 
     public List<ExchangeClassRequest> findByClassCode(String classCode , int page) {
 
-        Pageable pageable = PageRequest.of(page, pageSize); //page is which page, pageSize is number of element which page
-        List<ExchangeClassRequest> requestFound = exchangeClassRequestRepository.
-                findByMajorClass_ClassCode(classCode,pageable);
+        Pageable pageable = PageRequest.of(page, pageSize); //page is which page, pageSize is number of element in a page
+        List<ExchangeClassRequest> data = exchangeClassRequestRepository.
+                findByAccount_ClassCode(classCode,pageable);
 
-        if (requestFound.isEmpty()) {
+        if (data.isEmpty()) {
             throw new ExchangeClassRequestException("no request with that class code: " + classCode, HttpStatus.NOT_FOUND);
         }
 
-        return requestFound;
+        return data;
     }
 
     public List<ExchangeClassRequest> findBySlot(String slot, int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
 
-        List<ExchangeClassRequest> requestFound = exchangeClassRequestRepository.findByMajorClass_Slot(slot,pageable);
-        if (requestFound.isEmpty()) {
+        List<ExchangeClassRequest> data = exchangeClassRequestRepository.findByCurrentSlot(slot,pageable);
+        if (data.isEmpty()) {
             throw new ExchangeSlotRequestException(
                     "no slot request with slot: " + slot,
                     HttpStatus.NOT_FOUND
             );
         }
-        return requestFound;
+        return data;
+    }
+
+    public boolean existsByStudentCode(String studentCode){
+        return exchangeClassRequestRepository.existsByAccount_StudentCode(studentCode);
     }
 
 

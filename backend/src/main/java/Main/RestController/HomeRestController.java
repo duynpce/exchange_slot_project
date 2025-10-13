@@ -7,12 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/")
 public class HomeRestController {
 
-    @GetMapping
+    @GetMapping("/home")
     public String home(){
         return "This is home";
+    }
+
+    @GetMapping("/test-access-denied-handler")
+    public String accessDeniedHandler(){
+        return "you're a admin";
     }
 
 }

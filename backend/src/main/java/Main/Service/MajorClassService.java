@@ -16,4 +16,8 @@ public class MajorClassService {
     public Optional<MajorClass> findByClassCode(String classCode){
         return majorClassRepository.findByClassCode(classCode);
     }
+
+    public boolean existsByClassCode(String classCode){
+        return majorClassRepository.existsByClassCode(classCode);
+    }
 }

@@ -1,6 +1,6 @@
 package Main.Validator;
 
-import Main.DTO.ExchangeSlotRequestDTO;
+import Main.DTO.CreateExchangeSlotRequestDTO;
 import Main.Exception.ExchangeClassRequestException;
 import Main.Exception.ExchangeSlotRequestException;
 import Main.Model.Enity.Account;
@@ -23,7 +23,7 @@ public class ExchangeSlotRequestValidator {
     @Autowired
     AccountService accountService;
 
-    public ExchangeSlotRequest validateAddRequest(ExchangeSlotRequestDTO request){
+    public ExchangeSlotRequest validateAddRequest(CreateExchangeSlotRequestDTO request){
         final String studentCode  = request.getStudentCode();
 
         Account account = accountService.findByStudentCode(studentCode);

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface MajorClassRepository extends JpaRepository<MajorClass,String> {
 
     Optional<MajorClass> findByClassCode(String ClassCode);
+
+    boolean existsByClassCode(String classCode);
 }

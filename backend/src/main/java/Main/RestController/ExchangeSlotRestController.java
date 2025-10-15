@@ -1,6 +1,6 @@
 package Main.RestController;
 
-import Main.DTO.ExchangeSlotRequestDTO;
+import Main.DTO.CreateExchangeSlotRequestDTO;
 import Main.DTO.ResponseDTO;
 import Main.Exception.ExchangeSlotRequestException;
 import Main.Exception.URLException;
@@ -26,7 +26,7 @@ public class ExchangeSlotRestController {
     ExchangeSlotRequestValidator slotRequestValidator;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody ExchangeSlotRequestDTO request) {
+    public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateExchangeSlotRequestDTO request) {
 
         ExchangeSlotRequest slotRequest = slotRequestValidator.validateAddRequest(request);
 

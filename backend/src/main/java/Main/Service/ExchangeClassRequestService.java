@@ -1,7 +1,9 @@
 package Main.Service;
 
+import Main.DTO.ExchangeClassRequestResponseDTO;
 import Main.Exception.ExchangeClassRequestException;
 import Main.Exception.ExchangeSlotRequestException;
+import Main.Mapper.ExchangeClassRequestMapper;
 import Main.Model.Enity.ExchangeClassRequest;
 import Main.Repository.ExchangeClassRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,8 @@ public class ExchangeClassRequestService {/// temporary
     @Autowired
     ExchangeClassRequestRepository exchangeClassRequestRepository;
 
-
+    @Autowired
+    ExchangeClassRequestMapper exchangeClassRequestMapper;
 
     public boolean add(ExchangeClassRequest exchangeClassRequest) {
         boolean alreadyExisted = exchangeClassRequestRepository.
@@ -42,7 +45,7 @@ public class ExchangeClassRequestService {/// temporary
     }
 
 
-    public List<ExchangeClassRequest> findByClassCode(String classCode , int page) {
+    public List<ExchangeClassRequestResponseDTO> findByClassCode(String classCode , int page) {
 
         Pageable pageable = PageRequest.of(page, pageSize); //page is which page, pageSize is number of element in a page
         List<ExchangeClassRequest> data = exchangeClassRequestRepository.
@@ -52,10 +55,10 @@ public class ExchangeClassRequestService {/// temporary
             throw new ExchangeClassRequestException("no request with that class code: " + classCode, HttpStatus.NOT_FOUND);
         }
 
-        return data;
+        return exchangeClassRequestMapper.toDtoList(data);
     }
 
-    public List<ExchangeClassRequest> findBySlot(String slot, int page) {
+    public List<ExchangeClassRequestResponseDTO> findBySlot(String slot, int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         List<ExchangeClassRequest> data = exchangeClassRequestRepository.findByCurrentSlot(slot,pageable);
@@ -65,11 +68,17 @@ public class ExchangeClassRequestService {/// temporary
                     HttpStatus.NOT_FOUND
             );
         }
-        return data;
+        return exchangeClassRequestMapper.toDtoList(data);
     }
 
     public boolean existsByStudentCode(String studentCode){
         return exchangeClassRequestRepository.existsByAccount_StudentCode(studentCode);
+    }
+
+
+    public ExchangeClassRequestResponseDTO findById(int id){
+        ExchangeClassRequest request = exchangeClassRequestRepository.findById(id).orElse(null);
+        return exchangeClassRequestMapper.toDto(request);
     }
 
 

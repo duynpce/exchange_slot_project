@@ -16,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 
 @EnableWebSecurity
@@ -49,15 +52,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception { //handle exception later
 
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)/// csrf -> csrf.disable
+        httpSecurity.csrf(AbstractHttpConfigurer::disable)/// csrf -> csrf.disable because it is for session not for jwt
                 .sessionManagement
                         (session -> session.
                                         sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ///disable session (default authentication of spring)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login","/register").permitAll()
                         .requestMatchers("/test-access-denied-handler").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-        )
+                        .anyRequest().authenticated() //logged in --> can access --> do not care about role
+                         )
+                    .cors(cors -> cors.configurationSource(request -> {
+                        /// turn off cors temporary for testing --> config again when deploy --
+                        CorsConfiguration corsConfiguration = new CorsConfiguration();
+                        corsConfiguration.setAllowedOrigins(List.of("*"));
+                        corsConfiguration.setAllowedMethods(List.of("*"));
+                        corsConfiguration.setAllowedHeaders(List.of("*"));
+                        corsConfiguration.setAllowCredentials(false);
+                        return  corsConfiguration;
+                    }))
                 .logout(LogoutConfigurer::permitAll)//login -> permitAll()
                 .addFilterBefore(JWTauthenticationConfig, UsernamePasswordAuthenticationFilter.class )
                 .exceptionHandling(handle -> handle /// config exception handler

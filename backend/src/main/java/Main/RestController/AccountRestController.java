@@ -5,23 +5,17 @@ import Main.DTO.LoginResponseDTO;
 import Main.DTO.LoginRequestDTO;
 import Main.DTO.ResetPasswordDTO;
 import Main.DTO.ResponseDTO;
-import Main.Enum.Role;
 import Main.Exception.AccountException;
 import Main.Model.Enity.Account;
-import Main.Repository.AccountRepository;
 import Main.Service.AccountService;
 import Main.Utility.jwtUtil;
-import Main.Validator.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import Main.Utility.util;
 
-import java.util.Optional;
-import java.util.Random;
 
 @CrossOrigin(origins = "*")
 @RestController

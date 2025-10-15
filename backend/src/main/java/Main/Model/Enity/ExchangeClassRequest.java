@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "exchange_class_request",catalog = "global_db" )
+@Table(name = "exchange_class_request" )
 public class ExchangeClassRequest {
 
     @Id

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-@Table(name = "accounts", catalog = "global_db")
+@Table(name = "accounts")
 @Entity
 public class Account {
     @Id
@@ -32,6 +32,7 @@ public class Account {
     @Column(name = "class_code",length = 15, nullable = false)
     private String classCode;   
 
+    //for query data --> read only
     @ManyToOne
     @JoinColumn(name = "class_code", referencedColumnName = "class_code", insertable = false, updatable = false)
     private MajorClass majorClass;

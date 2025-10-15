@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "exchange_slot_request", catalog =  "global_db")
+@Table(name = "exchange_slot_request")
 public class ExchangeSlotRequest {
 
     @Id

@@ -4,7 +4,9 @@ import Main.DTO.LoginRequestDTO;
 import Main.DTO.ResetPasswordDTO;
 import Main.Exception.AccountException;
 import Main.Model.Enity.Account;
+import Main.Model.Enity.MajorClass;
 import Main.Repository.AccountRepository;
+import Main.Service.MajorClassService;
 import Main.Utility.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,10 @@ public class AccountValidator {
 
     @Autowired /// temporary could separate interface for implementing versions of service
     AccountRepository accountRepository;
+
+    @Autowired
+    MajorClassService majorClassService;
+
 
     void throwExceptionIfNull(String field, String message){
         if(field == null){
@@ -44,6 +50,7 @@ public class AccountValidator {
         throwExceptionIfNull(account.getPhoneNumber(), "null phone number");
         throwExceptionIfNull(account.getStudentCode(), "null student code");
         throwExceptionIfNull(account.getAccountName(), "null Account name");
+        throwExceptionIfNull(account.getClassCode(), "null class code");
         throwExceptionIfNull(account.getRole().toString(), "null role");
 
         throwExceptionIfExists(accountRepository.existsByUsername(account.getUsername()), "existed username");
@@ -51,6 +58,7 @@ public class AccountValidator {
         throwExceptionIfExists(accountRepository.existsByStudentCode(account.getStudentCode()), "existed student code");
         throwExceptionIfExists(accountRepository.existsByAccountName(account.getAccountName()), "existed account name");
 
+        throwExceptionIfNotExists(majorClassService.existsByClassCode(account.getClassCode()), "not class with code: " + account.getClassCode() );
         boolean isValidPassword = utility.validatePassword(account.getPassword());
 
         if(!isValidPassword) {throw new AccountException("invalid password", HttpStatus.BAD_REQUEST); }

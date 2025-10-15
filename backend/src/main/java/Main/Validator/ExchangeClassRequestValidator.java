@@ -1,12 +1,11 @@
 package Main.Validator;
 
-import Main.DTO.ExchangeClassRequestDTO;
+import Main.DTO.CreateExchangeClassRequestDTO;
 import Main.Exception.ExchangeClassRequestException;
 import Main.Model.Enity.Account;
 import Main.Model.Enity.ExchangeClassRequest;
 import Main.Model.Enity.MajorClass;
 import Main.Service.AccountService;
-import Main.Service.ExchangeClassRequestService;
 import Main.Service.MajorClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class ExchangeClassRequestValidator {
     AccountService accountService;
 
 
-    public ExchangeClassRequest validateAddRequest(ExchangeClassRequestDTO request){
+    public ExchangeClassRequest validateAddRequest(CreateExchangeClassRequestDTO request){
         final String studentCode  = request.getStudentCode();
         final String desiredClassCode = request.getDesiredClassCode();
 

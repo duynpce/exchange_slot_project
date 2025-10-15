@@ -13,8 +13,8 @@ public class MajorClassService {
     @Autowired
     MajorClassRepository majorClassRepository;
 
-    public Optional<MajorClass> findByClassCode(String classCode){
-        return majorClassRepository.findByClassCode(classCode);
+    public MajorClass findByClassCode(String classCode){
+        return majorClassRepository.findByClassCode(classCode).orElse(null);
     }
 
     public boolean existsByClassCode(String classCode){

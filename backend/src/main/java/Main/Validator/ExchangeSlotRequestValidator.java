@@ -1,12 +1,12 @@
 package Main.Validator;
 
 import Main.DTO.CreateExchangeSlotRequestDTO;
-import Main.Exception.ExchangeClassRequestException;
 import Main.Exception.ExchangeSlotRequestException;
 import Main.Model.Enity.Account;
 import Main.Model.Enity.ExchangeSlotRequest;
 import Main.Model.Enity.MajorClass;
 import Main.Service.AccountService;
+import Main.Service.ExchangeSlotRequestService;
 import Main.Service.MajorClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,38 +23,49 @@ public class ExchangeSlotRequestValidator {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    ExchangeSlotRequestService exchangeSlotRequestService;
+
+    private void throwExceptionIfNull(Object field, String message){
+        if(field == null){
+            throw new ExchangeSlotRequestException(message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void throwExceptionIfExists(boolean isExists, String message){
+        if(isExists){
+            throw new ExchangeSlotRequestException(message, HttpStatus.CONFLICT);
+        }
+    }
+
+    private void throwExceptionIfNotExists(boolean isExists, String message){
+        if(!isExists){
+            throw new ExchangeSlotRequestException(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     public ExchangeSlotRequest validateAddRequest(CreateExchangeSlotRequestDTO request){
         final String studentCode  = request.getStudentCode();
+        final String desiredSlot = request.getDesiredSlot();
+
+        throwExceptionIfExists(exchangeSlotRequestService.existsByStudentCode(studentCode), "existed request with student code: " + studentCode );
 
         Account account = accountService.findByStudentCode(studentCode);
-        if(account == null){ //is empty
-            throw new ExchangeClassRequestException
-                    ("no existing student with student code: " + studentCode, HttpStatus.NOT_FOUND);
-        }
+        throwExceptionIfNull(account, "no account with student code: " + studentCode);
 
         final String currentClassCode = account.getMajorClass().getClassCode();
-        Optional<MajorClass> currentClass = majorClassService.findByClassCode(currentClassCode);
-        boolean existsStudentCode = accountService.existsByStudentCode(studentCode);
+        MajorClass currentClass = majorClassService.findByClassCode(currentClassCode);
+        throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
 
-        if(currentClass.isEmpty()) {
-            throw new ExchangeSlotRequestException
-                    ("no existing class with class code: " + currentClassCode, HttpStatus.NOT_FOUND);
-        }
-
-        if(!existsStudentCode){
-            throw new ExchangeSlotRequestException
-                    ("no existing student with student code: " + studentCode, HttpStatus.NOT_FOUND);
-        }
-
-        String currentSlot = currentClass.get().getSlot();
-        String desiredSlot = request.getDesiredSlot();
+        String currentSlot = currentClass.getSlot();
 
         if(currentSlot.equals(desiredSlot)){
             throw new ExchangeSlotRequestException
                     ("cannot make request for the same slot changes: " + currentSlot, HttpStatus.NOT_FOUND);
         }
 
-        return new ExchangeSlotRequest(studentCode,currentClassCode,desiredSlot, currentSlot);
+        return new ExchangeSlotRequest(studentCode,currentClassCode, desiredSlot ,currentSlot);
 
     }
+
 }

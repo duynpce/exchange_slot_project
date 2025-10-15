@@ -1,6 +1,7 @@
 package Main.RestController;
 
 import Main.DTO.CreateExchangeSlotRequestDTO;
+import Main.DTO.ExchangeSlotRequestResponseDTO;
 import Main.DTO.ResponseDTO;
 import Main.Exception.ExchangeSlotRequestException;
 import Main.Exception.URLException;
@@ -48,7 +49,7 @@ public class ExchangeSlotRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable int id) {
         if(id < 0){
             throw new URLException("id must be >= 0", HttpStatus.BAD_REQUEST);
@@ -66,16 +67,16 @@ public class ExchangeSlotRestController {
     }
 
     @GetMapping("/class/{classCode}/page/{page}")/// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findByClassCode
+    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequestResponseDTO>>> findByClassCode
             (@PathVariable String classCode,
             @PathVariable int page) {
         if(page < 0){
             throw new URLException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeSlotRequest> result = exchangeSlotRequestService.findByClassCode(classCode, page);
+        List<ExchangeSlotRequestResponseDTO> result = exchangeSlotRequestService.findByClassCode(classCode, page);
 
-        ResponseDTO<List<ExchangeSlotRequest>> response = new ResponseDTO<>(
+        ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(
                 true,
                 "slot request(s) found successfully",
                 "no error",
@@ -127,20 +128,20 @@ public class ExchangeSlotRestController {
 //    }
 
     @GetMapping("/slot/{slot}/page/{page}") /// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequest>>> findBySlot
+    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequestResponseDTO>>> findBySlot
             (@PathVariable String slot, @PathVariable int page) {
 
         if(page < 0){
             throw new URLException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeSlotRequest> result = exchangeSlotRequestService.findBySlot(slot, page);
+        List<ExchangeSlotRequestResponseDTO> data = exchangeSlotRequestService.findBySlot(slot, page);
 
-        ResponseDTO<List<ExchangeSlotRequest>> response = new ResponseDTO<>(
+        ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(
                 true,
                 "slot request(s) found successfully",
                 "no error",
-                result
+                data
         );
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -24,13 +24,8 @@ public class ExchangeClassRequestService {/// temporary
     @Autowired
     ExchangeClassRequestMapper exchangeClassRequestMapper;
 
-    public boolean add(ExchangeClassRequest exchangeClassRequest) {
-        boolean alreadyExisted = exchangeClassRequestRepository.
-                existsByAccount_StudentCode(exchangeClassRequest.getStudentCode());
-        if (alreadyExisted) {
-            throw new ExchangeClassRequestException("already existed request for this student code", HttpStatus.CONFLICT);
-        }
 
+    public boolean add(ExchangeClassRequest exchangeClassRequest) {
         return exchangeClassRequestRepository.save(exchangeClassRequest).getId() != 0; //default id =0 , save return new Enity
     }
 

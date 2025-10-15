@@ -21,9 +21,6 @@ public class ExchangeSlotRequest {
     @Column(name = "current_class",length = 15, nullable = false)
     private String currentClassCode;
 
-    @Column(name = "desired_class", length = 15 , nullable = false)
-    private String desiredClasCode;
-
     @Column(name = "current_slot" , length = 3, nullable = false)
     private String currentSlot;
 
@@ -33,11 +30,12 @@ public class ExchangeSlotRequest {
 
     /// those @ManyToOne --> indicate constraint or fk in db --> read-only --> for query data
     @ManyToOne(fetch = FetchType.LAZY) //lazy --> only join table when needed , eager(default) --> always join table
-    @JoinColumns({
-            @JoinColumn(name = "student_code", referencedColumnName = "student_code", insertable = false, updatable = false),
-            @JoinColumn(name = "current_class", referencedColumnName = "class_code", insertable = false,updatable = false)
-    })
+    @JoinColumn(name = "student_code", referencedColumnName = "student_code", insertable = false, updatable = false)
     private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_class", referencedColumnName = "class_code", insertable = false,updatable = false)
+    private MajorClass majorClass;
 
 
     //this constructor for query data

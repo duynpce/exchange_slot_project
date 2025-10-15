@@ -25,19 +25,19 @@ public class AccountValidator {
     MajorClassService majorClassService;
 
 
-    void throwExceptionIfNull(String field, String message){
+    private void throwExceptionIfNull(Object field, String message){
         if(field == null){
             throw new AccountException(message, HttpStatus.BAD_REQUEST);
         }
     }
 
-    void throwExceptionIfExists(boolean isExists, String message){
+    private void throwExceptionIfExists(boolean isExists, String message){
         if(isExists){
             throw new AccountException(message, HttpStatus.CONFLICT);
         }
     }
 
-    void throwExceptionIfNotExists(boolean isExists, String message){
+    private void throwExceptionIfNotExists(boolean isExists, String message){
         if(!isExists){
             throw new AccountException(message, HttpStatus.NOT_FOUND);
         }

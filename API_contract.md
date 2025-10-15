@@ -276,7 +276,7 @@ Error Response:
         "data": "no data"
     }
 
-DELETE /exchangeClass/{id}
+DELETE /exchangeClass/id/{id}
 
 Description: Xóa một yêu cầu đổi lớp theo id.
 
@@ -400,7 +400,7 @@ Khi studentCode đã tồn tại yêu cầu đổi slot:
     "data": "no data"
     }
 
-DELETE /exchangeSlot/{id}
+DELETE /exchangeSlot/id/{id}
 
 Description: Xóa một yêu cầu đổi slot theo id.
 

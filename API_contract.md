@@ -219,7 +219,7 @@ ExchangeClassRequest object
         "currentSlot": String ("1,2" or "3.4" and != desiredSlot)
     }
 
-POST /exchangeClass
+POST /exchange_class
 
 Description: Thêm một yêu cầu đổi lớp mới.
 
@@ -276,7 +276,7 @@ Error Response:
         "data": "no data"
     }
 
-DELETE /exchangeClass/id/{id}
+DELETE /exchange_class/id/{id}
 
 Description: Xóa một yêu cầu đổi lớp theo id.
 
@@ -307,13 +307,15 @@ Error Response:
     "data": "no data"
     }
 
-GET /exchangeClass/{classCode}/page/{page}
+GET /exchange_class/{classCode}/page/{page}
 
 Description: Lấy danh sách yêu cầu đổi lớp theo classCode.
 URL Params:
 
     classCode (string): mã lớp cần lấy
-    page: là trang số mấy
+    page: là trang số mấy (>=0)
+    example :
+    /exchange_class/SE2003/page/0
 
 Headers:
 
@@ -343,7 +345,7 @@ Error Response:
         "data": null
     }
 
-POST /exchangeSlot
+POST /exchange_slot
 
 Description:
 Thêm một yêu cầu đổi ca học mới.
@@ -400,7 +402,7 @@ Khi studentCode đã tồn tại yêu cầu đổi slot:
     "data": "no data"
     }
 
-DELETE /exchangeSlot/id/{id}
+DELETE /exchange_slot/id/{id}
 
 Description: Xóa một yêu cầu đổi slot theo id.
 
@@ -428,87 +430,8 @@ Headers: Content-Type: application/json
         "data": "no data"
     }
 
-GET /exchangeSlot/class/{classCode}/page/{page}
 
-Description: Lấy danh sách slot request theo mã lớp (classCode) và phân trang.
-
-URL Params:
-
-    classCode : string.
-    
-    page : int(>=0). 
-
-Headers: Content-Type: application/json
-
-Success Response:
-
-    HTTP Code: 200 OK
-    Content:
-    {
-        "processSuccess": true,
-        "message": "slot request(s) found successfully",
-        "error": "no error",
-        "data": [
-        {
-        "id": 1,
-        "studentCode": "S123456",
-        "classCode": "CS101",
-        "slot": "3-4",
-        "createdAt": "2025-10-04T08:30:00Z"
-        },
-        ...
-        ]
-    }
-
-Error Response:
-
-    Khi không có slot request nào cho classCode:
-    HTTP Code: 404 NOT_FOUND
-    Content:
-    {
-        "processSuccess": false,
-        "message": "no slot request with class code: {classCode}",
-        "error": "NOT_FOUND",
-        "data": null
-    }
-
-GET /exchangeSlot/subject/{subjectCode}/page/{page}
-
-Description:
-Lấy danh sách slot request theo mã môn học (subjectCode) và phân trang.
-
-URL Params:
-
-    subjectCode : String.
-    page : int.
-
-Headers: Content-Type: application/json
-
-Success Response:
-
-    HTTP Code: 200 OK
-    Content:
-    {
-        "processSuccess": true,
-        "message": "slot request(s) found successfully",
-        "error": "no error",
-        "data": [ ... ]
-    }
-
-Error Response:
-
-Khi không có slot request nào cho subjectCode:
-    
-    HTTP Code: 404 NOT_FOUND
-    Content:
-    {
-        "processSuccess": false,
-        "message": "no slot request with subject code: {subjectCode}",
-        "error": "NOT_FOUND",
-        "data": null
-    }
-
-GET /exchangeSlot/slot/{slot}/page/{page}
+GET /exchange_slot/slot/{slot}/page/{page}
 
 Description:
 Lấy danh sách slot request theo ca học (slot) và phân trang.
@@ -517,6 +440,7 @@ URL Params:
 
     slot :  String("1,2" or "3,4").
     page : int(>=0).
+    example : /exchange_slot/slot/3,4/page/0
 
 Headers:Content-Type: application/json
 
@@ -540,42 +464,6 @@ Khi không có slot request nào cho slot:
     {
         "processSuccess": false,
         "message": "no slot request with slot: {slot}",
-        "error": "NOT_FOUND",
-        "data": null
-    }
-
-GET /exchangeSlot/subject_code&class_code?subjectCode=...&classCode=...&page=...
-
-Description:
-Lấy danh sách slot request theo subjectCode và classCode, có phân trang.
-
-Query(Data) Params:
-    
-    subjectCode (string)
-    classCode (string)
-    page (int)
-
-Headers: Content-Type: application/json
-
-Success Response:
-    
-    HTTP Code: 200 OK 
-    Content:
-    {
-        "processSuccess": true,
-        "message": "slot request(s) found successfully",
-        "error": "no error",
-        "data": [ ... ]
-    }
-
-Error Response:
-    
-    Không có dữ liệu phù hợp:
-    HTTP Code: 404 NOT_FOUND
-    Content:
-    {
-        "processSuccess": false,
-        "message": "no slot request with subject code: {subjectCode} and class code: {classCode}",
         "error": "NOT_FOUND",
         "data": null
     }

@@ -1,11 +1,13 @@
 package Main.Validator;
 
 import Main.DTO.LoginRequestDTO;
+import Main.DTO.PatchAccountDTO;
 import Main.DTO.ResetPasswordDTO;
 import Main.Exception.AccountException;
 import Main.Model.Enity.Account;
 import Main.Model.Enity.MajorClass;
-import Main.Repository.AccountRepository;
+import Main.Service.AccountService;
+import Main.Service.AccountService;
 import Main.Service.MajorClassService;
 import Main.Utility.util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ public class AccountValidator {
     @Autowired
     util utility;
 
-    @Autowired /// temporary could separate interface for implementing versions of service
-    AccountRepository accountRepository;
+    @Autowired 
+    AccountService accountService;
 
     @Autowired
     MajorClassService majorClassService;
@@ -53,12 +55,13 @@ public class AccountValidator {
         throwExceptionIfNull(account.getClassCode(), "null class code");
         throwExceptionIfNull(account.getRole().toString(), "null role");
 
-        throwExceptionIfExists(accountRepository.existsByUsername(account.getUsername()), "existed username");
-        throwExceptionIfExists(accountRepository.existsByPhoneNumber(account.getPhoneNumber()), "existed phone number");
-        throwExceptionIfExists(accountRepository.existsByStudentCode(account.getStudentCode()), "existed student code");
-        throwExceptionIfExists(accountRepository.existsByAccountName(account.getAccountName()), "existed account name");
+        throwExceptionIfExists(accountService.existsByUsername(account.getUsername()), "existed username");
+        throwExceptionIfExists(accountService.existsByPhoneNumber(account.getPhoneNumber()), "existed phone number");
+        throwExceptionIfExists(accountService.existsByStudentCode(account.getStudentCode()), "existed student code");
+        throwExceptionIfExists(accountService.existsByAccountName(account.getAccountName()), "existed account name");
 
-        throwExceptionIfNotExists(majorClassService.existsByClassCode(account.getClassCode()), "not class with code: " + account.getClassCode() );
+        throwExceptionIfNotExists(majorClassService.existsByClassCode(account.getClassCode()),
+                "not class with code: " + account.getClassCode() );
         boolean isValidPassword = utility.validatePassword(account.getPassword());
 
         if(!isValidPassword) {throw new AccountException("invalid password", HttpStatus.BAD_REQUEST); }
@@ -70,7 +73,7 @@ public class AccountValidator {
 
         throwExceptionIfNull(username, "null username");
         throwExceptionIfNull(password, "null password");
-        throwExceptionIfNotExists(accountRepository.existsByUsername(username),"no account with username " + username);
+        throwExceptionIfNotExists(accountService.existsByUsername(username),"no account with username " + username);
     }
 
     public void validateResetPassword(ResetPasswordDTO resetPasswordDTO){
@@ -84,6 +87,32 @@ public class AccountValidator {
 
         if(!isValidPassword) {throw new AccountException("invalid password", HttpStatus.BAD_REQUEST); }
 
-        throwExceptionIfNotExists(accountRepository.existsByUsername(username),"no account with username " + username);
+        throwExceptionIfNotExists(accountService.existsByUsername(username),"no account with username " + username);
+    }
+
+    //validate and return account after patched
+    public Account validatePatchAccount(PatchAccountDTO patchAccountDTO){ //a little multitask here
+        final String username = utility.getUsername();
+        final String newStudentCode = patchAccountDTO.getNewStudentCode();
+        final String newClassCode = patchAccountDTO.getNewClassCode();
+        Account account = accountService.findByUserName(username);
+
+        throwExceptionIfNull(account , "no account with username: " + username + " ContextHolder");
+
+        if(newStudentCode  == null && newClassCode == null){
+            throw new AccountException("null both new student code and new class code", HttpStatus.BAD_REQUEST);
+        }
+
+        if(newStudentCode != null){
+            account.setStudentCode(newStudentCode);
+        }
+
+        if(newClassCode != null){
+            throwExceptionIfNotExists(majorClassService.existsByClassCode(newClassCode),
+                    "not class with code: " + newClassCode);
+            account.setClassCode(newClassCode);
+        }
+
+        return account; // this is account after patched
     }
 }

@@ -192,6 +192,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getHttpStatus()).body(response);
     }
 
+    @ExceptionHandler(UtilityException.class)
+    public ResponseEntity<ResponseDTO<String>>handleUtilityException(UtilityException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage(e.getMessage());
+        response.setError(e.getHttpStatus().getReasonPhrase());
+        response.setHttpStatus(e.getHttpStatus().value());
+        return ResponseEntity.status(e.getHttpStatus()).body(response);
+    }
+
     //config exception
     @ExceptionHandler(NoSuchAlgorithmException.class)
     public ResponseEntity<ResponseDTO<String>>handleNoSuchAlgorithmException(NoSuchAlgorithmException e){

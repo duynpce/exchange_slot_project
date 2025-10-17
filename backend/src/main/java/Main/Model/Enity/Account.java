@@ -37,6 +37,7 @@ public class Account {
     @JoinColumn(name = "class_code", referencedColumnName = "class_code", insertable = false, updatable = false)
     private MajorClass majorClass;
 
+    //for query data --> read only
     @Column(name = "roles", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;

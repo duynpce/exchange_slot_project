@@ -206,6 +206,48 @@ error response
     "httpStatus": 404
     }
 
+Patch /account
+
+description : thay đổi thông tin của account (class code hoặc student code)
+
+URL Param :none
+
+Data Param: 
+
+    {
+        "newStudentCode" :String,
+        "newClassCode" :String
+    }
+    lưu ý: 
+    - 1 trong 2 field có thể null nhưng cả 2 không được null
+    - nếu cả 2 null thì sẽ lỗi
+    - nếu chỉ 1 cái null thì update cái còn lại
+
+success response:
+
+    HTTP Code: 200 ok
+    Content:
+    {
+        "processSuccess": true,
+        "message": "patched account successfully",
+        "error": "no error",
+        "data": "no data"
+    }
+
+error response:
+    
+    khi cả 2 field đều null
+    HTTP Code: 400 bad request
+    Content:
+    {
+        "processSuccess": false,
+        "message": "both new student code and new class code are null",
+        "error" : "bad request",
+        "data": "no data"
+    }
+
+Headers: Content-Type: application/json
+
 
 #ExchangeClassRequest
 ExchangeClassRequest object

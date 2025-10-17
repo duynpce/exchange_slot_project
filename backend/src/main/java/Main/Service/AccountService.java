@@ -2,6 +2,7 @@ package Main.Service;
 
 
 import Main.DTO.LoginRequestDTO;
+import Main.DTO.PatchAccountDTO;
 import Main.DTO.ResetPasswordDTO;
 import Main.Exception.AccountException;
 import Main.Validator.AccountValidator;
@@ -23,22 +24,15 @@ public class AccountService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Autowired
-    AccountValidator accountValidator;
-
-
-    public boolean register(Account account){
-        accountValidator.validateRegister(account);
+    public void register(Account account){
 
         String encryptedPassword = passwordEncoder.encode(account.getPassword());
         account.setPassword(encryptedPassword);
         accountRepository.save(account);
 
-        return true;
     }
 
     public  Account login(LoginRequestDTO loginRequest){
-        accountValidator.validateLogin(loginRequest);
 
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
@@ -53,17 +47,19 @@ public class AccountService {
 
     }
 
-    public boolean resetPassword(ResetPasswordDTO resetPasswordDTO){
-
-        accountValidator.validateResetPassword(resetPasswordDTO);
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO){
 
         String username = resetPasswordDTO.getUsername();
         String encryptedPassword = passwordEncoder.encode(resetPasswordDTO.getNewPassword());
 
-        return accountRepository.resetPassword(username,encryptedPassword) == 1;
     }
 
-    public Account findByUserName(String userName){
+    public void  save(Account accountAfterPatch){
+        accountRepository.save(accountAfterPatch);
+    }
+
+
+    public Account findByUserName(String userName) {
         return accountRepository.findByUsername(userName).orElse(null);
     }
 

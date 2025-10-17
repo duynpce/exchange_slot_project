@@ -76,8 +76,7 @@ public class AccountValidator {
         throwExceptionIfNotExists(accountService.existsByUsername(username),"no account with username " + username);
     }
 
-    public void validateResetPassword(ResetPasswordDTO resetPasswordDTO){
-        final String username = resetPasswordDTO.getUsername();;
+    public void validateResetPassword(ResetPasswordDTO resetPasswordDTO, String username){
         final String newPassword = resetPasswordDTO.getNewPassword();
 
         throwExceptionIfNull(username, "null username");

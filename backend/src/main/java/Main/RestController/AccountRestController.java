@@ -24,9 +24,6 @@ public class AccountRestController {
     AccountService accountService;
 
     @Autowired
-    jwtUtil jwtUtility;
-
-    @Autowired
     util utility;
 
     @Autowired
@@ -37,29 +34,26 @@ public class AccountRestController {
         accountValidator.validateRegister(account);// will put it in service if separate interface
         accountService.register(account);
 
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(true,"no error", "register successfully",null);
+        ResponseDTO<String> responseDTO = new ResponseDTO<>
+                (true,"no error", "register successfully",null);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
-        accountValidator.validateLogin(loginRequest);// will put it in service if separate interface
-        Account foundAccount = accountService.login(loginRequest); ///login failed --> throw exception in service
+        @PostMapping("/login")
+        public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
+            accountValidator.validateLogin(loginRequest);// will put it in service if separate interface
+            LoginResponseDTO loginResponseDTO = accountService.login(loginRequest);
 
-        LoginResponseDTO loginResponseDTO;
-        UserDetailConfig user = new UserDetailConfig(foundAccount);
-        String refreshToken = jwtUtility.getRefreshToken(user);
-        String accessToken = jwtUtility.getAccessToken(user);
-        loginResponseDTO =  new LoginResponseDTO(refreshToken,accessToken ,"login success");
-        return ResponseEntity.status(HttpStatus.OK).body(loginResponseDTO);
-    }
+            return ResponseEntity.status(HttpStatus.OK).body(loginResponseDTO);
+        }
 
     @PatchMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPassword
             (@RequestBody ResetPasswordDTO resetPasswordDTO){
-        accountValidator.validateResetPassword(resetPasswordDTO);// will put it in service if separate interface
-        accountService.resetPassword(resetPasswordDTO);
+        final String username = utility.getUsername(); ///get username in Context Holder(for security)
+        accountValidator.validateResetPassword(resetPasswordDTO,username);// will put it in service if separate interface
+        accountService.resetPassword(resetPasswordDTO,username);
 
         ResponseDTO<String> responseDTO =
                 new ResponseDTO<>(true,"no error","reset successfully",null);
@@ -69,7 +63,7 @@ public class AccountRestController {
 
     @PatchMapping("/account")
     public ResponseEntity<ResponseDTO<String>> patchAccount(@RequestBody PatchAccountDTO patchAccountDTO){
-        Account accountAfterPatched = accountValidator.validatePatchAccount(patchAccountDTO);
+        Account accountAfterPatched = accountValidator.validatePatchAccount(patchAccountDTO);// will put it in service if separate interface
         accountService.save(accountAfterPatched);
 
         ResponseDTO<String> responseDTO = new ResponseDTO<>

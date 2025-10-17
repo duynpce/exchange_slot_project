@@ -171,7 +171,6 @@ URL Params: None
 Data Params:
 
     {
-        userName: String,
         newPassword: String,
     }
 

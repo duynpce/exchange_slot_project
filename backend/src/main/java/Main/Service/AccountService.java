@@ -1,10 +1,14 @@
 package Main.Service;
 
 
+import Main.Config.UserDetailConfig;
 import Main.DTO.LoginRequestDTO;
+import Main.DTO.LoginResponseDTO;
 import Main.DTO.PatchAccountDTO;
 import Main.DTO.ResetPasswordDTO;
 import Main.Exception.AccountException;
+import Main.Utility.jwtUtil;
+import Main.Utility.util;
 import Main.Validator.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +28,14 @@ public class AccountService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    util utility;
+
+    @Autowired
+    jwtUtil jwtUtility;
+
+
+
     public void register(Account account){
 
         String encryptedPassword = passwordEncoder.encode(account.getPassword());
@@ -32,30 +44,36 @@ public class AccountService {
 
     }
 
-    public  Account login(LoginRequestDTO loginRequest){
+    public LoginResponseDTO login(LoginRequestDTO loginRequest){
 
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-
-        Account account = accountRepository.findByUsername(username).get(); ///has validated by validator
-        String encryptedPassword = account.getPassword();
+        Account foundAccount = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new AccountException("Account not found", HttpStatus.UNAUTHORIZED));
+        String encryptedPassword = foundAccount.getPassword();
         boolean correctPassword = passwordEncoder.matches(password,encryptedPassword );
 
-        if(correctPassword) {return account;}
+        if(correctPassword) {
+            LoginResponseDTO loginResponseDTO;
+            UserDetailConfig user = new UserDetailConfig(foundAccount);
+            String refreshToken = jwtUtility.getRefreshToken(user);
+            String accessToken = jwtUtility.getAccessToken(user);
+            loginResponseDTO =  new LoginResponseDTO(refreshToken,accessToken ,"login success");
+            return loginResponseDTO;
+        }
 
         throw new AccountException("incorrect password" , HttpStatus.UNAUTHORIZED);
 
     }
 
-    public void resetPassword(ResetPasswordDTO resetPasswordDTO){
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO, String username){
 
-        String username = resetPasswordDTO.getUsername();
         String encryptedPassword = passwordEncoder.encode(resetPasswordDTO.getNewPassword());
-
+        accountRepository.resetPassword(username, resetPasswordDTO.getNewPassword());
     }
 
-    public void  save(Account accountAfterPatch){
-        accountRepository.save(accountAfterPatch);
+    public void  save(Account account){
+        accountRepository.save(account);
     }
 
 

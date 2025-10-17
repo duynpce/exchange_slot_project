@@ -26,9 +26,11 @@ public class util {
 
     public String getUsername(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if(authentication == null || !authentication.isAuthenticated()){
             throw new UtilityException("hasn't logged in", HttpStatus.UNAUTHORIZED);
         }
+
         return authentication.getName();
     }
 

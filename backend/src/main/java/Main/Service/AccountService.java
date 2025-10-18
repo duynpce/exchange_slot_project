@@ -69,7 +69,7 @@ public class AccountService {
     public void resetPassword(ResetPasswordDTO resetPasswordDTO, String username){
 
         String encryptedPassword = passwordEncoder.encode(resetPasswordDTO.getNewPassword());
-        accountRepository.resetPassword(username, resetPasswordDTO.getNewPassword());
+        accountRepository.resetPassword(username, encryptedPassword);
     }
 
     public void  save(Account account){

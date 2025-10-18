@@ -72,4 +72,17 @@ public class AccountRestController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
+    @PatchMapping("/reset_password_for_testing")
+    public ResponseEntity<ResponseDTO<String>> resetPasswordForTestTing(@RequestBody ResetPasswordDTO resetPasswordDTO){
+        final String username = utility.getUsername(); ///get username in Context Holder(for security)
+        accountService.resetPassword(resetPasswordDTO,username);
+
+        ResponseDTO<String> responseDTO =
+                new ResponseDTO<>(true,"no error","reset successfully",null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+    }
+
+
+
 }

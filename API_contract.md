@@ -348,7 +348,7 @@ Error Response:
     "data": "no data"
     }
 
-GET /exchange_class/{classCode}/page/{page}
+GET /exchange_class/class_code/{classCode}/page/{page}
 
 Description: Lấy danh sách yêu cầu đổi lớp theo classCode.
 URL Params:

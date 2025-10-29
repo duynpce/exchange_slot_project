@@ -205,6 +205,45 @@ error response
     "message": "reset failed",
     }
 
+POST /refresh_access_token
+
+description : làm mới access token bằng refresh token
+
+URL Params: None
+
+Data Params:
+
+    {
+        refreshToken: String
+    }
+
+Headers: Content-Type: application/json
+
+success response
+
+    Http code: 200
+    Content:
+    {
+        "processSuccess": true,
+        "message": "refresh access token successfully",
+        "error": "no error",
+        "data": {
+            "accessToken": "string"
+        }
+    }
+
+error response
+
+    Http code: 401
+    khi refresh token không hợp lệ hoặc access token chưa hết hạn
+    Content:
+    {
+        "processSuccess": false,
+        "message": "invalid refresh token or access token haven't expired",
+        "error": "UNAUTHORIZED",
+        "data": "no data"
+    }
+
 Patch /account
 
 description : thay đổi thông tin của account (class code hoặc student code)
@@ -519,15 +558,6 @@ Khi studentCode đã tồn tại yêu cầu đổi slot:
     }
 
 
-    Khi có lỗi hệ thống (lỗi DB, exception nội bộ):
-    HTTP Code: 500 INTERNAL_SERVER_ERROR 
-    Content:
-    {
-    "processSuccess": false,
-    "message": "can not add slot request due to internal errors",
-    "error": "INTERNAL_SERVER_ERROR",
-    "data": "no data"
-    }
 
 DELETE /exchange_slot/id/{id}
 
@@ -593,4 +623,115 @@ Khi không có slot request nào cho slot:
         "message": "no slot request with slot: {slot}",
         "error": "NOT_FOUND",
         "data": null
+    }
+
+MajorClass(class) 
+    
+    object 
+    {
+        "classCode" :String
+        "slot":String ("1,2") or("3,4")
+    }
+    tên object là MajorClass vì class là ký hiệu trong java
+    
+
+lưu ý quan trọng chỉ có role admin mới có thể truy cập
+tới các endpoint /class  
+
+
+POST /class
+
+Description:
+Thêm một lớp học mới (class) vào hệ thống.
+
+URL Params:
+NONE
+
+Data Param:
+
+    {
+        "classCode": "string",
+        "slot": String ("1,2") or ("3,4")
+    }
+
+
+Headers:
+Content-Type: application/json
+
+✅ Success Response:
+
+HTTP Code: 201 CREATED
+Content:
+
+    {
+        "processSuccess": true,
+        "message": "class added successfully",
+        "error": "no error",
+        "data": "no data"
+    }
+
+❌ Error Responses:
+
+Khi classCode đã tồn tại trong hệ thống:
+
+    HTTP Code: 409 CONFLICT
+    Content:
+    {
+        "processSuccess": false,
+        "message": "already existed class with this class code",
+        "error": "CONFLICT",
+        "data": "no data"
+    }
+
+PATCH /class
+
+Description:
+Thay đổi thông tin của MajorClass (class code hoặc slot).
+
+URL Params:
+none
+
+Data Param:
+
+    {
+    "classCode": "string",
+    "slot": "string"
+    }
+    Lưu ý:
+    - 1 trong 2 field có thể null nhưng cả 2 không được null.
+    - Nếu cả 2 cùng null → lỗi.
+    - Nếu chỉ có 1 field không null → hệ thống sẽ chỉ update field đó.
+
+✅ Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "patched major class successfully",
+        "error": "no error",
+        "data": "no data"
+    }
+
+❌ Error Responses:
+
+    Khi cả classCode và slot đều null:
+    HTTP Code: 400 BAD_REQUEST
+    Content: 
+    {
+    "processSuccess": false,
+    "message": "null both class code and slot",
+    "error": "BAD_REQUEST",
+    "data": "no data"
+    }
+
+
+    Khi không tồn tại classCode trong hệ thống:
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "not found class with class code: {classCode}",
+        "error": "NOT_FOUND",
+        "data": "no data"
     }

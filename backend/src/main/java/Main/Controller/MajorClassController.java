@@ -2,6 +2,7 @@ package Main.Controller;
 
 import Main.DTO.Common.ResponseDTO;
 import Main.DTO.MajorClass.CreateMajorClassDTO;
+import Main.DTO.MajorClass.UpdateMajorClassDTO;
 import Main.Entity.MajorClass;
 import Main.Mapper.MajorClassMapper;
 import Main.Service.MajorClassService;
@@ -31,6 +32,17 @@ public class MajorClassController {
         MajorClass majorClass = majorClassMapper.toEntity(createMajorClassDTO);
         majorClassValidator.validateAddRequest(majorClass);
         majorClassService.add(majorClass);
+
+        ResponseDTO<String> response =
+                new ResponseDTO<>(true, "MajorClass added successfully", "no error", null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    public ResponseEntity<ResponseDTO<String>> update(UpdateMajorClassDTO updateMajorClassDTO){
+        MajorClass majorClass = majorClassMapper.toEntity(updateMajorClassDTO);
+        majorClassValidator.validateUpdateRequest(majorClass);
+        majorClassService.update(majorClass);
 
         ResponseDTO<String> response =
                 new ResponseDTO<>(true, "MajorClass updated successfully", "no error", null);

@@ -1,6 +1,6 @@
 package Main.Repository;
 
-import Main.Model.Enity.ExchangeSlotRequest;
+import Main.Entity.ExchangeSlotRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

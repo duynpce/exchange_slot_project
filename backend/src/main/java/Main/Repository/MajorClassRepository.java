@@ -1,6 +1,6 @@
 package Main.Repository;
 
-import Main.Model.Enity.MajorClass;
+import Main.Entity.MajorClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,14 +1,11 @@
 package Main.Utility;
 
-import Main.Exception.UtilityException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import Main.Exception.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.regex.Pattern;
 
 @Component
@@ -24,14 +21,23 @@ public class util {
         return pattern.matcher(password).matches();
     }
 
-    public String getUsername(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication == null || !authentication.isAuthenticated()){
-            throw new UtilityException("hasn't logged in", HttpStatus.UNAUTHORIZED);
+    public void throwExceptionIfNull(Object field, String message){
+        if(field == null){
+            throw new BaseException(message, HttpStatus.BAD_REQUEST);
         }
+    }
 
-        return authentication.getName();
+    public void throwExceptionIfExists(boolean isExists, String message){
+        if(isExists){
+            throw new BaseException(message, HttpStatus.CONFLICT);
+        }
+    }
+
+    public void throwExceptionIfNotExists(boolean isExists, String message){
+        if(!isExists){
+            throw new BaseException(message, HttpStatus.NOT_FOUND);
+        }
     }
 
 }

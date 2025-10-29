@@ -187,22 +187,22 @@ error response
 
     có giá trị là null thì vẫn thông báo như ở trên
     
+    Http code 401 
     khi mật khẩu không hợp lệ
     {
     "processSuccess": false,
     "data": "no data",
     "error": "invalid password",
     "message": "reset failed",
-    "httpStatus": 400
     }
 
     khi không tìm thấy tài khoản
+    Http code 404
     {
     "processSuccess": false,
     "data": "no data",
     "error": "no existed account",
     "message": "reset failed",
-    "httpStatus": 404
     }
 
 Patch /account
@@ -247,6 +247,46 @@ error response:
 
 Headers: Content-Type: application/json
 
+GET /account
+
+description : lấy thông tin của account thông qua accessToken
+
+URL Param :none
+
+Data Param:
+
+success response:
+
+    HTTP Code: 200 ok
+    Content:
+    {
+        "processSuccess": true,
+        "message": "patched account successfully",
+        "error": "no error",
+        "data": {
+                    "id" : int
+                    "classCode": String
+                    "studentCode": String
+                    "accountName": String 
+                    "role": String                
+                }
+    
+    }
+
+error response:
+
+    khi access token không hợp lệ hoặc không có access token 
+    HTTP code : 401 
+     Content:
+    {
+        "processSuccess": false,
+        "message": "haven't logged in",
+        "error": "UNAUTHORIZATED",
+        "data": null or "no data"
+    }
+
+
+Headers: Content-Type: application/json
 
 #ExchangeClassRequest
 ExchangeClassRequest object
@@ -382,6 +422,52 @@ Error Response:
     {
         "processSuccess": false,
         "message": "no request with that class code: {classCode}",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+GET /exchange_class/student_code/{studentCode}
+
+Description: Lấy yêu cầu đổi lớp theo studentCode.
+
+URL Params:
+    
+    studentCode :String
+
+Headers:
+
+Content-Type: application/json
+
+Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+
+    {
+    "processSuccess": true,
+    "message": "request found successfully",
+    "error": "no error",
+    "data":
+        {
+            "id": int,
+            "studentCode": String,
+            "desiredClassCode": String,
+            "CurrentclassCode": String,
+            "desiredSlot" : String ("1,2" or "3.4")
+            "currentSlot": String ("1,2" or "3.4" and != desiredSlot)
+        }
+}
+
+
+Error Response:
+
+Khi không có request nào cho studentCode:
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no request with that student code: SV001",
         "error": "NOT_FOUND",
         "data": null
     }

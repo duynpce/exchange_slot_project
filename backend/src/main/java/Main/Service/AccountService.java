@@ -1,25 +1,28 @@
 package Main.Service;
 
 
-import Main.Config.UserDetailConfig;
-import Main.DTO.LoginRequestDTO;
-import Main.DTO.LoginResponseDTO;
-import Main.DTO.PatchAccountDTO;
-import Main.DTO.ResetPasswordDTO;
-import Main.Exception.AccountException;
+import Main.Config.Security.UserDetailConfig;
+import Main.Config.Security.UserDetailServiceConfig;
+import Main.DTO.Auth.*;
+import Main.Enum.Constant;
+import Main.Exception.BaseException;
 import Main.Utility.jwtUtil;
-import Main.Utility.util;
-import Main.Validator.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
-import Main.Model.Enity.Account;
+import Main.Entity.Account;
 import Main.Repository.AccountRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AccountService {
 
     @Autowired
@@ -29,19 +32,21 @@ public class AccountService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    util utility;
+    ApplicationContext context;
 
     @Autowired
     jwtUtil jwtUtility;
 
-
-
-    public void register(Account account){
-
+    @Caching(evict = { ///  if  registered success --> delete accountExists of the account
+            @CacheEvict(value = "accountExists", key = "#account.studentCode"),
+            @CacheEvict(value = "accountExists", key = "#account.username"),
+            @CacheEvict(value = "accountExists", key = "#account.accountName"),
+            @CacheEvict(value = "accountExists", key = "#account.phoneNumber")
+    })
+    public Account register(Account account){
         String encryptedPassword = passwordEncoder.encode(account.getPassword());
         account.setPassword(encryptedPassword);
-        accountRepository.save(account);
-
+        return accountRepository.save(account);
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequest){
@@ -49,7 +54,7 @@ public class AccountService {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
         Account foundAccount = accountRepository.findByUsername(username)
-                .orElseThrow(() -> new AccountException("Account not found", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new BaseException("Account not found", HttpStatus.UNAUTHORIZED));
         String encryptedPassword = foundAccount.getPassword();
         boolean correctPassword = passwordEncoder.matches(password,encryptedPassword );
 
@@ -62,41 +67,67 @@ public class AccountService {
             return loginResponseDTO;
         }
 
-        throw new AccountException("incorrect password" , HttpStatus.UNAUTHORIZED);
+        throw new BaseException("incorrect password" , HttpStatus.UNAUTHORIZED);
 
     }
 
-    public void resetPassword(ResetPasswordDTO resetPasswordDTO, String username){
+    public int resetPassword(ResetPasswordDTO resetPasswordDTO, String username){
 
         String encryptedPassword = passwordEncoder.encode(resetPasswordDTO.getNewPassword());
-        accountRepository.resetPassword(username, encryptedPassword);
+        return accountRepository.resetPassword(username, encryptedPassword);
+    }
+
+    public ResponseRefreshTokenDTO refreshAccessToken(RefreshAccessTokenDTO refreshAccessTokenDTO){
+        final String refreshToken = refreshAccessTokenDTO.getRefreshToken();
+        final String refreshSecretKey = jwtUtility.getRefreshSecretKey();
+        String username =  jwtUtility.extractUsername(refreshToken, refreshSecretKey);
+
+        if(username != null){
+            UserDetailConfig user = new
+                    UserDetailConfig(context.getBean(UserDetailServiceConfig.class).loadUserByUsername(username));
+            boolean validToken = jwtUtility.validateToken(refreshToken, user, refreshSecretKey);
+
+            if(validToken){
+                final String accessToken = jwtUtility.getAccessToken(user);
+                return new ResponseRefreshTokenDTO(accessToken);
+            }
+        }
+
+        throw new BaseException("invalid refresh token or access token haven't expired", HttpStatus.UNAUTHORIZED);
     }
 
     public void  save(Account account){
         accountRepository.save(account);
     }
 
-
-    public Account findByUserName(String userName) {
-        return accountRepository.findByUsername(userName).orElse(null);
+    @Cacheable(value = "accountData", key = "#username")
+    public Account findByUserName(String username) {
+        return accountRepository.findByUsername(username).orElseThrow
+                (() -> new BaseException("not found account with username : " + username, HttpStatus.NOT_FOUND));
     }
 
+    @Cacheable(value = "accountData" , key = "#studentCode")
     public Account findByStudentCode(String studentCode){
-        return  accountRepository.findByStudentCode(studentCode).orElse(null);
+        return  accountRepository.findByStudentCode(studentCode).orElseThrow
+                (() -> new BaseException("not found account with studentCode : " + studentCode, HttpStatus.NOT_FOUND));
     }
 
+    @Cacheable(value = "accountExists", key = "#studentCode")
     public boolean existsByStudentCode(String studentCode){
         return accountRepository.existsByStudentCode(studentCode);
     }
 
+    @Cacheable(value = "accountExists", key = "#username")
     public boolean existsByUsername(String username){
         return accountRepository.existsByUsername(username);
     }
 
+    @Cacheable(value = "accountExists", key = "#accountName")
     public boolean existsByAccountName(String accountName){
         return accountRepository.existsByAccountName(accountName);
     }
 
+    @Cacheable(value = "accountExists", key = "#phoneNumber")
     public boolean existsByPhoneNumber(String phoneNumber){
         return accountRepository.existsByPhoneNumber(phoneNumber);
     }

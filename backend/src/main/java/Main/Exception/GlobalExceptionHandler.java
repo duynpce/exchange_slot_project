@@ -1,7 +1,7 @@
 package Main.Exception;
 
 
-import Main.DTO.ResponseDTO;
+import Main.DTO.Common.ResponseDTO;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,7 +30,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("the data could be null, violate the constraint of database or already existed");
         response.setError("CONFLICT");
-        response.setHttpStatus(HttpStatus.CONFLICT.value());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
@@ -42,7 +41,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("no such existed data found");
         response.setError("NOT_FOUND");
-        response.setHttpStatus(HttpStatus.NOT_FOUND.value());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
@@ -53,7 +51,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("can't commit data to the database please check out the data");
         response.setError("CONFLICT");
-        response.setHttpStatus(HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
@@ -65,7 +62,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("no such method existed in this endpoint");
         response.setError("METHOD_NOT_ALLOWED");
-        response.setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
@@ -76,7 +72,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("do not support this type of file, support json only");
         response.setError("UNSUPPORTED MEDIA TYPE");
-        response.setHttpStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(response);
     }
 
@@ -87,7 +82,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("can't return the file's type of the client expected");
         response.setError("NOT ACCEPTABLE");
-        response.setHttpStatus(HttpStatus.NOT_ACCEPTABLE.value());
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
     }
 
@@ -98,7 +92,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("cannot read the data from client");
         response.setError("NOT ACCEPTABLE");
-        response.setHttpStatus(HttpStatus.NOT_ACCEPTABLE.value());
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
     }
 
@@ -110,7 +103,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("null pointer from the required data");
         response.setError("BAD REQUEST");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -121,7 +113,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("wrong parameter to call a method");
         response.setError("BAD REQUEST");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -132,7 +123,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("need a value from the url to run the method properly");
         response.setError("BAD REQUEST");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -143,63 +133,18 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("access token expired");
         response.setError("UNAUTHORIZED");
-        response.setHttpStatus(HttpStatus.UNAUTHORIZED.value());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     /// custom exception
-    @ExceptionHandler(AccountException.class)
-    public ResponseEntity<ResponseDTO<String>>handleAccountException(AccountException e){
-        ResponseDTO<String> response = new ResponseDTO<>();
-        response.setData(null);
-        response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError(e.getHttpStatus().getReasonPhrase());
-        response.setHttpStatus(e.getHttpStatus().value());
-        return ResponseEntity.status(e.getHttpStatus()).body(response);
-    }
 
-    @ExceptionHandler(ExchangeClassRequestException.class)
-    public ResponseEntity<ResponseDTO<String>>handleExchangeClassRequestException(ExchangeClassRequestException e){
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ResponseDTO<String>>handleBaseException(BaseException e){
         ResponseDTO<String> response = new ResponseDTO<>();
         response.setData(null);
         response.setProcessSuccess(false);
         response.setMessage(e.getMessage());
         response.setError(e.getHttpStatus().getReasonPhrase());
-        response.setHttpStatus(e.getHttpStatus().value());
-        return ResponseEntity.status(e.getHttpStatus()).body(response);
-    }
-
-    @ExceptionHandler(ExchangeSlotRequestException.class)
-    public ResponseEntity<ResponseDTO<String>>handleExchangeSlotRequestException(ExchangeSlotRequestException e){
-        ResponseDTO<String> response = new ResponseDTO<>();
-        response.setData(null);
-        response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError(e.getHttpStatus().getReasonPhrase());
-        response.setHttpStatus(e.getHttpStatus().value());
-        return ResponseEntity.status(e.getHttpStatus()).body(response);
-    }
-
-    @ExceptionHandler(URLException.class)
-    public ResponseEntity<ResponseDTO<String>>handleURLException(URLException e){
-        ResponseDTO<String> response = new ResponseDTO<>();
-        response.setData(null);
-        response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError(e.getHttpStatus().getReasonPhrase());
-        response.setHttpStatus(e.getHttpStatus().value());
-        return ResponseEntity.status(e.getHttpStatus()).body(response);
-    }
-
-    @ExceptionHandler(UtilityException.class)
-    public ResponseEntity<ResponseDTO<String>>handleUtilityException(UtilityException e){
-        ResponseDTO<String> response = new ResponseDTO<>();
-        response.setData(null);
-        response.setProcessSuccess(false);
-        response.setMessage(e.getMessage());
-        response.setError(e.getHttpStatus().getReasonPhrase());
-        response.setHttpStatus(e.getHttpStatus().value());
         return ResponseEntity.status(e.getHttpStatus()).body(response);
     }
 
@@ -211,7 +156,6 @@ public class GlobalExceptionHandler {
         response.setProcessSuccess(false);
         response.setMessage("no algorithms to hash");
         response.setError("NoSuchAlgorithms");
-        response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(response);
     }
 

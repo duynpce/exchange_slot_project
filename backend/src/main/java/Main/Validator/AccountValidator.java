@@ -73,27 +73,24 @@ public class AccountValidator {
         utility.throwExceptionIfNotExists(accountService.existsByUsername(username),"no account with username " + username);
     }
 
-    //validate and return account after patched
-    public Account validatePatchAccount(UpdateAccountDTO patchAccountDTO){ //a little multitask here
-        final String username = jwtUtility.getUsername();
-        final String newStudentCode = patchAccountDTO.getNewStudentCode();
-        final String newClassCode = patchAccountDTO.getNewClassCode();
-        Account account = accountService.findByUserName(username);
+    //validate and set new information for  account
+    public void validateUpdateAccount(UpdateAccountDTO updateAccountDTO, Account account){
+        final String newStudentCode = updateAccountDTO.getStudentCode();
+        final String newClassCode = updateAccountDTO.getClassCode();
 
         if(newStudentCode  == null && newClassCode == null){
             throw new BaseException("null both new student code and new class code", HttpStatus.BAD_REQUEST);
+        }
+
+        if(newClassCode != null){// if not null --> set new
+            account.setClassCode(newClassCode);
+            utility.throwExceptionIfNotExists(majorClassService.existsByClassCode(newClassCode),"no class with class code: " +newClassCode );
         }
 
         if(newStudentCode != null){
             account.setStudentCode(newStudentCode);
         }
 
-        if(newClassCode != null){
-            utility.throwExceptionIfNotExists(majorClassService.existsByClassCode(newClassCode),
-                    "not class with code: " + newClassCode);
-            account.setClassCode(newClassCode);
-        }
 
-        return account; // this is account after patched
     }
 }

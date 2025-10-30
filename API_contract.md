@@ -253,8 +253,8 @@ URL Param :none
 Data Param: 
 
     {
-        "newStudentCode" :String,
-        "newClassCode" :String
+        "StudentCode" :String,
+        "ClassCode" :String
     }
     lưu ý: 
     - 1 trong 2 field có thể null nhưng cả 2 không được null
@@ -393,6 +393,47 @@ Error Response:
         "processSuccess": false,
         "message": "can not add for some internal errors",
         "error": "INTERNAL_SERVER_ERROR",
+        "data": "no data"
+    }
+
+Patch /exchange_class
+
+description : thay đổi nguyện vọng lớp của sinh viên (studentCode, desiredClassCode)
+
+URL Param : none
+
+Data Param:
+    
+    {
+    "studentCode" : String,
+    "desiredClassCode" : String
+    }
+
+lưu ý:
+- 1 trong 2 field có thể null nhưng cả 2 không được null
+- nếu cả 2 null thì sẽ lỗi
+- nếu chỉ 1 cái null thì update cái còn lại
+
+success response:
+
+    HTTP Code: 200 ok
+    Content:
+    {
+        "processSuccess": true,
+        "message": "patched exchange class successfully",
+        "error": "no error",
+        "data": "no data"
+    }
+
+error response:
+
+    khi cả 2 field đều null
+    HTTP Code: 400 bad request
+    Content:
+    {
+        "processSuccess": false,
+        "message": "both studentCode and desiredClassCode are null",
+        "error" : "bad request",
         "data": "no data"
     }
 

@@ -80,8 +80,10 @@ public class AccountController {
 
     @PatchMapping("/account")
     public ResponseEntity<ResponseDTO<String>> update(@RequestBody UpdateAccountDTO updateAccountDTO){
-        Account accountAfterPatched = accountValidator.validatePatchAccount(updateAccountDTO);// will put it in service if separate interface
-        accountService.update(accountAfterPatched);
+        final String username = jwtUtility.getUsername();
+        Account account = accountService.findByUserName(username);
+        accountValidator.validateUpdateAccount(updateAccountDTO, account);
+        accountService.update(account);
 
         ResponseDTO<String> responseDTO = new ResponseDTO<>
                         (true,"no error","patch account successfully",null);

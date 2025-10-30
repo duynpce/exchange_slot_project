@@ -9,6 +9,7 @@ import Main.Exception.BaseException;
 import Main.Utility.jwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
@@ -95,7 +96,8 @@ public class AccountService {
         throw new BaseException("invalid refresh token or access token haven't expired", HttpStatus.UNAUTHORIZED);
     }
 
-    public void  save(Account account){
+    @Cacheable(value = "accountData", key = "#username")
+    public void  update(Account account){
         accountRepository.save(account);
     }
 

@@ -61,7 +61,6 @@ public class ExchangeClassRequestService {
         return exchangeClassRequestMapper.toDto(saved);
     }
 
-
     @CacheEvict(value = "exchangeClassData", key ="#id")
     public void deleteById(int id) {
 
@@ -100,7 +99,7 @@ public class ExchangeClassRequestService {
         return exchangeClassRequestMapper.toDtoList(data);
     }
 
-    @Cacheable(value = "exchangeStudentData", key = "#studentCode")
+    @Cacheable(value = "exchangeClassData", key = "#studentCode")
     public ExchangeClassRequestResponseDTO findByStudentCode(String studentCode) {
 
         ExchangeClassRequest data = exchangeClassRequestRepository.findByAccount_StudentCode(studentCode)

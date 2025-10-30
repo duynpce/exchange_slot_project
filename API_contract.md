@@ -625,6 +625,51 @@ Khi không có slot request nào cho slot:
         "data": null
     }
 
+GET /exchange_slot/student_code/{studentCode}
+
+Description: Lấy yêu cầu đổi slot theo studentCode.
+
+URL Params:
+
+    studentCode : String
+
+Headers:
+
+    Content-Type: application/json
+
+Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+
+    {
+        "processSuccess": true,
+        "message": "request found successfully",
+        "error": "no error",
+        "data": {
+            "id": int,
+            "studentCode": String,
+            "desiredSlot": String ("1,2" or "3,4"),
+            "currentSlot": String ("1,2" or "3,4" and != desiredSlot),
+            "desiredClassCode": String,
+            "currentClassCode": String
+        }
+    }
+
+Error Response:
+
+Khi không có request nào cho studentCode:
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no request with that student code: SV001",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+
 MajorClass(class) 
     
     object 

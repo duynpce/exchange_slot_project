@@ -142,4 +142,16 @@ public class ExchangeSlotController {
         );
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/student_code/{studentCode}")
+    public ResponseEntity<ResponseDTO<ExchangeSlotRequestResponseDTO>> findByStudentCode(
+            @PathVariable String studentCode
+    ) {
+        ExchangeSlotRequestResponseDTO data = exchangeSlotRequestService.findByStudentCode(studentCode);
+
+        ResponseDTO<ExchangeSlotRequestResponseDTO> response =
+                new ResponseDTO<>(true, "request found successfully", "no error", data);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

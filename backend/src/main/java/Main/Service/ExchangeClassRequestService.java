@@ -100,7 +100,7 @@ public class ExchangeClassRequestService {
         return exchangeClassRequestMapper.toDtoList(data);
     }
 
-    @Cacheable(value = "listExchangeStudentData", key = "#studentCode")
+    @Cacheable(value = "exchangeStudentData", key = "#studentCode")
     public ExchangeClassRequestResponseDTO findByStudentCode(String studentCode) {
 
         ExchangeClassRequest data = exchangeClassRequestRepository.findByAccount_StudentCode(studentCode)

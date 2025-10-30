@@ -9,6 +9,7 @@ import Main.Entity.ExchangeSlotRequest;
 import Main.Repository.ExchangeSlotRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -98,6 +99,15 @@ public class ExchangeSlotRequestService {
             throw new BaseException("no slot request with slot: " + slot, HttpStatus.NOT_FOUND);
         }
         return exchangeSlotRequestMapper.toDtoList(data);
+    }
+
+    @CachePut(value = "exchangeSlotData", key = "#studentCode")
+    public ExchangeSlotRequestResponseDTO findByStudentCode(String studentCode) {
+
+        ExchangeSlotRequest data = exchangeSlotRequestRepository.findByAccount_StudentCode(studentCode)
+                .orElseThrow(() -> new BaseException("no exchange request found",HttpStatus.NOT_FOUND));
+
+        return exchangeSlotRequestMapper.toDto(data);
     }
 
     @Cacheable(value = "exchangeSlotExists", key = "#studentCode")

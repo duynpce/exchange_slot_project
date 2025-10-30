@@ -50,12 +50,11 @@ public class AccountService {
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequest){
-
-        String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword();
+        final String username = loginRequest.getUsername();
+        final String password = loginRequest.getPassword();
         Account foundAccount = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new BaseException("Account not found", HttpStatus.UNAUTHORIZED));
-        String encryptedPassword = foundAccount.getPassword();
+        final String encryptedPassword = foundAccount.getPassword();
         boolean correctPassword = passwordEncoder.matches(password,encryptedPassword );
 
         if(correctPassword) {

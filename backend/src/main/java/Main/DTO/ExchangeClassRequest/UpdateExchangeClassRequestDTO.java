@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateExchangeClassRequestDTO {
-    private String studentCode;
     private String desiredClassCode;
 
 }

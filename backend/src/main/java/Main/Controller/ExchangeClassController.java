@@ -10,6 +10,7 @@ import Main.Entity.ExchangeClassRequest;
 import Main.Mapper.ExchangeClassRequestMapper;
 import Main.Service.ExchangeClassRequestService;
 import Main.Validator.ExchangeClassRequestValidator;
+import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,6 @@ public class ExchangeClassController {
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateExchangeClassRequestDTO request) {
 
-
         ExchangeClassRequest exchangeClassRequest = exchangeClassRequestMapper.toEntity(request);
         classRequestValidator.validateAddRequest(exchangeClassRequest);
         exchangeClassRequestService.add(exchangeClassRequest); // throw exception if failed
@@ -48,11 +48,13 @@ public class ExchangeClassController {
             @PathVariable int id,
             @RequestBody UpdateExchangeClassRequestDTO request) {
 
-        ExchangeClassRequest exchangeClassRequest = exchangeClassRequestMapper.toEntity(request);
+        ExchangeClassRequest exchangeClassRequest = exchangeClassRequestService.findById(id);
+        exchangeClassRequest.setDesiredClassCode(request.getDesiredClassCode());
+        System.out.println(exchangeClassRequest);
         classRequestValidator.validateUpdateRequest(exchangeClassRequest);
-        exchangeClassRequest.setId(id);
 
-        ExchangeClassRequestResponseDTO updated = exchangeClassRequestService.update(exchangeClassRequest);
+        ExchangeClassRequestResponseDTO updated =
+                exchangeClassRequestMapper.toDto(exchangeClassRequestService.update(exchangeClassRequest));
 
         ResponseDTO<ExchangeClassRequestResponseDTO> response =
                 new ResponseDTO<>(true, "request updated successfully", "no error", updated);
@@ -62,13 +64,18 @@ public class ExchangeClassController {
 
     @DeleteMapping("/id/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable int id) {
-        if(id < 0){
-            throw new BaseException("id must be >= 0", HttpStatus.BAD_REQUEST);
-        }
 
-        exchangeClassRequestService.deleteById(id); //throw exception if fail
+        ExchangeClassRequest  request = exchangeClassRequestService.findById(id);
+        exchangeClassRequestService.deleteById(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        ResponseDTO<String> response = new ResponseDTO<>(
+                true,
+                "slot request deleted successfully",
+                "no error",
+                "no data"
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/class_code/{classCode}/page/{page}") /// add pagination to it please pageable page
@@ -79,7 +86,8 @@ public class ExchangeClassController {
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeClassRequestResponseDTO> data = exchangeClassRequestService.findByClassCode(classCode,page);
+        List<ExchangeClassRequestResponseDTO> data = exchangeClassRequestMapper.
+                toDtoList(exchangeClassRequestService.findByClassCode(classCode,page));
 
         if(data.isEmpty()){
             throw new BaseException("no exchange class request found", HttpStatus.NOT_FOUND);
@@ -99,7 +107,8 @@ public class ExchangeClassController {
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeClassRequestResponseDTO> data = exchangeClassRequestService.findBySlot(slot, page);
+        List<ExchangeClassRequestResponseDTO> data = exchangeClassRequestMapper.
+                toDtoList(exchangeClassRequestService.findBySlot(slot, page));
 
         if(data.isEmpty()){
             throw new BaseException("no class request found", HttpStatus.NOT_FOUND);
@@ -116,7 +125,8 @@ public class ExchangeClassController {
             @PathVariable String studentCode
             ) {
 
-        ExchangeClassRequestResponseDTO data = exchangeClassRequestService.findByStudentCode(studentCode);
+        ExchangeClassRequestResponseDTO data = exchangeClassRequestMapper
+                .toDto(exchangeClassRequestService.findByStudentCode(studentCode));
 
         ResponseDTO<ExchangeClassRequestResponseDTO> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);
@@ -127,7 +137,7 @@ public class ExchangeClassController {
 
     @GetMapping("/id/{id}") ///  for testing
     public ExchangeClassRequestResponseDTO findById(@PathVariable int id){
-        return exchangeClassRequestService.findById(id);
+        return exchangeClassRequestMapper.toDto(exchangeClassRequestService.findById(id));
     }
 
 

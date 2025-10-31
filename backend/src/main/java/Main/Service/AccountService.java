@@ -98,7 +98,11 @@ public class AccountService {
         throw new BaseException("invalid refresh token or access token haven't expired", HttpStatus.UNAUTHORIZED);
     }
 
-    @CachePut(value = "accountData", key = "#account.username")
+    @Caching(put = {
+            @CachePut(value = "accountData", key = "#account.username"),
+            @CachePut(value = "accountData", key = "#account.studentCode"),
+            @CachePut(value = "accountData", key = "#account.phoneNumber")
+    })
     public Account  update(Account account ){
         return  accountRepository.save(account);
     }

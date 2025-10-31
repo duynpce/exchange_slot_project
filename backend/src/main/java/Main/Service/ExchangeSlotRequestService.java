@@ -2,6 +2,7 @@ package Main.Service;
 
 
 import Main.DTO.ExchangeSlotRequest.ExchangeSlotRequestResponseDTO;
+import Main.Entity.ExchangeClassRequest;
 import Main.Enum.Constant;
 import Main.Exception.BaseException;
 import Main.Mapper.ExchangeSlotRequestMapper;
@@ -41,14 +42,18 @@ public class ExchangeSlotRequestService {
         exchangeSlotRequestRepository.save(exchangeSlotRequest);
     }
 
-    @CacheEvict(value = "exchangeSlotData", key = "#id")
-    public void deleteById(int id) {
+    @Caching(evict = {
+            @CacheEvict(value = "exchangeSlotData", key = "#request.id"),
+            @CacheEvict(value = "exchangeSlotData", key = "#request.studentCode")
+    })
+    public void deleteById(ExchangeSlotRequest request) {
         try {
-            exchangeSlotRequestRepository.deleteById(id);
+            exchangeSlotRequestRepository.deleteById(request.getId());
         } catch (EmptyResultDataAccessException e) {
-            throw new BaseException("slot request with id " + id + " not found", HttpStatus.NOT_FOUND);
+            throw new BaseException("slot request with id " + request.getId() + " not found", HttpStatus.NOT_FOUND);
         }
     }
+
 
     @Cacheable(value = "listExchangeSlotData", key = "#classCode")
     public List<ExchangeSlotRequestResponseDTO> findByClassCode(String classCode, int page) {
@@ -99,6 +104,12 @@ public class ExchangeSlotRequestService {
             throw new BaseException("no slot request with slot: " + slot, HttpStatus.NOT_FOUND);
         }
         return exchangeSlotRequestMapper.toDtoList(data);
+    }
+
+    @Cacheable(value = "exchangeSlotData", key ="#id")
+    public ExchangeSlotRequest findById(int id){
+        return exchangeSlotRequestRepository.findById(id).
+                orElseThrow(() -> new BaseException(" not found request with id : " + id, HttpStatus.NOT_FOUND));
     }
 
     @CachePut(value = "exchangeSlotData", key = "#studentCode")

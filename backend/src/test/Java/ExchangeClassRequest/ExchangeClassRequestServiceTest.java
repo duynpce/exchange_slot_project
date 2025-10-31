@@ -124,7 +124,7 @@ public class ExchangeClassRequestServiceTest {
             // Mock repository update
             when(repository.save(any(ExchangeClassRequest.class))).thenReturn(expected);
 
-            ExchangeClassRequestResponseDTO result = service.update(input);
+            ExchangeClassRequest result = service.update(input);
 
             assertNotEquals(input.getDesiredClassCode(), result.getDesiredClassCode(), "#testCase " + (i + 1) + " failed: Update failed");
             System.out.println("#testCase " + (i + 1) + " passed: ExchangeClassRequest updated");
@@ -144,7 +144,7 @@ public class ExchangeClassRequestServiceTest {
             // Mock repository delete
             doNothing().when(repository).deleteById(idToDelete);
 
-            service.deleteById(idToDelete);
+            service.deleteById(testCases.get(i));
 
             // Kiểm tra gọi deleteById 1 lần
             verify(repository, times(1)).deleteById(idToDelete);
@@ -163,7 +163,7 @@ public class ExchangeClassRequestServiceTest {
 
             when(repository.findById(expected.getId())).thenReturn(Optional.of(expected));
 
-            ExchangeClassRequestResponseDTO result = service.findById(expected.getId());
+            ExchangeClassRequest result = service.findById(expected.getId());
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
             assertEquals(expected.getStudentCode(), result.getStudentCode(), "#testCase " + (i + 1) + " failed: studentCode mismatch");
@@ -186,7 +186,7 @@ public class ExchangeClassRequestServiceTest {
             when(repository.findByAccount_ClassCode(expected.getCurrentClassCode(),page))
                     .thenReturn(List.of(expected));
 
-            List<ExchangeClassRequestResponseDTO> result = service.findByClassCode(expected.getCurrentClassCode(), pageNumber);
+            List<ExchangeClassRequest> result = service.findByClassCode(expected.getCurrentClassCode(), pageNumber);
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
             assertFalse(result.isEmpty(), "#testCase " + (i + 1) + " failed: empty result list");
@@ -208,7 +208,7 @@ public class ExchangeClassRequestServiceTest {
 
             when(repository.findByCurrentSlot(input.getCurrentSlot(),page)).thenReturn(testCases);
 
-            List<ExchangeClassRequestResponseDTO> result = service.findBySlot(input.getCurrentSlot(), pageNumber);
+            List<ExchangeClassRequest> result = service.findBySlot(input.getCurrentSlot(), pageNumber);
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
             assertFalse(result.isEmpty(), "#testCase " + (i + 1) + " failed: empty result list");

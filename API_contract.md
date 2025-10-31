@@ -396,7 +396,7 @@ Error Response:
         "data": "no data"
     }
 
-Patch /exchange_class
+Patch /exchange_class/id/{id}
 
 description : thay đổi nguyện vọng lớp của sinh viên (studentCode, desiredClassCode)
 
@@ -405,7 +405,6 @@ URL Param : none
 Data Param:
     
     {
-    "studentCode" : String,
     "desiredClassCode" : String
     }
 

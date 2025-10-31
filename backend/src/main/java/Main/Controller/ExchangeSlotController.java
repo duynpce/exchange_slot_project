@@ -52,7 +52,8 @@ public class ExchangeSlotController {
             throw new BaseException("id must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-         exchangeSlotRequestService.deleteById(id); ///throw exception if not found
+        ExchangeSlotRequest request = exchangeSlotRequestService.findById(id);
+        exchangeSlotRequestService.deleteById(request);
 
         ResponseDTO<String> response = new ResponseDTO<>(
                 true,
@@ -60,7 +61,7 @@ public class ExchangeSlotController {
                 "no error",
                 "no data"
         );
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/class/{classCode}/page/{page}")/// add pagination to it please pageable page

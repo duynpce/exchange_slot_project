@@ -51,7 +51,6 @@ public class ExchangeClassRequestValidator {
 
         String currentSlot = currentClass.getSlot();
         String desiredSlot = desiredClass.getSlot();
-
         if(currentSlot.equals(desiredSlot)){
             throw new BaseException("cannot make request for the same slot changes: " + currentSlot, HttpStatus.NOT_FOUND);
         }

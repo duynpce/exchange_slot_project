@@ -33,7 +33,6 @@ public class AccountController {
     @Autowired
     AccountMapper accountMapper;
 
-
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<String>> register(@RequestBody RegisterRequestDTO registerRequestDTO){
         Account account = accountMapper.toEntity(registerRequestDTO);

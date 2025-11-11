@@ -20,4 +20,8 @@ public class HomeController {
         return "you're a admin";
     }
 
+    @GetMapping("/hello")
+    public String hello(){
+        return "hello this is a endpoint from exchange-slot for student of Ngo Phuong Duy and Le Phuoc Duy";
+    }
 }

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="82b54f30-0462-4cfb-85bd-3a4a8e4a7f87" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/AuthenticationEntryPointConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/AuthenticationProviderConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/JWTAuthenticationConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/RememberMeAuthenticationConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/UserDetailConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Config/UserDetailServiceConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/ResetPasswordDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Enum/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/URLException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/Chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/ChatRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Service/ChatService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Utility/jwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API_contract.md" beforeDir="false" afterPath="$PROJECT_DIR$/API_contract.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/ExchangeClassRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/LoginDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/LoginResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/LoginDTOTEMP.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/LoginRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/ResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/DTO/ResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/ExchangeSlotRequestException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/ExchangeSlotRequestException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Exchange_Student_Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Exchange_Student_Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/ExchangeClassRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/ExchangeClassRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/ExchangeSlotRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Model/Enity/ExchangeSlotRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/ExchangeClassRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/ExchangeClassRequestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/ExchangeSlotRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Repository/ExchangeSlotRequestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/AccountRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/AccountRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/ExchangeClassRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/ExchangeClassRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/ExchangeSlotRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/RestController/ExchangeSlotRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Service/ExchangeClassRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Service/ExchangeClassRequestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Service/ExchangeSlotRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Service/ExchangeSlotRequestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Service/GlobalDBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Service/GlobalDBService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Test/RunTestcase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Test/RunTestcase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Test/UtilityForTesting.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Test/UtilityForTesting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/Main/Utility/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/Main/Utility/util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/DTO/ExchangeClassRequestDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/DTO/LoginDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Exchange_Student_Project.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Exchange_Student_Project.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Model/Enity/Account.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Model/Enity/Account.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Model/Enity/ExchangeClassRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Model/Enity/ExchangeClassRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Model/Enity/ExchangeSlotRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Model/Enity/ExchangeSlotRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Repository/AccountRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Repository/AccountRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Repository/ExchangeClassRequestRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Repository/ExchangeClassRequestRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Repository/ExchangeSlotRequestRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Repository/ExchangeSlotRequestRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/RestController/AccountRestController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/RestController/AccountRestController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/RestController/ExchangeClassRestController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/RestController/ExchangeClassRestController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Service/AccountService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Service/AccountService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Service/ExchangeClassRequestService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Service/ExchangeClassRequestService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Service/ExchangeSlotRequestService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/Main/Service/ExchangeSlotRequestService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Service/GlobalDBService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Test/RunTestcase.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Test/UtilityForTesting.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/Main/Utility/Utility.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;duynpce&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/duynpce/exchange_slot_project.git&quot;,
+    &quot;accountId&quot;: &quot;7eaf0053-9259-4320-96bb-a6fc2b00a166&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="32YOGHBiMjTsWJQjkqTLaC8GfEB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/GithubRepository/exchange_slot_project&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list />
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/backend" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="82b54f30-0462-4cfb-85bd-3a4a8e4a7f87" name="Changes" comment="" />
+      <created>1757593944530</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1757593944530</updated>
+    </task>
+    <servers />
+  </component>
+</project>

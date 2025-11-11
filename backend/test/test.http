@@ -1,3 +1,15 @@
 ###
+<<<<<<< HEAD
 GET http://192.168.56.1:8080/exchangeClass?classCode=se2151
 Accept: application/json
+=======
+POST http://localhost:8080/account/register
+
+{
+"username":"duynp2006"
+"password":"password"
+}
+
+Accept: application/json
+
+>>>>>>> develop

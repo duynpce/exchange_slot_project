@@ -9,7 +9,7 @@ import Main.Mapper.ExchangeSlotRequestMapper;
 import Main.Service.ExchangeSlotRequestService;
 import Main.Validator.ExchangeSlotRequestValidator;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +19,14 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/exchange_slot")
+@RequiredArgsConstructor
 public class ExchangeSlotController {
 
-    @Autowired
-    ExchangeSlotRequestService exchangeSlotRequestService;
+    private final ExchangeSlotRequestService exchangeSlotRequestService;
 
-    @Autowired
-    ExchangeSlotRequestValidator slotRequestValidator;
+    private final ExchangeSlotRequestValidator slotRequestValidator;
 
-    @Autowired
-    ExchangeSlotRequestMapper exchangeSlotRequestMapper;
+    private final ExchangeSlotRequestMapper exchangeSlotRequestMapper;
 
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateExchangeSlotRequestDTO request) {
@@ -72,7 +70,9 @@ public class ExchangeSlotController {
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeSlotRequestResponseDTO> result = exchangeSlotRequestService.findByClassCode(classCode, page);
+        List<ExchangeSlotRequestResponseDTO> result = exchangeSlotRequestMapper.
+                toDtoList(exchangeSlotRequestService.findByClassCode(classCode, page));
+
 
         ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(
                 true,
@@ -133,7 +133,8 @@ public class ExchangeSlotController {
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeSlotRequestResponseDTO> data = exchangeSlotRequestService.findBySlot(slot, page);
+        List<ExchangeSlotRequestResponseDTO> data = exchangeSlotRequestMapper
+                .toDtoList(exchangeSlotRequestService.findBySlot(slot, page));
 
         ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(
                 true,
@@ -148,7 +149,8 @@ public class ExchangeSlotController {
     public ResponseEntity<ResponseDTO<ExchangeSlotRequestResponseDTO>> findByStudentCode(
             @PathVariable String studentCode
     ) {
-        ExchangeSlotRequestResponseDTO data = exchangeSlotRequestService.findByStudentCode(studentCode);
+        ExchangeSlotRequestResponseDTO data = exchangeSlotRequestMapper
+                .toDto(exchangeSlotRequestService.findByStudentCode(studentCode));
 
         ResponseDTO<ExchangeSlotRequestResponseDTO> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);

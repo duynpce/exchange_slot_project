@@ -820,3 +820,217 @@ Data Param:
         "error": "NOT_FOUND",
         "data": "no data"
     }
+
+# Chat
+
+Chat object
+
+    {
+        "id": int,
+        "user1Id": int,
+        "user2Id": int
+    }
+
+POST /chat
+
+description: tạo một chat mới giữa hai user
+
+URL Params: None
+
+Data Params:
+
+    {
+        "user1Id": int,
+        "user2Id": int
+    }
+
+Headers: Content-Type: application/json
+
+success response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "chat created successfully",
+        "error": "no error",
+        "data": "no data"
+    }
+
+error response:
+    
+    khi payload thiếu field hoặc giá trị không hợp lệ
+    HTTP Code: 400 BAD REQUEST
+    Content:
+    {
+        "processSuccess": false,
+        "message": "create chat failed",
+        "error": "null or invalid field",
+        "data": "no data"
+    }
+
+    - khi có lỗi hệ thống (DB, internal error)
+    HTTP Code: 500 INTERNAL_SERVER_ERROR
+    Content:
+    {
+        "processSuccess": false,
+        "message": "can not create chat for some internal errors",
+        "error": "INTERNAL_SERVER_ERROR",
+        "data": "no data"
+    }
+
+
+GET /chat/page/{page}
+
+description: lấy danh sách chats của account hiện tại (dựa trên JWT)
+
+URL Params:
+    page: int (>=0)
+
+Headers:
+    Content-Type: application/json
+    Authorization: Bearer <accessToken>  (required — endpoint reads username from JWT)
+
+Data Params: None
+
+success response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "chats loaded successfully",
+        "error": "no error",
+        "data": [ {GetChatDTO}, ... ]
+    }
+
+error responses:
+
+khi page < 0
+
+    HTTP Code: 400 BAD REQUEST
+    Content:
+    {
+        "processSuccess": false,
+        "message": "page must >= 0",
+        "error": "bad request",
+        "data": "no data"
+    }
+
+khi chưa đăng nhập / token không hợp lệ
+
+    HTTP Code: 401 UNAUTHORIZED
+    Content:
+    {
+        "processSuccess": false,
+        "message": "have not logged in",
+        "error": "UNAUTHORIZED",
+        "data": "no data"
+    }
+
+khi không có chat nào cho user
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no chat with user id {id} found",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+
+# Message
+
+SendMessageDTO
+
+    {
+        "chatId": int,
+        "senderId": int,
+        "content": String
+    }
+
+ResponseMessageDTO
+
+    {
+        "id": int,
+        "chatId": int,
+        "content": String,
+        "senderId": int
+    }
+
+WebSocket: sendMessage (STOMP)
+
+Endpoint: /app/sendMessage  (MessageMapping("sendMessage"))
+
+description: gửi 1 message qua WebSocket — server sẽ broadcast tới /topic/{chatId} và lưu message vào DB
+
+Data Params (message payload):
+
+    {
+        "chatId": int,
+        "senderId": int,
+        "content": String
+    }
+
+Success behavior (WebSocket): server forwards the message to /topic/{chatId} and saves the message. No HTTP response (WS message acknowledgement depends on STOMP client).
+
+
+GET /message/id/{id}/page/{page}
+
+description: tải messages theo chat id (phân trang)
+
+URL Params:
+    
+    id: int (chatId)
+    page: int (>=0)
+
+Headers: Content-Type: application/json
+
+Data Params: None
+
+success response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "messages loaded successfully",
+        "error": "no error",
+        "data": [ {ResponseMessageDTO}, ... ]
+    }
+
+error responses:
+
+khi page < 0
+
+    HTTP Code: 400 BAD REQUEST
+    Content:
+    {
+        "processSuccess": false,
+        "message": "page must >= 0",
+        "error": "bad request",
+        "data": "no data"
+    }
+
+khi không có message nào cho chat id
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no message with chat id {id} found",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
+internal error (DB...)
+
+    HTTP Code: 500 INTERNAL_SERVER_ERROR
+    Content:
+    {
+        "processSuccess": false,
+        "message": "can not load messages for some internal errors",
+        "error": "INTERNAL_SERVER_ERROR",
+        "data": "no data"
+    }

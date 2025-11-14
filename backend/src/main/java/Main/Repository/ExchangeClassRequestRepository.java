@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExchangeClassRequestRepository extends JpaRepository<ExchangeClassRequest,Integer> {
-    List<ExchangeClassRequest> findByAccount_ClassCode(String classCode, Pageable page);
-    List<ExchangeClassRequest> findByCurrentSlot(String slot, Pageable page);
+    List<ExchangeClassRequest> findByAccount_ClassCode(String classCode, Pageable pageable);
+    List<ExchangeClassRequest> findByCurrentSlot(String slot, Pageable pageable);
 
 
     Optional<ExchangeClassRequest> findByAccount_StudentCode(String studentCode);

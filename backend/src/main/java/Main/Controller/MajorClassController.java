@@ -7,7 +7,7 @@ import Main.Entity.MajorClass;
 import Main.Mapper.MajorClassMapper;
 import Main.Service.MajorClassService;
 import Main.Validator.MajorClassValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,16 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/class")
+@RequiredArgsConstructor
 public class MajorClassController {
 
-    @Autowired
-    MajorClassMapper majorClassMapper;
-
-    @Autowired
-    MajorClassValidator majorClassValidator;
-
-    @Autowired
-    MajorClassService majorClassService;
+    private final MajorClassMapper majorClassMapper;
+    private final MajorClassValidator majorClassValidator;
+    private final MajorClassService majorClassService;
 
     public ResponseEntity<ResponseDTO<String>> add(CreateMajorClassDTO createMajorClassDTO){
         MajorClass majorClass = majorClassMapper.toEntity(createMajorClassDTO);

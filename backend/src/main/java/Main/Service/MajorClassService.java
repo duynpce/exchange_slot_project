@@ -1,6 +1,7 @@
 package Main.Service;
 
 import Main.Entity.MajorClass;
+import Main.Enum.Constant;
 import Main.Exception.BaseException;
 import Main.Repository.MajorClassRepository;
 
@@ -9,14 +10,20 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MajorClassService {
+
+    private final int pageSize = Constant.DefaultPageSize.getPageSize();
 
     private final MajorClassRepository majorClassRepository;
 
@@ -42,5 +49,19 @@ public class MajorClassService {
     @Cacheable(value = "majorClassExists", key = "#classCode")
     public boolean existsByClassCode(String classCode){
         return majorClassRepository.existsByClassCode(classCode);
+    }
+
+    @Cacheable(value = "majorClassData", key = "'all'")
+    public List<MajorClass> findAll(int page){
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        List<MajorClass> data = majorClassRepository.findAll(page, pageable);
+
+
+        if(data.isEmpty()) {
+            throw new BaseException("no major class found", HttpStatus.NOT_FOUND);
+
+        }
+        return data;
     }
 }

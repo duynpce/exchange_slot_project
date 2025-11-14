@@ -718,16 +718,12 @@ MajorClass(class)
         "slot":String ("1,2") or("3,4")
     }
     tên object là MajorClass vì class là ký hiệu trong java
-    
 
-lưu ý quan trọng chỉ có role admin mới có thể truy cập
-tới các endpoint /class  
-
-
-POST /class
+POST /class 
 
 Description:
 Thêm một lớp học mới (class) vào hệ thống.
+quyền yêu cầu là admin
 
 URL Params:
 NONE
@@ -772,6 +768,7 @@ PATCH /class
 
 Description:
 Thay đổi thông tin của MajorClass (class code hoặc slot).
+quyền yêu cầu là admin
 
 URL Params:
 none
@@ -820,6 +817,63 @@ Data Param:
         "error": "NOT_FOUND",
         "data": "no data"
     }
+
+GET /class/page/{page}
+
+Description:
+Lấy danh sách lớp (MajorClass) theo trang (phân trang).
+
+URL Params:
+    page : int (>=0)
+    example: /class/page/0
+
+Headers:
+    Content-Type: application/json
+    Authorization: Bearer <accessToken>   (required — only admin role can access endpoints under /class)
+
+Data Params: None
+
+Success Response:
+
+    HTTP Code: 200 OK
+    Content:
+    {
+        "processSuccess": true,
+        "message": "MajorClasses loaded successfully",
+        "error": "no error",
+        "data": [
+            {
+                "classCode": "string",
+                "slot": "string"    // "1,2" or "3,4"
+            },
+            ...
+        ]
+    }
+
+Error Responses:
+
+khi page < 0
+
+    HTTP Code: 400 BAD REQUEST
+    Content:
+    {
+        "processSuccess": false,
+        "message": "page must >= 0",
+        "error": "bad request",
+        "data": "no data"
+    }
+
+không tìm thấy class nào trong hệ thống
+
+    HTTP Code: 404 NOT_FOUND
+    Content:
+    {
+        "processSuccess": false,
+        "message": "no major class found",
+        "error": "NOT_FOUND",
+        "data": null
+    }
+
 
 # Chat
 
@@ -892,6 +946,8 @@ Headers:
     Authorization: Bearer <accessToken>  (required — endpoint reads username from JWT)
 
 Data Params: None
+
+
 
 success response:
 

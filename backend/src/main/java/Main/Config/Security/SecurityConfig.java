@@ -56,7 +56,7 @@ public class SecurityConfig {
                                         sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ///disable session (default authentication of spring)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login","/register", "/refresh_access_token", "/hello").permitAll()
-                        .requestMatchers("/test-access-denied-handler","/class/**").hasRole("ADMIN")
+                        .requestMatchers("/test-access-denied-handler","/class").hasRole("ADMIN")
                         .anyRequest().authenticated() //logged in --> can access --> do not care about role
                          )
                     .cors(cors -> cors.configurationSource(request -> {

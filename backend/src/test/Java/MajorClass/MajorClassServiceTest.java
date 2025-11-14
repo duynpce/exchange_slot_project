@@ -1,6 +1,7 @@
 package MajorClass;
 
 import Main.Entity.MajorClass;
+import Main.Exception.BaseException;
 import Main.Repository.MajorClassRepository;
 import Main.Service.MajorClassService;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,5 +120,36 @@ public class MajorClassServiceTest {
             verify(majorClassRepository, times(1)).existsByClassCode(classCode);
         }
         System.out.println("existsByClassCode passed \n");
+    }
+
+    // added tests for findAll
+    @Test
+    public void testFindAll() {
+        List<MajorClass> expectedList = new ArrayList<>();
+        List<MajorClass> src = serviceTestUtil.getTestCase();
+        for (int i = 0; i < src.size(); i++) {
+            MajorClass m = src.get(i);
+            m.setId(i + 1);
+            expectedList.add(m);
+        }
+
+        when(majorClassRepository.findAll(eq(pageNumber), any(Pageable.class))).thenReturn(expectedList);
+
+        List<MajorClass> result = majorClassService.findAll(pageNumber);
+
+        assertNotNull(result, "findAll returned null");
+        assertEquals("findAll size mismatch", expectedList.size(), result.size());
+        verify(majorClassRepository, times(1)).findAll(eq(pageNumber), any(Pageable.class));
+        System.out.println("findAll passed \n");
+    }
+
+    @Test
+    public void testFindAllNotFound() {
+        when(majorClassRepository.findAll(eq(pageNumber), any(Pageable.class))).thenReturn(new ArrayList<>());
+
+        BaseException ex = assertThrows(BaseException.class, () -> majorClassService.findAll(pageNumber));
+        assertTrue(ex.getMessage().contains("no major class found"));
+        verify(majorClassRepository, times(1)).findAll(eq(pageNumber), any(Pageable.class));
+        System.out.println("findAll not found case passed \n");
     }
 }

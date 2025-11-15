@@ -10,24 +10,18 @@ import Main.Service.MajorClassService;
 import Main.Utility.jwtUtil;
 import Main.Utility.util;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AccountValidator {
 
-    @Autowired
-    util utility;
-
-    @Autowired 
-    AccountService accountService;
-
-    @Autowired
-    MajorClassService majorClassService;
-
-    @Autowired
-    jwtUtil jwtUtility;
+    private  final util utility;
+    private  final AccountService accountService;
+    private  final MajorClassService majorClassService;
 
     public void validateRegister(Account account){
 

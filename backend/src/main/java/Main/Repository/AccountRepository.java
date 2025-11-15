@@ -12,7 +12,7 @@
     import java.util.Optional;
 
     @Repository
-    public interface AccountRepository extends JpaRepository <Account,String>{
+    public interface AccountRepository extends JpaRepository <Account,Integer>{
 //        Optional <Account> findByPhoneNumber(String phoneNumber);
 //        Optional <Account> findByAccountName(String accountName);
 

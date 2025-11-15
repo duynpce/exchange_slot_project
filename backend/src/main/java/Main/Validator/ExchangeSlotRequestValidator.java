@@ -9,24 +9,21 @@ import Main.Service.ExchangeSlotRequestService;
 import Main.Service.MajorClassService;
 
 import Main.Utility.util;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ExchangeSlotRequestValidator {
 
-    @Autowired
-    MajorClassService majorClassService;
 
-    @Autowired
-    AccountService accountService;
+    private  final MajorClassService majorClassService;
+    private  final AccountService accountService;
+    private final ExchangeSlotRequestService exchangeSlotRequestService;
 
-    @Autowired
-    ExchangeSlotRequestService exchangeSlotRequestService;
-
-    @Autowired
-    util utility;
+    private final util utility;
 
     public void validateAddRequest(ExchangeSlotRequest request){
         final String studentCode  = request.getStudentCode();

@@ -88,45 +88,48 @@ public class ExchangeClassRequestServiceTest {
 
     @Test
     public void testAdd() {
+        System.out.println("Running testAdd...");
         List<ExchangeClassRequest> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
-            ExchangeClassRequest input = testCases.get(i);
-            ExchangeClassRequest expected = new ExchangeClassRequest();
-            expected.setId(i + 1); // Giả sử ID được auto-generate và bắt đầu từ 1
+            ExchangeClassRequest expected = testCases.get(i);
 
             // Mock repository và encoder
-            when(repository.save(any(ExchangeClassRequest.class))).thenReturn(expected);
+            when(repository.save(expected)).thenReturn(expected);
 
-            ExchangeClassRequest result = service.add(input);
+            ExchangeClassRequest result = service.add(expected);
 
             // Kiểm tra xem ID của kết quả có khác ID mặc định là 0 không (do auto-generate ID)
-            assertNotEquals(input.getId(), result.getId(), "#testCase " + (i + 1) + " failed: ID");
+            assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
+            assertEquals( "#testCase " + (i + 1) + " failed: ID mismatch after add" ,expected.getId(), result.getId());
             System.out.println("#testCase " + (i + 1) + " passed: ExchangeClassRequest ID " + result.getId());
 
-            verify(repository, times(1)).save(input);
+            verify(repository, times(1)).save(expected);
         }
         System.out.println("add ExchangeClassRequest passed \n");
     }
 
     @Test
     public void testUpdate() {
+        System.out.println("Running testUpdate...");
         List<ExchangeClassRequest> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
             ExchangeClassRequest input = testCases.get(i);
-            input.setDesiredClassCode("updatedClassCode" + i); // Cập nhật trường desiredClassCode
+            input.setDesiredClassCode("updatedClassCode" + i);
 
             ExchangeClassRequest expected = new ExchangeClassRequest();
             expected.setId(i + 1);
             expected.setDesiredClassCode(input.getDesiredClassCode());
 
             // Mock repository update
-            when(repository.save(any(ExchangeClassRequest.class))).thenReturn(expected);
+            when(repository.save(input)).thenReturn(expected);
 
             ExchangeClassRequest result = service.update(input);
 
-            assertNotEquals(input.getDesiredClassCode(), result.getDesiredClassCode(), "#testCase " + (i + 1) + " failed: Update failed");
+            assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
+            assertEquals("#testCase " + (i + 1) + " failed: desiredClassCode mismatch after update"
+                    ,expected.getDesiredClassCode(), result.getDesiredClassCode());
             System.out.println("#testCase " + (i + 1) + " passed: ExchangeClassRequest updated");
 
             verify(repository, times(1)).save(input);
@@ -136,6 +139,7 @@ public class ExchangeClassRequestServiceTest {
 
     @Test
     public void testDeleteById() {
+        System.out.println("Running testDeleteById...");
         List<ExchangeClassRequest> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
@@ -146,7 +150,7 @@ public class ExchangeClassRequestServiceTest {
 
             service.deleteById(testCases.get(i));
 
-            // Kiểm tra gọi deleteById 1 lần
+            // check call deleteById once
             verify(repository, times(1)).deleteById(idToDelete);
             System.out.println("#testCase " + (i + 1) + " passed: Deleted ExchangeClassRequest ID " + idToDelete);
         }
@@ -155,6 +159,7 @@ public class ExchangeClassRequestServiceTest {
 
     @Test
     public void testFindById() {
+        System.out.println("Running testFindById...");
         List<ExchangeClassRequest> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
@@ -166,8 +171,9 @@ public class ExchangeClassRequestServiceTest {
             ExchangeClassRequest result = service.findById(expected.getId());
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
-            assertEquals(expected.getStudentCode(), result.getStudentCode(), "#testCase " + (i + 1) + " failed: studentCode mismatch");
-            Assertions.assertEquals(expected.getId(), result.getId(), "#testCase " + (i + 1) + " failed: ID mismatch");
+            assertEquals("#testCase " + (i + 1) + " failed: studentCode mismatch"
+                    ,expected.getStudentCode(), result.getStudentCode());
+            assertEquals( "#testCase " + (i + 1) + " failed: ID mismatch",expected.getId(), result.getId());
 
             System.out.println("#testCase " + (i + 1) + " passed: found ExchangeClassRequest ID " + result.getId());
             verify(repository, times(1)).findById(expected.getId());
@@ -177,6 +183,7 @@ public class ExchangeClassRequestServiceTest {
 
     @Test
     public void testFindByClassCode() {
+        System.out.println("Running testFindByClassCode...");
         List<ExchangeClassRequest> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
@@ -190,7 +197,8 @@ public class ExchangeClassRequestServiceTest {
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
             assertFalse(result.isEmpty(), "#testCase " + (i + 1) + " failed: empty result list");
-            assertEquals(expected.getCurrentClassCode(), result.getFirst().getCurrentClassCode(), "#testCase " + (i + 1) + " failed: classCode mismatch");
+            assertEquals( "#testCase " + (i + 1) + " failed: classCode mismatch",
+                    expected.getCurrentClassCode(), result.getFirst().getCurrentClassCode());
 
             System.out.println("#testCase " + (i + 1) + " passed: found ExchangeClassRequest with classCode " + expected.getCurrentClassCode());
             verify(repository, times(1)).findByAccount_ClassCode(expected.getCurrentClassCode(), page);
@@ -201,6 +209,7 @@ public class ExchangeClassRequestServiceTest {
 
     @Test
     public void testFindBySlot() {
+        System.out.println("Running testFindBySlot...");
         List<ExchangeClassRequest> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
@@ -212,7 +221,8 @@ public class ExchangeClassRequestServiceTest {
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
             assertFalse(result.isEmpty(), "#testCase " + (i + 1) + " failed: empty result list");
-            assertEquals(input.getCurrentSlot(), result.get(i).getCurrentSlot(), "#testCase " + (i + 1) + " failed: slot mismatch");
+            assertEquals("#testCase " + (i + 1) + " failed: slot mismatch"
+                    ,input.getCurrentSlot(), result.get(i).getCurrentSlot());
 
             System.out.println("#testCase " + (i + 1) + " passed: found ExchangeClassRequest with slot " + input.getCurrentSlot());
             verify(repository, times(1)).findByCurrentSlot(input.getCurrentSlot(),page);

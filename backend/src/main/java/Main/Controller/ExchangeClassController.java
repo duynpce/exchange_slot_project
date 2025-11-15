@@ -59,7 +59,7 @@ public class ExchangeClassController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable int id) {
 
         ExchangeClassRequest  request = exchangeClassRequestService.findById(id);

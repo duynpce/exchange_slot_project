@@ -4,18 +4,18 @@ import Main.Entity.MajorClass;
 import Main.Exception.BaseException;
 import Main.Service.MajorClassService;
 import Main.Utility.util;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class MajorClassValidator {
 
+    @Autowired
+    util utility;
 
-    private final util utility;
-    private final MajorClassService majorClassService;
+    @Autowired
+    MajorClassService majorClassService;
 
     public void validateAddRequest(MajorClass majorClass){
         final String classCode = majorClass.getClassCode();

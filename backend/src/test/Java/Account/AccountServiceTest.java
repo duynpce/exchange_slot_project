@@ -46,7 +46,6 @@ public class AccountServiceTest {
 
     @Test
     public void testAdd(){
-        System.out.println("Running testAdd...");
         List<Account> testCases = serviceTestUtil.getTestCase();
 
         for(int i = 0 ;i< testCases.size(); i++){
@@ -73,7 +72,6 @@ public class AccountServiceTest {
 
     @Test
     public void testResetPassword() {
-        System.out.println("Running testResetPassword...");
         List<Account> testCases = serviceTestUtil.getTestCase();
 
         for(int i = 0; i < testCases.size(); i++) {
@@ -103,7 +101,6 @@ public class AccountServiceTest {
 
     @Test
     public void testFindByStudentCode() {
-        System.out.println("Running testFindByStudentCode...");
         List<Account> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
@@ -126,7 +123,6 @@ public class AccountServiceTest {
 
     @Test
     public void testFindByUsername() {
-        System.out.println("Running testFindByUsername...");
         List<Account> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {

@@ -3,16 +3,20 @@ package Main.Service;
 
 import Main.Config.Security.UserDetailConfig;
 import Main.Config.Security.UserDetailServiceConfig;
+import Main.DTO.Account.UpdateAccountDTO;
 import Main.DTO.Auth.*;
+import Main.Enum.Constant;
 import Main.Exception.BaseException;
 import Main.Utility.jwtUtil;
-import lombok.RequiredArgsConstructor;
+import Main.Utility.util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +26,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class AccountService {
 
-    private final AccountRepository accountRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final ApplicationContext context;
-    private final jwtUtil jwtUtility;
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ApplicationContext context;
+
+    @Autowired
+    jwtUtil jwtUtility;
 
     @Caching(evict = { ///  if  registered success --> delete accountExists of the account
             @CacheEvict(value = "accountExists", key = "#account.studentCode"),
@@ -129,10 +139,6 @@ public class AccountService {
         return accountRepository.existsByPhoneNumber(phoneNumber);
     }
 
-    @Cacheable(value = "accountExists", key = "#id")
-    public boolean existsById(int id){
-        return accountRepository.existsById(id);
-    }
 
 
 }

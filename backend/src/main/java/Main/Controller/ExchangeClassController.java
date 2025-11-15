@@ -10,7 +10,8 @@ import Main.Entity.ExchangeClassRequest;
 import Main.Mapper.ExchangeClassRequestMapper;
 import Main.Service.ExchangeClassRequestService;
 import Main.Validator.ExchangeClassRequestValidator;
-import lombok.RequiredArgsConstructor;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +21,16 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/exchange_class")
-@RequiredArgsConstructor
 public class ExchangeClassController {
 
-    private final ExchangeClassRequestService exchangeClassRequestService;
+    @Autowired
+    ExchangeClassRequestService exchangeClassRequestService;
 
-    private final ExchangeClassRequestValidator classRequestValidator;
+    @Autowired
+    ExchangeClassRequestValidator classRequestValidator;
 
-    private final ExchangeClassRequestMapper exchangeClassRequestMapper;
+    @Autowired
+    ExchangeClassRequestMapper exchangeClassRequestMapper;
 
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateExchangeClassRequestDTO request) {
@@ -59,7 +62,7 @@ public class ExchangeClassController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable int id) {
 
         ExchangeClassRequest  request = exchangeClassRequestService.findById(id);

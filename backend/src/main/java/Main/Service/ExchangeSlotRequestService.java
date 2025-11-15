@@ -37,8 +37,9 @@ public class ExchangeSlotRequestService {
     @Caching(evict = {  ///  add later
             @CacheEvict(value = "exchangeSlotExists", key = "#exchangeSlotRequest.studentCode")
     })
-    public ExchangeSlotRequest add(ExchangeSlotRequest exchangeSlotRequest) {
-        return exchangeSlotRequestRepository.save(exchangeSlotRequest);
+    public void add(ExchangeSlotRequest exchangeSlotRequest) {
+
+        exchangeSlotRequestRepository.save(exchangeSlotRequest);
     }
 
     @Caching(evict = {
@@ -46,12 +47,16 @@ public class ExchangeSlotRequestService {
             @CacheEvict(value = "exchangeSlotData", key = "#request.studentCode")
     })
     public void deleteById(ExchangeSlotRequest request) {
+        try {
             exchangeSlotRequestRepository.deleteById(request.getId());
+        } catch (EmptyResultDataAccessException e) {
+            throw new BaseException("slot request with id " + request.getId() + " not found", HttpStatus.NOT_FOUND);
+        }
     }
 
 
     @Cacheable(value = "listExchangeSlotData", key = "#classCode")
-    public List<ExchangeSlotRequest> findByClassCode(String classCode, int page) {
+    public List<ExchangeSlotRequestResponseDTO> findByClassCode(String classCode, int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         List<ExchangeSlotRequest> data =
@@ -60,7 +65,7 @@ public class ExchangeSlotRequestService {
         if (data.isEmpty()) {
             throw new BaseException("no slot request with class code: " + classCode, HttpStatus.NOT_FOUND);
         }
-        return data;
+        return exchangeSlotRequestMapper.toDtoList(data);
     }
 /// for exchange subject request
 //    public List<ExchangeSlotRequest> findBySubjectCode(String subjectCode, int page) {
@@ -91,14 +96,14 @@ public class ExchangeSlotRequestService {
 //    }
 
     @Cacheable(value = "listExchangeSlotData", key = "#slot")
-    public List<ExchangeSlotRequest> findBySlot(String slot, int page) {
+    public List<ExchangeSlotRequestResponseDTO> findBySlot(String slot, int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
 
         List<ExchangeSlotRequest> data = exchangeSlotRequestRepository.findByCurrentSlot(slot,pageable);
         if (data.isEmpty()) {
             throw new BaseException("no slot request with slot: " + slot, HttpStatus.NOT_FOUND);
         }
-        return data;
+        return exchangeSlotRequestMapper.toDtoList(data);
     }
 
     @Cacheable(value = "exchangeSlotData", key ="#id")
@@ -108,12 +113,12 @@ public class ExchangeSlotRequestService {
     }
 
     @CachePut(value = "exchangeSlotData", key = "#studentCode")
-    public ExchangeSlotRequest findByStudentCode(String studentCode) {
+    public ExchangeSlotRequestResponseDTO findByStudentCode(String studentCode) {
 
         ExchangeSlotRequest data = exchangeSlotRequestRepository.findByAccount_StudentCode(studentCode)
                 .orElseThrow(() -> new BaseException("no exchange request found",HttpStatus.NOT_FOUND));
 
-        return data;
+        return exchangeSlotRequestMapper.toDto(data);
     }
 
     @Cacheable(value = "exchangeSlotExists", key = "#studentCode")

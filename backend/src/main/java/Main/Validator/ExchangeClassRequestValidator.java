@@ -11,18 +11,24 @@ import Main.Service.ExchangeClassRequestService;
 import Main.Service.MajorClassService;
 
 import Main.Utility.util;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class ExchangeClassRequestValidator {
 
-    private final MajorClassService majorClassService;
-    private final AccountService accountService;
-    private final ExchangeClassRequestService exchangeClassRequestService;
-    private final util utility;
+    @Autowired
+    MajorClassService majorClassService;
+
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    ExchangeClassRequestService exchangeClassRequestService;
+
+    @Autowired
+    util utility;
 
     public void validateAddRequest(ExchangeClassRequest request){
         final String studentCode  = request.getStudentCode();

@@ -7,8 +7,7 @@ import Main.Mapper.MessageMapper;
 import Main.Entity.Message;
 import Main.Repository.MessageRepository;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,18 +18,24 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class MessageService {
     private final int PageSize = Constant.DefaultPageSize.getPageSize();
 
-    private final MessageRepository messageRepository;
-    private final MessageMapper messageMapper;
+    @Autowired
+    MessageRepository messageRepository;
 
-    public Message save(Message message){
-        return messageRepository.save(message);
+    @Autowired
+    MessageMapper messageMapper;
+
+    public void sendMessage(SendMessageDTO sendMessageDTO){
+        Message message = messageMapper.toEntity(sendMessageDTO);
+        messageRepository.save(message);
     }
 
-    @Cacheable(value = "messageData", key = "#chatId" + '-' + "#page")
+    public void receiveMessage(){
+
+    }
+
     public List<Message> loadMessageByChatId(int chatId, int page){
         Pageable pageable = PageRequest.of(page, PageSize);
         List<Message> data = messageRepository.findByChatIdOrderByIdDesc(chatId, pageable);

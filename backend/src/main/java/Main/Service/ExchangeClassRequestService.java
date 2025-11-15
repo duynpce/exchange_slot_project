@@ -7,11 +7,12 @@ import Main.Mapper.ExchangeClassRequestMapper;
 import Main.Entity.ExchangeClassRequest;
 import Main.Repository.ExchangeClassRequestRepository;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,14 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ExchangeClassRequestService {
     private final int pageSize = Constant.DefaultPageSize.getPageSize();
 
-    private final ExchangeClassRequestRepository exchangeClassRequestRepository;
-    private final ExchangeClassRequestMapper exchangeClassRequestMapper;
+    @Autowired
+    ExchangeClassRequestRepository exchangeClassRequestRepository;
+
+    @Autowired
+    ExchangeClassRequestMapper exchangeClassRequestMapper;
 
     @Caching(evict = {  /// add later
             @CacheEvict(value = "exchangeClassExists", key = "#exchangeClassRequest.studentCode")

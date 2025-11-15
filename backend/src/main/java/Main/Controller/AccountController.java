@@ -4,13 +4,12 @@ import Main.DTO.Account.GetAccountDTO;
 import Main.DTO.Account.UpdateAccountDTO;
 import Main.DTO.Auth.*;
 import Main.DTO.Common.ResponseDTO;
-import Main.Exception.BaseException;
 import Main.Mapper.AccountMapper;
 import Main.Entity.Account;
 import Main.Service.AccountService;
 import Main.Utility.jwtUtil;
 import Main.Validator.AccountValidator;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,18 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/")
-@RequiredArgsConstructor
 public class AccountController {
-    private final AccountService accountService;
-    private final jwtUtil jwtUtility;
-    private final AccountValidator accountValidator;
-    private final AccountMapper accountMapper;
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    jwtUtil jwtUtility;
+
+    @Autowired
+    AccountValidator accountValidator;
+
+    @Autowired
+    AccountMapper accountMapper;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<String>> register(@RequestBody RegisterRequestDTO registerRequestDTO){
@@ -86,19 +91,14 @@ public class AccountController {
     }
 
     @GetMapping("/account")
-    public ResponseEntity<ResponseDTO<GetAccountDTO>> getAccountByContextHold(){
+    public ResponseEntity<ResponseDTO<GetAccountDTO>> getAccount(){
         final String username = jwtUtility.getUsername(); ///get username in Context Holder(for security)
+        GetAccountDTO getAccountDTO = accountMapper.toDto(accountService.findByUserName(username));
 
-        if(username != null){
-            GetAccountDTO getAccountDTO = accountMapper.toDto(accountService.findByUserName(username));
+        ResponseDTO<GetAccountDTO> responseDTO =
+                new ResponseDTO<>(true,"no error","get account successfully",getAccountDTO);
 
-            ResponseDTO<GetAccountDTO> responseDTO =
-                    new ResponseDTO<>(true,"no error","get account successfully",getAccountDTO);
-
-            return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
-        }
-
-        throw new BaseException("have not logged in", HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
 

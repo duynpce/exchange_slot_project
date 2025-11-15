@@ -55,7 +55,7 @@ public class MajorClassService {
     public List<MajorClass> findAll(int page){
         Pageable pageable = PageRequest.of(page, pageSize);
 
-        List<MajorClass> data = majorClassRepository.findAll(page, pageable);
+        List<MajorClass> data = majorClassRepository.findAll(pageable).stream().toList();
 
 
         if(data.isEmpty()) {

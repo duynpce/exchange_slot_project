@@ -1,0 +1,15 @@
+// Status: 500, time: 831ms, size: 122 B
+### HTTP Request ▏#1
+GET http://localhost:8080/account/resetPassword?accountId=2&newPassword=newpassword HTTP/1.1
+connection: close
+content-type: application/json
+date: Wed, 10 Sep 2025 04:26:39 GMT
+transfer-encoding: chunked
+
+{
+  "timestamp": "2025-09-10T04:26:39.432+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "path": "/account/resetPassword"
+}
+>> D:\java_file\springboot\project\Exchange_Student_Project\.idea\httpClient\09-10\HTTP Request ▏#1\2025-09-10T112639.json

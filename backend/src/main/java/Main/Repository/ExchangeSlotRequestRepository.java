@@ -1,5 +1,17 @@
 package Main.Repository;
 
+<<<<<<< HEAD
+import Main.Model.Enity.ExchangeSlotRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlotRequest,Integer> {
+    List<ExchangeSlotRequest> findByClassCode(String classCode);
+    List<ExchangeSlotRequest> findBySubjectCode(String subjectCode);
+    List<ExchangeSlotRequest> findByClassCodeAndSubjectCode(String classCode,String subjectCode);
+    boolean existsByStudentCodeAndSubjectCode(String studentCode, String subjectCode);
+=======
 import Main.Entity.ExchangeSlotRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +27,5 @@ public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlo
 
     boolean existsByAccount_StudentCode(String studentCode);
     Optional<ExchangeSlotRequest> findByAccount_StudentCode(String studentCode);
+>>>>>>> develop
 }

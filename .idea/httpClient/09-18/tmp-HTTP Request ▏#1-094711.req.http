@@ -1,0 +1,6 @@
+// Size: 0 B
+### HTTP Request ▏#1
+GET http://192.168.56.1:8080/exchangeClass?classCode=se2151 HTTP/1.1
+Accept: application/json
+Content-Length: 0
+

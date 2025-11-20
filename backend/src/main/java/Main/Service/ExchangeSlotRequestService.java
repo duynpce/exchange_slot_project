@@ -1,15 +1,6 @@
 package Main.Service;
 
 
-<<<<<<< HEAD
-import Main.DTO.ExchangeClassRequestDTO;
-import Main.DTO.ResponseDTO;
-import Main.Model.Enity.ExchangeClassRequest;
-import Main.Model.Enity.ExchangeSlotRequest;
-import Main.Repository.ExchangeSlotRequestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-=======
 import Main.DTO.ExchangeSlotRequest.ExchangeSlotRequestResponseDTO;
 import Main.Entity.ExchangeClassRequest;
 import Main.Enum.Constant;
@@ -28,46 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
->>>>>>> develop
 
 import java.util.List;
 
 @Service
-<<<<<<< HEAD
-public class ExchangeSlotRequestService {
-    @Autowired
-    ExchangeSlotRequestRepository exchangeSlotRequestRepository;
-
-    public List<ExchangeSlotRequest> findByClassCode (String classCode){
-        return exchangeSlotRequestRepository.findByClassCode(classCode);
-    }
-
-    public List<ExchangeSlotRequest> findBySubjectCode(String subjectCode){
-        return exchangeSlotRequestRepository.findBySubjectCode(subjectCode);
-    }
-
-    public List<ExchangeSlotRequest> findByClassCodeAndSubjectCode(String classCode,String subjectCode){
-        return exchangeSlotRequestRepository.findByClassCodeAndSubjectCode(classCode,subjectCode);
-    }
-
-    public boolean add(ExchangeSlotRequest exchangeSlotRequest){
-        boolean alreadyExisted=
-                exchangeSlotRequestRepository.
-                        existsByStudentCodeAndSubjectCode
-                                (exchangeSlotRequest.getStudentCode(), exchangeSlotRequest.getSubjectCode());
-        if(alreadyExisted) return false;
-
-        exchangeSlotRequestRepository.save(exchangeSlotRequest);
-        return true;
-
-    }
-
-    public boolean delete(ExchangeSlotRequest exchangeSlotRequest){
-        exchangeSlotRequestRepository.delete(exchangeSlotRequest);
-
-        return true;
-    }
-=======
 @Transactional
 public class ExchangeSlotRequestService {
 
@@ -168,5 +123,4 @@ public class ExchangeSlotRequestService {
 
 
 
->>>>>>> develop
 }

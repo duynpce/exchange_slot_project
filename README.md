@@ -1,6 +1,8 @@
 # exchange_slot_project
 project allow students to exchange slot in FPT university
 
+link demo : https://exchange-class.vercel.app/
+
 Tech stack :
 - Backend : Spring Boot, Mysql, Docker ,Redis
 - Frontend : Vanilla Javascript, HTML, CSS

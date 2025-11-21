@@ -34,8 +34,12 @@ public class ExchangeSlotRequestService {
     @Autowired
     ExchangeSlotRequestMapper exchangeSlotRequestMapper;
 
-    @Caching(evict = {  ///  add later
-            @CacheEvict(value = "exchangeSlotExists", key = "#exchangeSlotRequest.studentCode")
+
+    @Caching(evict = {
+            @CacheEvict(value = "exchangeSlotExists", key = "#exchangeSlotRequest.studentCode"),
+            @CacheEvict(value = "exchangeSlotData", key ="#exchangeSlotRequest.id"),
+            @CacheEvict(value = "listExchangeSlotData", key = "#exchangeSlotRequest.classCode"),
+            @CacheEvict(value = "listExchangeSlotData", key = "#exchangeSlotRequest.currentSlot")
     })
     public ExchangeSlotRequest add(ExchangeSlotRequest exchangeSlotRequest) {
         return exchangeSlotRequestRepository.save(exchangeSlotRequest);
@@ -43,7 +47,10 @@ public class ExchangeSlotRequestService {
 
     @Caching(evict = {
             @CacheEvict(value = "exchangeSlotData", key = "#request.id"),
-            @CacheEvict(value = "exchangeSlotData", key = "#request.studentCode")
+            @CacheEvict(value = "exchangeSlotData", key = "#request.studentCode"),
+            @CacheEvict(value = "exchangeSlotExists", key = "#request.studentCode"),
+            @CacheEvict(value = "listExchangeSlotData", key = "#request.classCode"),
+            @CacheEvict(value = "listExchangeSlotData", key = "#request.slot")
     })
     public void deleteById(ExchangeSlotRequest request) {
             exchangeSlotRequestRepository.deleteById(request.getId());

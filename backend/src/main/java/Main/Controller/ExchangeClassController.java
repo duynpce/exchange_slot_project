@@ -46,8 +46,8 @@ public class ExchangeClassController {
             @RequestBody UpdateExchangeClassRequestDTO request) {
 
         ExchangeClassRequest exchangeClassRequest = exchangeClassRequestService.findById(id);
+
         exchangeClassRequest.setDesiredClassCode(request.getDesiredClassCode());
-        System.out.println(exchangeClassRequest);
         classRequestValidator.validateUpdateRequest(exchangeClassRequest);
 
         ExchangeClassRequestResponseDTO updated =

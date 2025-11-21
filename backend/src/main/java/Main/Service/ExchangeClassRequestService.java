@@ -30,9 +30,11 @@ public class ExchangeClassRequestService {
     private final ExchangeClassRequestMapper exchangeClassRequestMapper;
 
     @Caching(evict = {  /// add later
-            @CacheEvict(value = "exchangeClassExists", key = "#exchangeClassRequest.studentCode")
+            @CacheEvict(value = "exchangeClassData", key ="#request.id"),
+            @CacheEvict(value = "exchangeClassExists", key = "#exchangeClassRequest.studentCode"),
+            @CacheEvict(value = "listExchangeClassData", key = "#exchangeClassRequest.classCode"),
+            @CacheEvict(value = "listExchangeClassData", key = "#exchangeClassRequest.currentSlot")
     })
-
     public ExchangeClassRequest add(ExchangeClassRequest exchangeClassRequest) {
          return exchangeClassRequestRepository.save(exchangeClassRequest); //default id =0 , save return new Entity
     }
@@ -53,6 +55,9 @@ public class ExchangeClassRequestService {
     @Caching(evict =  {
             @CacheEvict(value = "exchangeClassData", key ="#request.id"),
             @CacheEvict(value = "exchangeClassData", key ="#request.studentCode"),
+            @CacheEvict(value = "exchangeClassExists", key = "#request.studentCode"),
+            @CacheEvict(value = "listExchangeClassData", key = "#request.classCode"),
+            @CacheEvict(value = "listExchangeClassData", key = "#request.currentSlot")
     })
     public void deleteById(ExchangeClassRequest request) {
         exchangeClassRequestRepository.deleteById(request.getId());

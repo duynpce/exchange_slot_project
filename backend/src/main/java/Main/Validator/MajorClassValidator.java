@@ -1,12 +1,9 @@
 package Main.Validator;
 
 import Main.Entity.MajorClass;
-import Main.Exception.BaseException;
 import Main.Service.MajorClassService;
-import Main.Utility.util;
+import Main.Utility.Util;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,29 +11,29 @@ import org.springframework.stereotype.Component;
 public class MajorClassValidator {
 
 
-    private final util utility;
+    private final Util util;
     private final MajorClassService majorClassService;
 
     public void validateAddRequest(MajorClass majorClass){
         final String classCode = majorClass.getClassCode();
 
-        utility.throwExceptionIfNull(classCode, "null class code");
-        utility.throwExceptionIfNull(majorClass.getSlot(), "null slot");
+        util.throwExceptionIfNull(classCode, "null class code");
+        util.throwExceptionIfNull(majorClass.getSlot(), "null slot");
 
-        utility.throwExceptionIfExists(majorClassService.existsByClassCode(classCode)
+        util.throwExceptionIfExists(majorClassService.existsByClassCode(classCode)
                 ,"existed class with class code: " +classCode);
     }
 
     public void validateUpdateRequest(MajorClass majorClass){
         final String classCode = majorClass.getClassCode();
         final String slot = majorClass.getSlot();
+        MajorClass existingMajorClass = majorClassService.findByClassCode(classCode);
 
-        if(classCode == null && slot== null){
-            throw new BaseException("null both class code and slot", HttpStatus.BAD_REQUEST);
-        }
+        util.throwExceptionIfNull(classCode, "null class code");
+        util.throwExceptionIfNull(slot, "null slot");
+        util.throwExceptionIfNull(existingMajorClass,"no existing class with class code: " +classCode);
 
-        utility.throwExceptionIfNotExists(majorClassService.existsByClassCode(classCode),
-                "not found class with class code: " + classCode);
+        majorClass.setId(existingMajorClass.getId());
 
     }
 }

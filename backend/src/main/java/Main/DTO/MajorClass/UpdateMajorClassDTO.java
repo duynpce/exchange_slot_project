@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMajorClassDTO {
+    private int id;
     private String classCode;
     private String slot;
 }

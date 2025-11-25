@@ -8,9 +8,8 @@ import Main.Service.AccountService;
 import Main.Service.ExchangeSlotRequestService;
 import Main.Service.MajorClassService;
 
-import Main.Utility.util;
+import Main.Utility.Util;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -23,20 +22,20 @@ public class ExchangeSlotRequestValidator {
     private  final AccountService accountService;
     private final ExchangeSlotRequestService exchangeSlotRequestService;
 
-    private final util utility;
+    private final Util util;
 
     public void validateAddRequest(ExchangeSlotRequest request){
         final String studentCode  = request.getStudentCode();
         final String desiredSlot = request.getDesiredSlot();
 
-        utility.throwExceptionIfExists(exchangeSlotRequestService.existsByStudentCode(studentCode), "existed request with student code: " + studentCode );
+        util.throwExceptionIfExists(exchangeSlotRequestService.existsByStudentCode(studentCode), "existed request with student code: " + studentCode );
 
         Account account = accountService.findByStudentCode(studentCode);
-        utility.throwExceptionIfNull(account, "no account with student code: " + studentCode);
+        util.throwExceptionIfNull(account, "no account with student code: " + studentCode);
 
         final String currentClassCode = account.getMajorClass().getClassCode();
         MajorClass currentClass = majorClassService.findByClassCode(currentClassCode);
-        utility.throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
+        util.throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
 
         String currentSlot = currentClass.getSlot();
 

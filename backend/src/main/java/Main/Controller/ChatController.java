@@ -3,25 +3,16 @@ package Main.Controller;
 import Main.DTO.Chat.CreateChatDTO;
 import Main.DTO.Chat.GetChatDTO;
 import Main.DTO.Common.ResponseDTO;
-import Main.DTO.Message.ResponseMessageDTO;
-import Main.DTO.Message.SendMessageDTO;
 import Main.Entity.Account;
 import Main.Entity.Chat;
-import Main.Entity.Message;
 import Main.Exception.BaseException;
 import Main.Mapper.ChatMapper;
-import Main.Mapper.MessageMapper;
 import Main.Service.AccountService;
 import Main.Service.ChatService;
-import Main.Service.MessageService;
-import Main.Utility.jwtUtil;
+import Main.Utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.Jar;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +22,7 @@ import java.util.List;
 @RequestMapping("/chat")
 public class ChatController {
 
-    private final jwtUtil jwtUtility;
+    private final JwtUtil jwtUtil;
 
     private final ChatMapper chatMapper;
 
@@ -57,7 +48,7 @@ public class ChatController {
             throw new BaseException("page must >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        final String username = jwtUtility.getUsername();
+        final String username = jwtUtil.getUsername();
 
         if(username != null){
             Account account = accountService.findByUserName(username);

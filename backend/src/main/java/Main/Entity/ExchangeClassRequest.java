@@ -1,5 +1,6 @@
     package Main.Entity;
 
+    import Main.Common.BaseEntity;
     import jakarta.persistence.*;
     import lombok.Data;
     import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@
     @NoArgsConstructor
     @Entity
     @Table(name = "exchange_class_request" )
-    public class ExchangeClassRequest {
+    public class ExchangeClassRequest implements BaseEntity {
 
         @Id
         @Column(name = "id")

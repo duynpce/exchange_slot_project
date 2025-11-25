@@ -1,6 +1,7 @@
 package Main.Entity;
 
 
+import Main.Common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.time.Instant;
 @Table(name = "message")
 @Data
 @NoArgsConstructor
-public class Message {
+public class Message implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

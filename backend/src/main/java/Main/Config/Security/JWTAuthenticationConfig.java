@@ -1,6 +1,6 @@
 package Main.Config.Security;
 
-import Main.Utility.jwtUtil;
+import Main.Utility.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @Configuration
 public class JWTAuthenticationConfig extends OncePerRequestFilter {
 
-    private final jwtUtil jwtUtility;
+    private final JwtUtil jwtUtility;
     private final ApplicationContext context;
 
 

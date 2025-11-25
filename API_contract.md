@@ -82,7 +82,7 @@ khi có null field
 
 POST /login
 
-description : đăng nhập
+description : đăng nhập ,bật http only, https và tự động thêm refresh token vào header
 
 URL Params: None
 
@@ -101,8 +101,8 @@ success response:
         content:
             {
                 refresh token: string,
-                access token: String
-                message: "login sucess"
+                message: "login sucessfully"
+                .....
             }
 
 error response : 
@@ -161,6 +161,24 @@ error response:
     {
         you do not have the authorization to access this endpoint
     }
+
+Post /logout
+
+description : đăng xuất và tư động xóa refresh token khỏi header
+
+URL Params: None
+
+Data Params: None
+
+Headers:Content-Type: application/json
+
+success response 
+    
+    {
+        Http code: 200,
+        message: "logout successfully"
+    }
+
 
 PATCH /reset_password
 

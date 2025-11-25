@@ -18,4 +18,6 @@ public interface MajorClassRepository extends JpaRepository<MajorClass,String> {
     Page<MajorClass> findAll(Pageable pageable);
 
     boolean existsByClassCode(String classCode);
+
+    List<MajorClass> findBySlot(String slot, Pageable pageable);
 }

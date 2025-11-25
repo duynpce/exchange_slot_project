@@ -1,7 +1,5 @@
 package Main.Validator;
 
-import Main.DTO.ExchangeClassRequest.CreateExchangeClassRequestDTO;
-import Main.DTO.ExchangeClassRequest.UpdateExchangeClassRequestDTO;
 import Main.Exception.BaseException;
 import Main.Entity.Account;
 import Main.Entity.ExchangeClassRequest;
@@ -10,7 +8,8 @@ import Main.Service.AccountService;
 import Main.Service.ExchangeClassRequestService;
 import Main.Service.MajorClassService;
 
-import Main.Utility.util;
+
+import Main.Utility.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,26 +21,26 @@ public class ExchangeClassRequestValidator {
     private final MajorClassService majorClassService;
     private final AccountService accountService;
     private final ExchangeClassRequestService exchangeClassRequestService;
-    private final util utility;
+    private final Util util;
 
     public void validateAddRequest(ExchangeClassRequest request){
         final String studentCode  = request.getStudentCode();
         final String desiredClassCode = request.getDesiredClassCode();
 
-        utility.throwExceptionIfNull(studentCode, "null student code");
-        utility.throwExceptionIfNull(desiredClassCode, "null desired class code");
+        util.throwExceptionIfNull(studentCode, "null student code");
+        util.throwExceptionIfNull(desiredClassCode, "null desired class code");
 
-        utility.throwExceptionIfExists(exchangeClassRequestService.existsByStudentCode(studentCode)
+        util.throwExceptionIfExists(exchangeClassRequestService.existsByStudentCode(studentCode)
                 , "existed request with student code: " + studentCode );
 
         Account account = accountService.findByStudentCode(studentCode);
-        utility.throwExceptionIfNull(account, "no account with student code: " + studentCode);
+        util.throwExceptionIfNull(account, "no account with student code: " + studentCode);
 
         final String currentClassCode = account.getMajorClass().getClassCode();
         MajorClass currentClass = majorClassService.findByClassCode(currentClassCode);
         MajorClass desiredClass = majorClassService.findByClassCode(desiredClassCode);
-        utility.throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
-        utility.throwExceptionIfNull(desiredClass, "no existing class with class code: " + desiredClassCode);
+        util.throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
+        util.throwExceptionIfNull(desiredClass, "no existing class with class code: " + desiredClassCode);
 
         String currentSlot = currentClass.getSlot();
         String desiredSlot = desiredClass.getSlot();
@@ -59,17 +58,17 @@ public class ExchangeClassRequestValidator {
         final String studentCode  = request.getStudentCode();
         final String desiredClassCode = request.getDesiredClassCode();
 
-        utility.throwExceptionIfNull(studentCode, "null student code");
-        utility.throwExceptionIfNull(desiredClassCode, "null desired class code");
+        util.throwExceptionIfNull(studentCode, "null student code");
+        util.throwExceptionIfNull(desiredClassCode, "null desired class code");
 
         Account account = accountService.findByStudentCode(studentCode);
-        utility.throwExceptionIfNull(account, "no account with student code: " + studentCode);
+        util.throwExceptionIfNull(account, "no account with student code: " + studentCode);
 
         final String currentClassCode = account.getMajorClass().getClassCode();
         MajorClass currentClass = majorClassService.findByClassCode(currentClassCode);
         MajorClass desiredClass = majorClassService.findByClassCode(desiredClassCode);
-        utility.throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
-        utility.throwExceptionIfNull(desiredClass, "no existing class with class code: " + desiredClassCode);
+        util.throwExceptionIfNull(currentClass, "no existing class with class code: " + currentClassCode);
+        util.throwExceptionIfNull(desiredClass, "no existing class with class code: " + desiredClassCode);
 
         String currentSlot = currentClass.getSlot();
         String desiredSlot = desiredClass.getSlot();

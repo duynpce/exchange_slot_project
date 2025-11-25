@@ -1,12 +1,13 @@
 package Main.Entity;
 
+import Main.Common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "class")
-public class MajorClass {
+public class MajorClass implements BaseEntity {
 
     @Id
     @Column(name = "id")

@@ -1,5 +1,6 @@
 package Main.Entity;
 
+import Main.Common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "exchange_slot_request")
-public class ExchangeSlotRequest {
+public class ExchangeSlotRequest implements BaseEntity {
 
     @Id
     @Column(name ="id")

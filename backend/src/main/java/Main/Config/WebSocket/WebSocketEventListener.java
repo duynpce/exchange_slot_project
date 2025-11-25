@@ -2,10 +2,9 @@ package Main.Config.WebSocket;
 
 import Main.Config.Security.UserDetailConfig;
 import Main.Config.Security.UserDetailServiceConfig;
-import Main.Utility.jwtUtil;
+import Main.Utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.Jar;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -18,7 +17,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Slf4j
 public class WebSocketEventListener {
     private final SimpMessageSendingOperations messagingTemplate;
-    private final jwtUtil jwtUtility;
+    private final JwtUtil jwtUtility;
     private final UserDetailServiceConfig userDetailServiceConfig;;
 
     // Listen for WebSocket connection events, called when a user connects

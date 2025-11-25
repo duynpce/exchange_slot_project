@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 @Component
 @Getter
-public class jwtUtil {
+public class JwtUtil {
     private final String accessSecretKey = "w4Jf9sK2q1Vx8hYp3Zt6uN0rL5bQ2cF7gHjK9LmN0AdAdEW123D1hae0ifADH09i3q";
     private final String refreshSecretKey = "w73HUS1DJ8jhJ1SA213SU123132910sda1327uei12094USe99IIJda123xajAS12";
 

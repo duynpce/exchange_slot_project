@@ -1,18 +1,6 @@
-#Accounts
-    
-Account object
-    
-    {
-        id : int
-        userName: String
-        password: String
-        phoneNumber: String
-        accountName: String
-        studentCode: String
-        classCode: String
-    }
+# auth
 
-POST /register
+POST /auth/register
 
 description : tạo tài khoản mới
 URL Params: None
@@ -80,7 +68,7 @@ khi có null field
             }
 
 
-POST /login
+POST /auth/login
 
 description : đăng nhập ,bật http only, https và tự động thêm refresh token vào header
 
@@ -162,7 +150,7 @@ error response:
         you do not have the authorization to access this endpoint
     }
 
-Post /logout
+Post /auth/logout
 
 description : đăng xuất và tư động xóa refresh token khỏi header
 
@@ -180,7 +168,7 @@ success response
     }
 
 
-PATCH /reset_password
+PATCH /auth/reset_password
 
 description : đổi mật khẩu 
 
@@ -223,7 +211,7 @@ error response
     "message": "reset failed",
     }
 
-POST /refresh_access_token
+POST /auth/refresh_access_token
 
 description : làm mới access token bằng refresh token
 
@@ -260,6 +248,21 @@ error response
         "message": "invalid refresh token or access token haven't expired",
         "error": "UNAUTHORIZED",
         "data": "no data"
+    }
+
+
+# Account
+
+Account object
+
+    {
+        id : int
+        userName: String
+        password: String
+        phoneNumber: String
+        accountName: String
+        studentCode: String
+        classCode: String
     }
 
 Patch /account

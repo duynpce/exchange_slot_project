@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/") //temp will be ("/auth") when deploy
+@RequestMapping("/auth")
 @CrossOrigin(origins = "*", allowCredentials = "true") // allowCredentials to true to allow cookies
 public class AuthController {
     private final AuthService authService;

@@ -1,12 +1,15 @@
 package Main.Service;
 
 
+import Main.Entity.ExchangeClassRequest;
 import Main.Enum.Constant;
 import Main.Exception.BaseException;
 import Main.Entity.ExchangeSlotRequest;
 import Main.Repository.ExchangeSlotRequestRepository;
 import Main.Utility.CacheUtil;
+import Main.Utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.Jar;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,6 +33,8 @@ public class ExchangeSlotRequestService {
 
     private final ExchangeSlotRequestRepository exchangeSlotRequestRepository;
     private final CacheUtil<ExchangeSlotRequest> cacheUtil;
+    private final AccountService accountService;
+    private final JwtUtil jwtUtil;
 
     @Caching(
             cacheable = {
@@ -77,9 +82,9 @@ public class ExchangeSlotRequestService {
     }
 
     @Cacheable(value = cacheListData, key = "#classCode")
-    public List<ExchangeSlotRequest> findByClassCode(String classCode, int page) {
+    public List<ExchangeSlotRequest> findByCurrentClassCode(String classCode, int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<ExchangeSlotRequest> data = exchangeSlotRequestRepository.findByAccount_ClassCode(classCode, pageable);
+        List<ExchangeSlotRequest> data = exchangeSlotRequestRepository.findByCurrentClassCode(classCode, pageable);
 
         if (data.isEmpty()) {
             throw new BaseException("no slot request with class code: " + classCode, HttpStatus.NOT_FOUND);
@@ -133,12 +138,17 @@ public class ExchangeSlotRequestService {
 
     @Cacheable(value = cacheData, key = "#studentCode")
     public ExchangeSlotRequest findByStudentCode(String studentCode) {
-        return exchangeSlotRequestRepository.findByAccount_StudentCode(studentCode)
+        return exchangeSlotRequestRepository.findByStudentCode(studentCode)
                 .orElseThrow(() -> new BaseException("no exchange request found", HttpStatus.NOT_FOUND));
+    }
+
+    public ExchangeSlotRequest findByAccountId(int accountId) {
+        return exchangeSlotRequestRepository.findByAccountId(accountId).
+                orElseThrow(() -> new BaseException(" not found request with account id : " + accountId, HttpStatus.NOT_FOUND));
     }
 
     @Cacheable(value = cacheExists, key = "#studentCode")
     public boolean existsByStudentCode(String studentCode) {
-        return exchangeSlotRequestRepository.existsByAccount_StudentCode(studentCode);
+        return exchangeSlotRequestRepository.existsByStudentCode(studentCode);
     }
 }

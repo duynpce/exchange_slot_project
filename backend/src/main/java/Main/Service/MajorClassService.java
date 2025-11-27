@@ -40,10 +40,12 @@ public class MajorClassService {
             }
     )
     public MajorClass add(MajorClass majorClass) {
+        MajorClass savedMajorClass = majorClassRepository.save(majorClass);
+
         cacheUtil.addOneItemToList(cacheListData, "'all'", majorClass);
         cacheUtil.addOneItemToList(cacheListData, majorClass.getSlot(), majorClass);
 
-        return majorClassRepository.save(majorClass);
+        return savedMajorClass;
     }
 
     @Caching(
@@ -57,11 +59,13 @@ public class MajorClassService {
     public MajorClass update(MajorClass majorClass) {
         cacheUtil.updateOneItemToList(cacheListData, "'all'", majorClass);
 
-        String oldSlot = majorClass.getSlot().equals("1,2")  ? "3,4" : "1,2";
-        cacheUtil.deleteOneItemFromList(cacheListData,oldSlot, majorClass);
-        cacheUtil.addOneItemToList(cacheListData, majorClass.getSlot(), majorClass);
+        MajorClass updateMajorClass = majorClassRepository.save(majorClass);
 
-        return majorClassRepository.save(majorClass);
+        String oldSlot = majorClass.getSlot().equals("1,2")  ? "3,4" : "1,2";
+        cacheUtil.deleteOneItemFromList(cacheListData,oldSlot, updateMajorClass);
+        cacheUtil.addOneItemToList(cacheListData, majorClass.getSlot(), updateMajorClass);
+
+        return updateMajorClass;
     }
 
     @Cacheable(value = cacheData, key = "#classCode")

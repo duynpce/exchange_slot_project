@@ -1,13 +1,14 @@
 package Main.Service;
 
-import Main.DTO.ExchangeClassRequest.ExchangeClassRequestResponseDTO;
+
 import Main.Enum.Constant;
 import Main.Exception.BaseException;
-import Main.Mapper.ExchangeClassRequestMapper;
+
 import Main.Entity.ExchangeClassRequest;
 import Main.Repository.ExchangeClassRequestRepository;
 
 import Main.Utility.CacheUtil;
+import Main.Utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -32,6 +33,8 @@ public class ExchangeClassRequestService {
 
     private final ExchangeClassRequestRepository exchangeClassRequestRepository;
     private final CacheUtil<ExchangeClassRequest> cacheUtil;
+    private final AccountService accountService;
+    private final JwtUtil jwtUtil;
 
     @Caching(
         cacheable = {
@@ -65,6 +68,7 @@ public class ExchangeClassRequestService {
     public ExchangeClassRequest update(ExchangeClassRequest request) {
 
         ExchangeClassRequest updatedRequest = exchangeClassRequestRepository.save(request);
+
         // update cache if already cached list
         cacheUtil.updateOneItemToList(cacheListData, updatedRequest.getCurrentClassCode(), updatedRequest);
         cacheUtil.updateOneItemToList(cacheListData, updatedRequest.getCurrentSlot(), updatedRequest);
@@ -89,7 +93,7 @@ public class ExchangeClassRequestService {
 
         Pageable pageable = PageRequest.of(page, pageSize); //page is which page, pageSize is number of element in a page
         List<ExchangeClassRequest> data = exchangeClassRequestRepository.
-                findByAccount_ClassCode(classCode,pageable);
+                findByClassCode(classCode,pageable);
 
         if (data.isEmpty()) {
             throw new BaseException("no request with that class code: " + classCode, HttpStatus.NOT_FOUND);
@@ -114,7 +118,7 @@ public class ExchangeClassRequestService {
     @Cacheable(value = cacheData, key = "#studentCode")
     public ExchangeClassRequest findByStudentCode(String studentCode) {
 
-        return exchangeClassRequestRepository.findByAccount_StudentCode(studentCode)
+        return exchangeClassRequestRepository.findByStudentCode(studentCode)
                 .orElseThrow(()-> new BaseException("no request with student code "+ studentCode,HttpStatus.NOT_FOUND));
 
     }
@@ -126,9 +130,15 @@ public class ExchangeClassRequestService {
                 orElseThrow(() -> new BaseException(" not found request with id : " + id, HttpStatus.NOT_FOUND));
     }
 
+    @Cacheable(value = cacheData, key ="#accountId")
+    public ExchangeClassRequest findByAccountId(int accountId){
+        return exchangeClassRequestRepository.findByAccountId(accountId).
+                orElseThrow(() -> new BaseException(" not found request with account id : " + accountId, HttpStatus.NOT_FOUND));
+    }
+
     @Cacheable(value = cacheExists, key ="#studentCode")
     public boolean existsByStudentCode(String studentCode){
-        return exchangeClassRequestRepository.existsByAccount_StudentCode(studentCode);
+        return exchangeClassRequestRepository.existsByStudentCode(studentCode);
     }
 
 

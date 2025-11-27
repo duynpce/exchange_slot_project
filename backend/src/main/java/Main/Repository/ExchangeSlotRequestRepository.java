@@ -10,9 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlotRequest,Integer> {
-    List<ExchangeSlotRequest> findByAccount_ClassCode(String classCode, Pageable pageable);
+    List<ExchangeSlotRequest> findByCurrentClassCode(String classCode, Pageable pageable);
     List<ExchangeSlotRequest> findByCurrentSlot(String slot, Pageable pageable);
 
-    boolean existsByAccount_StudentCode(String studentCode);
-    Optional<ExchangeSlotRequest> findByAccount_StudentCode(String studentCode);
+    Optional<ExchangeSlotRequest> findByStudentCode(String studentCode);
+    Optional<ExchangeSlotRequest> findByAccountId(int accountId);
+
+    boolean existsByStudentCode(String studentCode);
 }

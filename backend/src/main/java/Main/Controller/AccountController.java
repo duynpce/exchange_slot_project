@@ -8,6 +8,7 @@ import Main.Mapper.AccountMapper;
 import Main.Entity.Account;
 import Main.Service.AccountService;
 import Main.Utility.JwtUtil;
+import Main.Validator.AccountValidator;
 import Main.Validator.AuthValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     private final AccountService accountService;
     private final JwtUtil jwtUtil;
-    private final AuthValidator authValidator;
+    private final AccountValidator accountValidator;
     private final AccountMapper accountMapper;
 
 
@@ -32,7 +33,7 @@ public class AccountController {
     public ResponseEntity<ResponseDTO<String>> update(@RequestBody UpdateAccountDTO updateAccountDTO){
         final String username = jwtUtil.getUsername();
         Account account = accountService.findByUserName(username);
-        authValidator.validateUpdateAccount(updateAccountDTO, account);
+        accountValidator.validateUpdateAccount(updateAccountDTO, account);
         accountService.update(account);
 
         ResponseDTO<String> responseDTO = new ResponseDTO<>

@@ -63,7 +63,7 @@ public class ExchangeSlotController {
     }
 
     @GetMapping("/class/{classCode}/page/{page}")/// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequestResponseDTO>>> findByClassCode
+    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequestResponseDTO>>> findByCurrentClassCode
             (@PathVariable String classCode,
             @PathVariable int page) {
         if(page < 0){
@@ -71,7 +71,7 @@ public class ExchangeSlotController {
         }
 
         List<ExchangeSlotRequestResponseDTO> result = exchangeSlotRequestMapper.
-                toDtoList(exchangeSlotRequestService.findByClassCode(classCode, page));
+                toDtoList(exchangeSlotRequestService.findByCurrentClassCode(classCode, page));
 
 
         ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(

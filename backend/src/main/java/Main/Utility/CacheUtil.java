@@ -58,6 +58,7 @@ public class CacheUtil<T extends BaseEntity>{
 
     }
 
+    // delete an item from a cached list, if not cached, do nothing
     public void deleteOneItemFromList(String CacheName, String key, T value) {
         int id = value.getId();
         Cache cache = cacheManager.getCache(CacheName);

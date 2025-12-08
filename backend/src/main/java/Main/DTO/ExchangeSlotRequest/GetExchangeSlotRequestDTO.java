@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExchangeSlotRequestResponseDTO {
+public class GetExchangeSlotRequestDTO {
     private int id;
     private String studentCode;
     private String currentClassCode;

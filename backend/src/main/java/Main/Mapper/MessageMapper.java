@@ -1,7 +1,6 @@
 package Main.Mapper;
 
-import Main.DTO.Message.ResponseMessageDTO;
-import Main.DTO.Message.SendMessageDTO;
+import Main.DTO.Message.GetMessageDTO;
 import org.mapstruct.Mapper;
 import Main.Entity.Message;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
-    Message toEntity(SendMessageDTO sendMessageDTO);
-    ResponseMessageDTO toDto(Message message);
-    List<ResponseMessageDTO> toDtoList(List<Message> messages);
+    Message toEntity(GetMessageDTO getMessageDTO);
+    GetMessageDTO toDto(Message message);
+    List<GetMessageDTO> toDtoList(List<Message> messages);
 }

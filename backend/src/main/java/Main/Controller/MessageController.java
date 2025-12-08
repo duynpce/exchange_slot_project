@@ -1,8 +1,7 @@
 package Main.Controller;
 
 import Main.DTO.Common.ResponseDTO;
-import Main.DTO.Message.ResponseMessageDTO;
-import Main.DTO.Message.SendMessageDTO;
+import Main.DTO.Message.GetMessageDTO;
 import Main.Entity.Message;
 import Main.Mapper.MessageMapper;
 import Main.Service.MessageService;
@@ -29,21 +28,21 @@ public class MessageController {
 
     // WebSocket endpoint to send messages /app/sendMessage
     @MessageMapping("sendMessage")
-    public void sendMessage(@Payload SendMessageDTO sendMessageDTO){
+    public void sendMessage(@Payload GetMessageDTO getMessageDTO){
         // Send the message to the specific chat topic, similar to @SendTo("/topic/{chatId}")
-        int chatId = sendMessageDTO.getChatId();
-        messagingTemplate.convertAndSend("/topic/" + chatId, sendMessageDTO);
+        int chatId = getMessageDTO.getChatId();
+        messagingTemplate.convertAndSend("/topic/" + chatId, getMessageDTO);
 
         // Save the message to the database
-        Message message = messageMapper.toEntity(sendMessageDTO);
+        Message message = messageMapper.toEntity(getMessageDTO);
         messageService.save(message);
     }
 
     @GetMapping("id/{id}/page/{page}")
-    public ResponseEntity<ResponseDTO<List<ResponseMessageDTO>>> loadMessages(@PathVariable int id, @PathVariable int page){
-        List<ResponseMessageDTO> messages = messageMapper.toDtoList(messageService.loadMessageByChatId(id, page));
+    public ResponseEntity<ResponseDTO<List<GetMessageDTO>>> loadMessages(@PathVariable int id, @PathVariable int page){
+        List<GetMessageDTO> messages = messageMapper.toDtoList(messageService.loadMessageByChatId(id, page));
 
-        ResponseDTO<List<ResponseMessageDTO>> response =
+        ResponseDTO<List<GetMessageDTO>> response =
                 new ResponseDTO<>(true, "messages loaded successfully", "no error", messages);
         return ResponseEntity.ok(response);
     }

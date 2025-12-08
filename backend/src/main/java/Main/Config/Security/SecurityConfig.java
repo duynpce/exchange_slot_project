@@ -60,12 +60,15 @@ public class SecurityConfig {
                         .anyRequest().authenticated() //logged in --> can access --> do not care about role
                          )
                     .cors(cors -> cors.configurationSource(request -> {
-                        /// turn off cors temporary for testing --> config again when deploy --
+                        final String origin = "https://exchange-class.vercel.app";
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
-                        corsConfiguration.setAllowedOrigins(List.of("*"));
-                        corsConfiguration.setAllowedMethods(List.of("*"));
+
+                        // set origin
+                        corsConfiguration.setAllowedOrigins(List.of(origin));
                         corsConfiguration.setAllowedHeaders(List.of("*"));
-                        corsConfiguration.setAllowCredentials(false);
+                        corsConfiguration.setAllowedMethods(List.of("*"));
+                        corsConfiguration.setExposedHeaders(List.of("Authorization")); //only origin can read header
+                        corsConfiguration.setAllowCredentials(true);
                         return  corsConfiguration;
                     }))
                 .logout(LogoutConfigurer::permitAll)//login -> permitAll()

@@ -64,8 +64,7 @@ public class AuthService {
         return accountRepository.resetPassword(username, encryptedPassword);
     }
 
-    public AccessTokenDTO refreshAccessToken(RefreshAccessTokenDTO refreshAccessTokenDTO){
-        final String refreshToken = refreshAccessTokenDTO.getRefreshToken();
+    public AccessTokenDTO refreshAccessToken(String refreshToken){
         final String refreshSecretKey = jwtUtil.getRefreshSecretKey();
         String username =  jwtUtil.extractUsername(refreshToken, refreshSecretKey);
 

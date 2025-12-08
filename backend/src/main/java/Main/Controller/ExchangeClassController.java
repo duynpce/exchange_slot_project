@@ -2,7 +2,7 @@ package Main.Controller;
 
 
 import Main.DTO.ExchangeClassRequest.CreateExchangeClassRequestDTO;
-import Main.DTO.ExchangeClassRequest.ExchangeClassRequestResponseDTO;
+import Main.DTO.ExchangeClassRequest.GetExchangeClassRequestDTO;
 import Main.DTO.Common.ResponseDTO;
 import Main.DTO.ExchangeClassRequest.UpdateExchangeClassRequestDTO;
 import Main.Exception.BaseException;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/exchange_class")
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class ExchangeClassController {
     }
 
     @PatchMapping("/id/{id}")
-    public ResponseEntity<ResponseDTO<ExchangeClassRequestResponseDTO>> update(
+    public ResponseEntity<ResponseDTO<GetExchangeClassRequestDTO>> update(
             @PathVariable int id,
             @RequestBody UpdateExchangeClassRequestDTO request) {
 
@@ -50,10 +49,10 @@ public class ExchangeClassController {
         exchangeClassRequest.setDesiredClassCode(request.getDesiredClassCode());
         classRequestValidator.validateUpdateRequest(exchangeClassRequest);
 
-        ExchangeClassRequestResponseDTO updated =
+        GetExchangeClassRequestDTO updated =
                 exchangeClassRequestMapper.toDto(exchangeClassRequestService.update(exchangeClassRequest));
 
-        ResponseDTO<ExchangeClassRequestResponseDTO> response =
+        ResponseDTO<GetExchangeClassRequestDTO> response =
                 new ResponseDTO<>(true, "request updated successfully", "no error", updated);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -73,59 +72,59 @@ public class ExchangeClassController {
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+    }   
 
     @GetMapping("/class_code/{classCode}/page/{page}") /// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeClassRequestResponseDTO>>> findByClassCode
+    public ResponseEntity<ResponseDTO<List<GetExchangeClassRequestDTO>>> findByClassCode
             (@PathVariable String classCode ,@PathVariable int page) {
 
         if(page < 0){
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeClassRequestResponseDTO> data = exchangeClassRequestMapper.
+        List<GetExchangeClassRequestDTO> data = exchangeClassRequestMapper.
                 toDtoList(exchangeClassRequestService.findByClassCode(classCode,page));
 
         if(data.isEmpty()){
             throw new BaseException("no exchange class request found", HttpStatus.NOT_FOUND);
         }
 
-        ResponseDTO<List<ExchangeClassRequestResponseDTO>> response =
+        ResponseDTO<List<GetExchangeClassRequestDTO>> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/slot/{slot}/page/{page}") /// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeClassRequestResponseDTO>>> findBySlot
+    public ResponseEntity<ResponseDTO<List<GetExchangeClassRequestDTO>>> findBySlot
             (@PathVariable String slot ,@PathVariable int page) {
 
         if(page < 0){
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeClassRequestResponseDTO> data = exchangeClassRequestMapper.
+        List<GetExchangeClassRequestDTO> data = exchangeClassRequestMapper.
                 toDtoList(exchangeClassRequestService.findBySlot(slot, page));
 
         if(data.isEmpty()){
             throw new BaseException("no class request found", HttpStatus.NOT_FOUND);
         }
 
-        ResponseDTO<List<ExchangeClassRequestResponseDTO>> response =
+        ResponseDTO<List<GetExchangeClassRequestDTO>> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/student_code/{studentCode}")
-    public ResponseEntity<ResponseDTO<ExchangeClassRequestResponseDTO>> findByStudentCode(
+    public ResponseEntity<ResponseDTO<GetExchangeClassRequestDTO>> findByStudentCode(
             @PathVariable String studentCode
             ) {
 
-        ExchangeClassRequestResponseDTO data = exchangeClassRequestMapper
+        GetExchangeClassRequestDTO data = exchangeClassRequestMapper
                 .toDto(exchangeClassRequestService.findByStudentCode(studentCode));
 
-        ResponseDTO<ExchangeClassRequestResponseDTO> response =
+        ResponseDTO<GetExchangeClassRequestDTO> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);
 
         return ResponseEntity.ok(response);
@@ -133,7 +132,7 @@ public class ExchangeClassController {
 
 
     @GetMapping("/id/{id}") ///  for testing
-    public ExchangeClassRequestResponseDTO findById(@PathVariable int id){
+    public GetExchangeClassRequestDTO findById(@PathVariable int id){
         return exchangeClassRequestMapper.toDto(exchangeClassRequestService.findById(id));
     }
 

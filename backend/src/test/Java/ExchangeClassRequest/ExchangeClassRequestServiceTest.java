@@ -1,15 +1,12 @@
 package ExchangeClassRequest;
 
 import Main.DTO.ExchangeClassRequest.CreateExchangeClassRequestDTO;
-import Main.DTO.ExchangeClassRequest.ExchangeClassRequestResponseDTO;
+import Main.DTO.ExchangeClassRequest.GetExchangeClassRequestDTO;
 import Main.DTO.ExchangeClassRequest.UpdateExchangeClassRequestDTO;
 import Main.Entity.ExchangeClassRequest;
 import Main.Mapper.ExchangeClassRequestMapper;
-import Main.Mapper.ExchangeClassRequestMapperImpl;
 import Main.Repository.ExchangeClassRequestRepository;
 import Main.Service.ExchangeClassRequestService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,8 +43,8 @@ public class ExchangeClassRequestServiceTest {
         }
 
         @Override
-        public ExchangeClassRequestResponseDTO toDto(ExchangeClassRequest request) {
-            ExchangeClassRequestResponseDTO dto = new ExchangeClassRequestResponseDTO();
+        public GetExchangeClassRequestDTO toDto(ExchangeClassRequest request) {
+            GetExchangeClassRequestDTO dto = new GetExchangeClassRequestDTO();
             dto.setId(request.getId());
             dto.setStudentCode(request.getStudentCode());
             dto.setDesiredClassCode(request.getDesiredClassCode());
@@ -58,12 +55,12 @@ public class ExchangeClassRequestServiceTest {
         }
 
         @Override
-        public List<ExchangeClassRequestResponseDTO> toDtoList(List<ExchangeClassRequest> requests) {
+        public List<GetExchangeClassRequestDTO> toDtoList(List<ExchangeClassRequest> requests) {
             if (requests == null) {
                 return new ArrayList<>();
             }
 
-            List<ExchangeClassRequestResponseDTO> dtoList = new ArrayList<>();
+            List<GetExchangeClassRequestDTO> dtoList = new ArrayList<>();
             for (ExchangeClassRequest request : requests) {
                 dtoList.add(toDto(request));
             }

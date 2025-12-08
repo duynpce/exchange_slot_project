@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class ResponseMessageDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class GetMessageDTO {
     private int id;
     private int chatId;
-    private String content;
     private int senderId;
+    private String content;
 }

@@ -1,7 +1,7 @@
 package Main.Controller;
 
 import Main.DTO.ExchangeSlotRequest.CreateExchangeSlotRequestDTO;
-import Main.DTO.ExchangeSlotRequest.ExchangeSlotRequestResponseDTO;
+import Main.DTO.ExchangeSlotRequest.GetExchangeSlotRequestDTO;
 import Main.DTO.Common.ResponseDTO;
 import Main.Exception.BaseException;
 import Main.Entity.ExchangeSlotRequest;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/exchange_slot")
 @RequiredArgsConstructor
@@ -63,18 +62,18 @@ public class ExchangeSlotController {
     }
 
     @GetMapping("/class/{classCode}/page/{page}")/// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequestResponseDTO>>> findByCurrentClassCode
+    public ResponseEntity<ResponseDTO<List<GetExchangeSlotRequestDTO>>> findByCurrentClassCode
             (@PathVariable String classCode,
             @PathVariable int page) {
         if(page < 0){
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeSlotRequestResponseDTO> result = exchangeSlotRequestMapper.
+        List<GetExchangeSlotRequestDTO> result = exchangeSlotRequestMapper.
                 toDtoList(exchangeSlotRequestService.findByCurrentClassCode(classCode, page));
 
 
-        ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(
+        ResponseDTO<List<GetExchangeSlotRequestDTO>> response = new ResponseDTO<>(
                 true,
                 "slot request(s) found successfully",
                 "no error",
@@ -126,17 +125,17 @@ public class ExchangeSlotController {
 //    }
 
     @GetMapping("/slot/{slot}/page/{page}") /// add pagination to it please pageable page
-    public ResponseEntity<ResponseDTO<List<ExchangeSlotRequestResponseDTO>>> findBySlot
+    public ResponseEntity<ResponseDTO<List<GetExchangeSlotRequestDTO>>> findBySlot
             (@PathVariable String slot, @PathVariable int page) {
 
         if(page < 0){
             throw new BaseException("page must be >= 0", HttpStatus.BAD_REQUEST);
         }
 
-        List<ExchangeSlotRequestResponseDTO> data = exchangeSlotRequestMapper
+        List<GetExchangeSlotRequestDTO> data = exchangeSlotRequestMapper
                 .toDtoList(exchangeSlotRequestService.findBySlot(slot, page));
 
-        ResponseDTO<List<ExchangeSlotRequestResponseDTO>> response = new ResponseDTO<>(
+        ResponseDTO<List<GetExchangeSlotRequestDTO>> response = new ResponseDTO<>(
                 true,
                 "slot request(s) found successfully",
                 "no error",
@@ -146,13 +145,13 @@ public class ExchangeSlotController {
     }
 
     @GetMapping("/student_code/{studentCode}")
-    public ResponseEntity<ResponseDTO<ExchangeSlotRequestResponseDTO>> findByStudentCode(
+    public ResponseEntity<ResponseDTO<GetExchangeSlotRequestDTO>> findByStudentCode(
             @PathVariable String studentCode
     ) {
-        ExchangeSlotRequestResponseDTO data = exchangeSlotRequestMapper
+        GetExchangeSlotRequestDTO data = exchangeSlotRequestMapper
                 .toDto(exchangeSlotRequestService.findByStudentCode(studentCode));
 
-        ResponseDTO<ExchangeSlotRequestResponseDTO> response =
+        ResponseDTO<GetExchangeSlotRequestDTO> response =
                 new ResponseDTO<>(true, "request found successfully", "no error", data);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

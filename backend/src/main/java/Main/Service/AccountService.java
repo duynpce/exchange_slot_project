@@ -11,6 +11,7 @@ import Main.Exception.BaseException;
 import Main.Utility.CacheUtil;
 import Main.Utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,65 +28,34 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.logging.Logger;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
 
     private final String cacheData = "accountData";
     private final String cacheExists = "accountExists";
 
     private final AccountRepository accountRepository;
-    private final CacheUtil<ExchangeSlotRequest> slotRequestCacheUtil;
-    private final CacheUtil<ExchangeClassRequest> classRequestCacheUtil;
-    private final ExchangeClassRequestService exchangeClassRequestService;
-    private final ExchangeSlotRequestService exchangeSlotRequestService;
-    private final MajorClassService majorClassService;
 
     @Caching(
             put = {
-                @CachePut(value = cacheData, key = "#account.username"),
-                @CachePut(value = cacheData, key = "#account.studentCode"),
-                @CachePut(value = cacheData, key = "#account.phoneNumber"),
+                    @CachePut(value = cacheData, key = "#account.username"),
+                    @CachePut(value = cacheData, key = "#account.studentCode"),
+                    @CachePut(value = cacheData, key = "#account.phoneNumber"),
             },
             evict = {
-                @CacheEvict(value = cacheExists, key = "#account.studentCode")
+                    @CacheEvict(value = cacheExists, key = "#account.studentCode"),
+
             }
 
     )
     public Account update(Account account) {
-        ExchangeClassRequest exchangeClassRequest = exchangeClassRequestService.findByAccountId(account.getId());
-        ExchangeSlotRequest exchangeSlotRequest = exchangeSlotRequestService.findByAccountId(account.getId());
-
-        final String classRequestCacheListName = "listExchangeClassData";
-        final String slotRequestCacheListName = "listExchangeSlotData";
-
-        final String oldClassCode = exchangeClassRequest.getCurrentClassCode();
-        final String oldSlot = exchangeSlotRequest.getCurrentSlot();
-
-        final String newClassCode = account.getClassCode();
-        final String newSlot = majorClassService.findByClassCode(newClassCode).getSlot();
-
-        //update cache if classCode changed
-        if(!oldClassCode.equals(newClassCode)){
-            classRequestCacheUtil.deleteOneItemFromList(classRequestCacheListName,oldClassCode, exchangeClassRequest);
-            classRequestCacheUtil.addOneItemToList(classRequestCacheListName,newClassCode, exchangeClassRequest);
-
-            slotRequestCacheUtil.deleteOneItemFromList(slotRequestCacheListName,oldClassCode, exchangeSlotRequest);
-            slotRequestCacheUtil.addOneItemToList(slotRequestCacheListName,newClassCode , exchangeSlotRequest);
-        }
-
-        //update cache if slot changed
-        if(!oldSlot.equals(newSlot)){
-            classRequestCacheUtil.deleteOneItemFromList(classRequestCacheListName,oldSlot, exchangeClassRequest);
-            classRequestCacheUtil.addOneItemToList(classRequestCacheListName,newSlot, exchangeClassRequest);
-
-            slotRequestCacheUtil.deleteOneItemFromList(slotRequestCacheListName,oldSlot, exchangeSlotRequest);
-            slotRequestCacheUtil.addOneItemToList(slotRequestCacheListName,newSlot, exchangeSlotRequest);
-        }
 
         return accountRepository.save(account);
-
     }
 
     @Cacheable(value = cacheData, key = "#username")

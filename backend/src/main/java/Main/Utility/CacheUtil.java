@@ -15,14 +15,16 @@ public class CacheUtil<T extends BaseEntity>{
     private final CacheManager cacheManager;
 
     // add an item to a cached list, if not cached, do nothing
-    public void addOneItemToList(String CacheName, String key, T value) {
-        Cache cache = cacheManager.getCache(CacheName);
+    public void addOneItemToList(String cacheName, String key, T value) {
+        if(cacheName == null || key == null || value ==null) {return;}
+
+        Cache cache = cacheManager.getCache(cacheName);
 
         if(cache == null){return;}
 
         //List.class --> cast to List<T>
         @SuppressWarnings("unchecked")  // to suppress unchecked cast warning
-        List<T> cachedList =  cache.get(key, List.class);
+        List<T> cachedList =  (List<T>)cache.get(key, List.class);
 
         if(cachedList == null) { return; }
 
@@ -32,9 +34,11 @@ public class CacheUtil<T extends BaseEntity>{
     }
 
     // update an item in a cached list, if not cached, do nothing
-    public void updateOneItemToList(String CacheName, String key, T value) {
+    public void updateOneItemToList(String cacheName, String key, T value) {
+        if(cacheName == null || key == null || value ==null) {return;}
+
         int id = value.getId();
-        Cache cache = cacheManager.getCache(CacheName);
+        Cache cache = cacheManager.getCache(cacheName);
 
         if(cache == null) {return;}
 
@@ -58,10 +62,17 @@ public class CacheUtil<T extends BaseEntity>{
 
     }
 
+    //
+    public void deleteItem(String cacheName, String key, T value){
+        if(cacheName == null || key == null || value ==null) {return;}
+        Cache cache = cacheManager.getCache(cacheName);
+    }
     // delete an item from a cached list, if not cached, do nothing
-    public void deleteOneItemFromList(String CacheName, String key, T value) {
+    public void deleteOneItemFromList(String cacheName, String key, T value) {
+        if(cacheName == null || key == null || value ==null) {return;}
+
         int id = value.getId();
-        Cache cache = cacheManager.getCache(CacheName);
+        Cache cache = cacheManager.getCache(cacheName);
 
         if(cache == null) {return;}
 
@@ -71,8 +82,15 @@ public class CacheUtil<T extends BaseEntity>{
         if(cachedList == null) {return;}
 
         // find By id and remove
-        cachedList.removeIf(item -> item.getId() == id);
-        cache.put(key, cachedList);
+        boolean removeSuccess = cachedList.removeIf(item -> item.getId() == id);
+        if(removeSuccess) cache.put(key, cachedList);
+    }
+
+    public void moveCacheFromToOtherList(String cacheName, String oldKey,String newKey, T value){
+        if(cacheName == null || oldKey == null || newKey == null || value ==null) {return;}
+
+        deleteOneItemFromList(cacheName,oldKey,value);
+        addOneItemToList(cacheName,newKey,value);
     }
 
 }

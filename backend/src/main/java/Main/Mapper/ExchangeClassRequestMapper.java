@@ -1,7 +1,7 @@
 package Main.Mapper;
 
 import Main.DTO.ExchangeClassRequest.CreateExchangeClassRequestDTO;
-import Main.DTO.ExchangeClassRequest.ExchangeClassRequestResponseDTO;
+import Main.DTO.ExchangeClassRequest.GetExchangeClassRequestDTO;
 import Main.DTO.ExchangeClassRequest.UpdateExchangeClassRequestDTO;
 import Main.Entity.ExchangeClassRequest;
 import org.mapstruct.Mapper;
@@ -13,6 +13,6 @@ public interface ExchangeClassRequestMapper {
 
     ExchangeClassRequest toEntity(CreateExchangeClassRequestDTO dto);
     ExchangeClassRequest toEntity(UpdateExchangeClassRequestDTO dto);
-    ExchangeClassRequestResponseDTO toDto(ExchangeClassRequest request);
-    List<ExchangeClassRequestResponseDTO> toDtoList(List<ExchangeClassRequest> requests);
+    GetExchangeClassRequestDTO toDto(ExchangeClassRequest request);
+    List<GetExchangeClassRequestDTO> toDtoList(List<ExchangeClassRequest> requests);
 }

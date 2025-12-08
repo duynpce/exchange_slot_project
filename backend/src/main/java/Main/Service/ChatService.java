@@ -1,11 +1,10 @@
 package Main.Service;
 
 import Main.Entity.Chat;
-import Main.Enum.Constant;
+import Main.Enum.IntConstant;
 import Main.Exception.BaseException;
 import Main.Repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ChatService {
-    private final int pageSize = Constant.DefaultPageSize.getPageSize();
+    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
 
     private final ChatRepository chatRepository;
 
@@ -27,7 +26,7 @@ public class ChatService {
         return chatRepository.save(chat);
     }
 
-    @Cacheable(value = "chatData", key = "#userId" + '-' + "#page")
+    @Cacheable(value = "chatData", key = "{#userId,#page}")
     public List<Chat> findByUserId(int userId, int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
         List<Chat> data = chatRepository.findByUserId(userId, pageable);

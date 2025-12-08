@@ -208,11 +208,7 @@ description : làm mới access token bằng refresh token
 
 URL Params: None
 
-Data Params:
-
-    {
-        refreshToken: String
-    }
+Data Params:none
 
 Headers: Content-Type: application/json
 

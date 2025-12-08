@@ -3,6 +3,7 @@ package Main.Controller;
 import Main.DTO.Auth.*;
 import Main.DTO.Common.ResponseDTO;
 import Main.Entity.Account;
+import Main.Exception.BaseException;
 import Main.Mapper.AccountMapper;
 import Main.Service.AuthService;
 import Main.Utility.JwtUtil;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*", allowCredentials = "true") // allowCredentials to true to allow cookies
 public class AuthController {
     private final AuthService authService;
     private final JwtUtil jwtUtil;
@@ -28,9 +28,13 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<String>> register(@RequestBody RegisterRequestDTO registerRequestDTO){
         Account account = accountMapper.toEntity(registerRequestDTO);
         authValidator.validateRegister(account);// will put it in service if separate interface
-        authService.register(account);
 
-        
+        if(authService.register(account).getId() == 0) {
+            throw new BaseException("register failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+
         ResponseDTO<String> responseDTO = new ResponseDTO<>
                 (true,"no error", "register successfully",null);
 
@@ -83,7 +87,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
-
     @PatchMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPassword
             (@RequestBody ResetPasswordDTO resetPasswordDTO){
@@ -99,8 +102,8 @@ public class AuthController {
 
     @PostMapping("/refresh_access_token")
     public ResponseEntity<ResponseDTO<AccessTokenDTO>>
-    refreshAccessToken(@RequestBody RefreshAccessTokenDTO refreshAccessTokenDTO){
-        AccessTokenDTO accessTokenDTO = authService.refreshAccessToken(refreshAccessTokenDTO);
+    refreshAccessToken(@CookieValue("refreshToken") String refreshToken){
+        AccessTokenDTO accessTokenDTO = authService.refreshAccessToken(refreshToken);
 
         ResponseDTO<AccessTokenDTO> response = new ResponseDTO<>(true,
                 "no error", "refresh access token successfully", accessTokenDTO);

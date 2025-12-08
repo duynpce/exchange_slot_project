@@ -15,6 +15,7 @@ public interface ExchangeClassRequestRepository extends JpaRepository<ExchangeCl
 
 
     Optional<ExchangeClassRequest> findByStudentCode(String studentCode);
+    Optional <ExchangeClassRequest> findByAccountId(int accountId);
 
     boolean existsByStudentCode(String studentCode);
 

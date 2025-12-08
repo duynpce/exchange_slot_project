@@ -1,7 +1,7 @@
 package Main.Service;
 
 import Main.Entity.MajorClass;
-import Main.Enum.Constant;
+import Main.Enum.IntConstant;
 import Main.Exception.BaseException;
 import Main.Repository.MajorClassRepository;
 import Main.Utility.CacheUtil;
@@ -22,7 +22,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MajorClassService {
-    private final int pageSize = Constant.DefaultPageSize.getPageSize();
+    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
     private final String cacheData = "majorClassData";
     private final String cacheExists = "majorClassExists";
     private final String cacheListData = "listMajorClassData";
@@ -43,8 +43,6 @@ public class MajorClassService {
         MajorClass savedMajorClass = majorClassRepository.save(majorClass);
 
         cacheUtil.addOneItemToList(cacheListData, "'all'", majorClass);
-        cacheUtil.addOneItemToList(cacheListData, majorClass.getSlot(), majorClass);
-
         return savedMajorClass;
     }
 

@@ -1,13 +1,13 @@
 package Main.Service;
 
-import Main.DTO.Message.SendMessageDTO;
-import Main.Enum.Constant;
+import Main.Enum.IntConstant;
 import Main.Exception.BaseException;
-import Main.Mapper.MessageMapper;
 import Main.Entity.Message;
 import Main.Repository.MessageRepository;
 
+import Main.Utility.CacheUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,18 +21,21 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MessageService {
-    private final int PageSize = Constant.DefaultPageSize.getPageSize();
+    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
+    private final String cacheData = "messageData";
 
     private final MessageRepository messageRepository;
-    private final MessageMapper messageMapper;
 
+
+    @CacheEvict(value = cacheData, allEntries = true)
     public Message save(Message message){
+
         return messageRepository.save(message);
     }
 
-    @Cacheable(value = "messageData", key = "#chatId" + '-' + "#page")
+    @Cacheable(value = cacheData, key = "{#chatId, #page}")
     public List<Message> loadMessageByChatId(int chatId, int page){
-        Pageable pageable = PageRequest.of(page, PageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         List<Message> data = messageRepository.findByChatIdOrderByIdDesc(chatId, pageable);
 
         if(data.isEmpty()) {

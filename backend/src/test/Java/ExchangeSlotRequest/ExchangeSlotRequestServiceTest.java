@@ -1,14 +1,11 @@
 package ExchangeSlotRequest;
 
 import Main.DTO.ExchangeSlotRequest.CreateExchangeSlotRequestDTO;
-import Main.DTO.ExchangeSlotRequest.ExchangeSlotRequestResponseDTO;
+import Main.DTO.ExchangeSlotRequest.GetExchangeSlotRequestDTO;
 import Main.Entity.ExchangeSlotRequest;
 import Main.Mapper.ExchangeSlotRequestMapper;
-import Main.Mapper.ExchangeSlotRequestMapperImpl;
 import Main.Repository.ExchangeSlotRequestRepository;
 import Main.Service.ExchangeSlotRequestService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,8 +38,8 @@ public class ExchangeSlotRequestServiceTest {
 
 
         @Override
-        public ExchangeSlotRequestResponseDTO toDto(ExchangeSlotRequest request) {
-            ExchangeSlotRequestResponseDTO dto = new ExchangeSlotRequestResponseDTO();
+        public GetExchangeSlotRequestDTO toDto(ExchangeSlotRequest request) {
+            GetExchangeSlotRequestDTO dto = new GetExchangeSlotRequestDTO();
             dto.setId(request.getId());
             dto.setStudentCode(request.getStudentCode());
             dto.setDesiredSlot(request.getDesiredSlot());
@@ -51,12 +48,12 @@ public class ExchangeSlotRequestServiceTest {
         }
 
         @Override
-        public List<ExchangeSlotRequestResponseDTO> toDtoList(List<ExchangeSlotRequest> requests) {
+        public List<GetExchangeSlotRequestDTO> toDtoList(List<ExchangeSlotRequest> requests) {
             if (requests == null) {
                 return new ArrayList<>();
             }
 
-            List<ExchangeSlotRequestResponseDTO> dtoList = new ArrayList<>();
+            List<GetExchangeSlotRequestDTO> dtoList = new ArrayList<>();
             for (ExchangeSlotRequest request : requests) {
                 dtoList.add(toDto(request));
             }

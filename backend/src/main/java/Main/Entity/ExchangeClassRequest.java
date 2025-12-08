@@ -31,6 +31,7 @@
         @Column(name = "current_slot", length = 3, nullable = false)
         private String currentSlot;
 
+        /// those @ManyToOne --> indicate constraint or fk in db --> read-only --> for query data
         @ManyToOne(fetch = FetchType.LAZY) //lazy --> only join table when needed , eager(default) --> always join table
         @JoinColumn(name = "student_code", referencedColumnName = "student_code", insertable = false, updatable = false)
         private Account account;

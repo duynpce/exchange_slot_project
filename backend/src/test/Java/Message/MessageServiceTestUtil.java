@@ -1,6 +1,6 @@
 package Message;
 
-import Main.DTO.Message.SendMessageDTO;
+import Main.DTO.Message.GetMessageDTO;
 import Main.Entity.Message;
 
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class MessageServiceTestUtil {
 
-    public List<SendMessageDTO> getSendMessageDTOs() {
-        List<SendMessageDTO> list = new ArrayList<>();
+    public List<GetMessageDTO> getGetMessageDTOs() {
+        List<GetMessageDTO> list = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            SendMessageDTO dto = new SendMessageDTO(i, i + 10, "msg " + i);
+            GetMessageDTO dto = new GetMessageDTO(i, i + 10, "msg " + i);
             list.add(dto);
         }
         return list;

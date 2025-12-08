@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/")
+@RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
@@ -29,7 +29,7 @@ public class AccountController {
     private final AccountMapper accountMapper;
 
 
-    @PatchMapping("/account")
+    @PatchMapping
     public ResponseEntity<ResponseDTO<String>> update(@RequestBody UpdateAccountDTO updateAccountDTO){
         final String username = jwtUtil.getUsername();
         Account account = accountService.findByUserName(username);
@@ -42,7 +42,7 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
-    @GetMapping("/account")
+    @GetMapping
     public ResponseEntity<ResponseDTO<GetAccountDTO>> getAccountByContextHold(){
         final String username = jwtUtil.getUsername(); ///get username in Context Holder(for security)
 

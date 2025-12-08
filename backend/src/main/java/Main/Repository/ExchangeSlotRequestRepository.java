@@ -14,7 +14,6 @@ public interface ExchangeSlotRequestRepository extends JpaRepository<ExchangeSlo
     List<ExchangeSlotRequest> findByCurrentSlot(String slot, Pageable pageable);
 
     Optional<ExchangeSlotRequest> findByStudentCode(String studentCode);
-    Optional<ExchangeSlotRequest> findByAccountId(int accountId);
 
     boolean existsByStudentCode(String studentCode);
 }

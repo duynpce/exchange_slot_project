@@ -33,8 +33,6 @@ public class ExchangeClassRequestService {
 
     private final ExchangeClassRequestRepository exchangeClassRequestRepository;
     private final CacheUtil<ExchangeClassRequest> cacheUtil;
-    private final AccountService accountService;
-    private final JwtUtil jwtUtil;
 
     @Caching(
         cacheable = {
@@ -93,7 +91,7 @@ public class ExchangeClassRequestService {
 
         Pageable pageable = PageRequest.of(page, pageSize); //page is which page, pageSize is number of element in a page
         List<ExchangeClassRequest> data = exchangeClassRequestRepository.
-                findByClassCode(classCode,pageable);
+                findByCurrentClassCode(classCode,pageable);
 
         if (data.isEmpty()) {
             throw new BaseException("no request with that class code: " + classCode, HttpStatus.NOT_FOUND);
@@ -128,12 +126,6 @@ public class ExchangeClassRequestService {
     public ExchangeClassRequest findById(int id){
         return exchangeClassRequestRepository.findById(id).
                 orElseThrow(() -> new BaseException(" not found request with id : " + id, HttpStatus.NOT_FOUND));
-    }
-
-    @Cacheable(value = cacheData, key ="#accountId")
-    public ExchangeClassRequest findByAccountId(int accountId){
-        return exchangeClassRequestRepository.findByAccountId(accountId).
-                orElseThrow(() -> new BaseException(" not found request with account id : " + accountId, HttpStatus.NOT_FOUND));
     }
 
     @Cacheable(value = cacheExists, key ="#studentCode")

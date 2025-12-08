@@ -20,52 +20,39 @@ Headers: Content-Type: application/json
 
 success response :
 
-{
-    "processSuccess": true,
-    "data": "no data",
-    "error": "no error",
-    "message": "registered successfully",
-    "httpStatus": 201
-}
+    httpStatus: 201
+    {
+        "processSuccess": true,
+        "data": "no data",
+        "error": "no error",
+        "message": "registered successfully",
+        
+    }
 
 
 error response:
     
 khi có đã có field đã tồn tại
 
+
+    httpStatus: 409
     {
         "processSuccess": false,
         "data": "no data",
         "error": "existed field name" ,
         "message": "register failed",
-        "httpStatus": 409
+        
     }
-        sample:
-        {
-            "processSuccess": false,
-            "data": "no data",
-            "error": "existed username" ,
-            "message": "register failed",
-            "httpStatus": 409
-        }
 
 khi có null field
-    
+
+    httpStatus: 400
     {
         "processSuccess": false,
         "data": "no data",
         "error": "null field name",
         "message": "register failed",
-        "httpStatus": 400
     }
-        sample:
-            {
-                "processSuccess": false,
-                "data": "no data",
-                "error": "null username",
-                "message": "register failed",
-                "httpStatus": 400
-            }
 
 
 POST /auth/login
@@ -88,9 +75,12 @@ success response:
     Http code : 200
         content:
             {
-                refresh token: string,
-                message: "login sucessfully"
-                .....
+                "processSuccess": false,
+                "data": "{
+                    "accessToken": "string"
+                    }"
+                "error": "no error",
+                "message": "login successfully",
             }
 
 error response : 
@@ -102,26 +92,27 @@ error response :
             "data": "no data",
             "error": "unauthorizaed",
             "message": "incorrect password",
-            "httpStatus": 400
         }
 
+    httpStatus: 404
     khi user name không tồn tại
     {
         "processSuccess": false,
         "data": "no data",
         "error": "no username existed",
         "message": "login failed",
-        "httpStatus": 404`
     }
     or
+
+    httpStatus: 400
     khi user name hoặc password là null
-    {
-        "processSuccess": false,
-        "data": "no data",
-        "error": "null password or username",
-        "message": "login failed",
-        "httpStatus": 400
-    }
+        {
+            "processSuccess": false,
+            "data": "no data",
+            "error": "null password or username",
+            "message": "login failed",
+            
+        }
 
 
 JWT login
@@ -139,16 +130,16 @@ success response : none
 error response:
 
     khi chưa đăng nhập hoặc sai token
-    {
-        "error": "status 401 - unauthorized, invalid token or haven't logged in",
-        "message": "this action need authentication - please login to perform"
-    }
+        {
+            "error": "status 401 - unauthorized, invalid token or haven't logged in",
+            "message": "this action need authentication - please login to perform"
+        }
 
     khi không có quyền truy cập
-    json
-    {
-        you do not have the authorization to access this endpoint
-    }
+        json
+        {
+            you do not have the authorization to access this endpoint
+        }
 
 Post /auth/logout
 
@@ -196,19 +187,19 @@ error response
     Http code 401 
     khi mật khẩu không hợp lệ
     {
-    "processSuccess": false,
-    "data": "no data",
-    "error": "invalid password",
-    "message": "reset failed",
+        "processSuccess": false,
+        "data": "no data",
+        "error": "invalid password",
+        "message": "reset failed",
     }
 
     khi không tìm thấy tài khoản
     Http code 404
     {
-    "processSuccess": false,
-    "data": "no data",
-    "error": "no existed account",
-    "message": "reset failed",
+        "processSuccess": false,
+        "data": "no data",
+        "error": "no existed account",
+        "message": "reset failed",
     }
 
 POST /auth/refresh_access_token

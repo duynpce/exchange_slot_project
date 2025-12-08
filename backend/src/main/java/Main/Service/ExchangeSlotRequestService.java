@@ -33,8 +33,6 @@ public class ExchangeSlotRequestService {
 
     private final ExchangeSlotRequestRepository exchangeSlotRequestRepository;
     private final CacheUtil<ExchangeSlotRequest> cacheUtil;
-    private final AccountService accountService;
-    private final JwtUtil jwtUtil;
 
     @Caching(
             cacheable = {
@@ -140,11 +138,6 @@ public class ExchangeSlotRequestService {
     public ExchangeSlotRequest findByStudentCode(String studentCode) {
         return exchangeSlotRequestRepository.findByStudentCode(studentCode)
                 .orElseThrow(() -> new BaseException("no exchange request found", HttpStatus.NOT_FOUND));
-    }
-
-    public ExchangeSlotRequest findByAccountId(int accountId) {
-        return exchangeSlotRequestRepository.findByAccountId(accountId).
-                orElseThrow(() -> new BaseException(" not found request with account id : " + accountId, HttpStatus.NOT_FOUND));
     }
 
     @Cacheable(value = cacheExists, key = "#studentCode")

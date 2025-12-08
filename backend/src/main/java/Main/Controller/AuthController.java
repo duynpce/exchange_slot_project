@@ -30,6 +30,7 @@ public class AuthController {
         authValidator.validateRegister(account);// will put it in service if separate interface
         authService.register(account);
 
+        
         ResponseDTO<String> responseDTO = new ResponseDTO<>
                 (true,"no error", "register successfully",null);
 

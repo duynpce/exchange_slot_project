@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/message/")
+@RequestMapping("/message")
 public class MessageController {
     private final SimpMessageSendingOperations messagingTemplate;
 
@@ -27,7 +27,7 @@ public class MessageController {
     private final MessageMapper messageMapper;
 
     // WebSocket endpoint to send messages /app/sendMessage
-    @MessageMapping("sendMessage")
+    @MessageMapping("/sendMessage")
     public void sendMessage(@Payload GetMessageDTO getMessageDTO){
         // Send the message to the specific chat topic, similar to @SendTo("/topic/{chatId}")
         int chatId = getMessageDTO.getChatId();
@@ -38,7 +38,7 @@ public class MessageController {
         messageService.save(message);
     }
 
-    @GetMapping("id/{id}/page/{page}")
+    @GetMapping("/id/{id}/page/{page}")
     public ResponseEntity<ResponseDTO<List<GetMessageDTO>>> loadMessages(@PathVariable int id, @PathVariable int page){
         List<GetMessageDTO> messages = messageMapper.toDtoList(messageService.loadMessageByChatId(id, page));
 

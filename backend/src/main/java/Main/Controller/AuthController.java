@@ -7,12 +7,15 @@ import Main.Exception.BaseException;
 import Main.Mapper.AccountMapper;
 import Main.Service.AuthService;
 import Main.Utility.JwtUtil;
+import Main.Utility.Util;
 import Main.Validator.AuthValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -20,9 +23,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
-    private final JwtUtil jwtUtil;
     private final AuthValidator authValidator;
+
+    private final JwtUtil jwtUtil;
     private final AccountMapper accountMapper;
+    private final JavaMailSender mailSender;
+
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<String>> register(@RequestBody RegisterRequestDTO registerRequestDTO){
@@ -32,8 +38,6 @@ public class AuthController {
         if(authService.register(account).getId() == 0) {
             throw new BaseException("register failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
 
         ResponseDTO<String> responseDTO = new ResponseDTO<>
                 (true,"no error", "register successfully",null);
@@ -87,12 +91,44 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
-    @PatchMapping("/reset_password")
+
+    @PostMapping("/forget_password")
+    public ResponseEntity<ResponseDTO<String>> forgetPassword
+            (@RequestBody ForgetPasswordDTO forgetPasswordDTO){
+
+
+        String email = authValidator.validateForgetPassword(forgetPasswordDTO);
+        OtpDTO otpDTO = authService.forgetPassword(email);
+
+        //send otp to email
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Password Reset OTP");
+        message.setText("Your OTP for password reset is: " + otpDTO.getOtp());
+        mailSender.send(message);
+
+        ResponseDTO<String> responseDTO =
+                new ResponseDTO<>(true,"no error",
+                        "send otp to email:" + email +  ", please check your email:" ,"no data");
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+    }
+
+    @PostMapping("/verify_otp")
+    public ResponseEntity<ResponseDTO<ResetTokenDTO>> verifyOtp(@RequestBody OtpDTO otpDTO){
+        ResetTokenDTO resetTokenDTO = authService.verifyOtp(otpDTO);
+        ResponseDTO<ResetTokenDTO> responseDTO =
+                new ResponseDTO<>(true,"no error","validate otp successfully",resetTokenDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+    }
+
+
+    @PostMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPassword
             (@RequestBody ResetPasswordDTO resetPasswordDTO){
-        final String username = jwtUtil.getUsername(); ///get username in Context Holder(for security)
-        authValidator.validateResetPassword(resetPasswordDTO,username);// will put it in service if separate interface
-        authService.resetPassword(resetPasswordDTO,username);
+        authValidator.validateResetPassword(resetPasswordDTO);
+        authService.resetPassword(resetPasswordDTO);
 
         ResponseDTO<String> responseDTO =
                 new ResponseDTO<>(true,"no error","reset successfully",null);
@@ -110,14 +146,4 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PatchMapping("/reset_password_for_testing")
-    public ResponseEntity<ResponseDTO<String>> resetPasswordForTestTing(@RequestBody ResetPasswordDTO resetPasswordDTO){
-        final String username = jwtUtil.getUsername(); ///get username in Context Holder(for security)
-        authService.resetPassword(resetPasswordDTO,username);
-
-        ResponseDTO<String> responseDTO =
-                new ResponseDTO<>(true,"no error","reset successfully",null);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
-    }
 }

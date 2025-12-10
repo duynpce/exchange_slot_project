@@ -31,9 +31,9 @@ public class AccountController {
     @PatchMapping
     public ResponseEntity<ResponseDTO<String>> update(@RequestBody UpdateAccountDTO updateAccountDTO){
         final String username = jwtUtil.getUsername();
-        Account account = accountService.findByUserName(username);
+        Account account = accountService.findByUsername(username);
         accountValidator.validateUpdateAccount(updateAccountDTO, account);
-        accountService.update(account);
+        accountService.save(account);
 
         ResponseDTO<String> responseDTO = new ResponseDTO<>
                         (true,"no error","patch account successfully",null);
@@ -46,7 +46,7 @@ public class AccountController {
         final String username = jwtUtil.getUsername(); ///get username in Context Holder(for security)
 
         if(username != null){
-            GetAccountDTO getAccountDTO = accountMapper.toDto(accountService.findByUserName(username));
+            GetAccountDTO getAccountDTO = accountMapper.toDto(accountService.findByUsername(username));
 
             ResponseDTO<GetAccountDTO> responseDTO =
                     new ResponseDTO<>(true,"no error","get account successfully",getAccountDTO);

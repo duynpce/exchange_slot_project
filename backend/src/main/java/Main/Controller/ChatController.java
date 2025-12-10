@@ -51,7 +51,7 @@ public class ChatController {
         final String username = jwtUtil.getUsername();
 
         if(username != null){
-            Account account = accountService.findByUserName(username);
+            Account account = accountService.findByUsername(username);
             List<Chat> chats = chatService.findByUserId(account.getId(), page);
             List<GetChatDTO> data = chatMapper.toDtoList(chats);
             ResponseDTO<List<GetChatDTO>> response =

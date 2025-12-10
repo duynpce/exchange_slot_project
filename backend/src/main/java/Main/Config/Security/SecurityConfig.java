@@ -55,9 +55,18 @@ public class SecurityConfig {
                         (session -> session.
                                         sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ///disable session (default authentication of spring)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/register", "/refresh_access_token", "/hello").permitAll()
-                        .requestMatchers("/test-access-denied-handler","/class").hasRole("ADMIN")
-                        .anyRequest().authenticated() //logged in --> can access --> do not care about role
+
+                                //public urls
+                                .requestMatchers(
+                                        "/auth/login","/auth/register", "/auth/refresh_access_token",
+                                        "/auth/forget_password","/auth/verify_otp","/auth/reset_password", "/hello").permitAll()
+
+
+                                //admin role required urls
+                                .requestMatchers("/test-access-denied-handler","/class").hasRole("ADMIN")
+
+                                //authenticated required urls
+                                .anyRequest().authenticated()
                          )
                     .cors(cors -> cors.configurationSource(request -> {
                         final String origin = "https://exchange-class.vercel.app";

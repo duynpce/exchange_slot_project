@@ -1,5 +1,6 @@
 package Main.Validator;
 
+import Main.DTO.Auth.ForgetPasswordDTO;
 import Main.DTO.Auth.LoginRequestDTO;
 import Main.DTO.Account.UpdateAccountDTO;
 import Main.DTO.Auth.ResetPasswordDTO;
@@ -23,6 +24,7 @@ public class AuthValidator {
 
     public void validateRegister(Account account){
 
+        util.throwExceptionIfNull(account, "null account");
         util.throwExceptionIfNull(account.getUsername(),"null username");
         util.throwExceptionIfNull(account.getPassword(),"null password");
         util.throwExceptionIfNull(account.getPhoneNumber(), "null phone number");
@@ -44,26 +46,51 @@ public class AuthValidator {
     }
 
     public void validateLogin(LoginRequestDTO loginRequest){
+
         final String username = loginRequest.getUsername();
         final String password = loginRequest.getPassword();;
 
+        util.throwExceptionIfNull(loginRequest, "null login request");
         util.throwExceptionIfNull(username, "null username");
         util.throwExceptionIfNull(password, "null password");
         util.throwExceptionIfNotExists(accountService.existsByUsername(username),"no account with username " + username);
     }
 
-    public void validateResetPassword(ResetPasswordDTO resetPasswordDTO, String username){
-        final String newPassword = resetPasswordDTO.getNewPassword();
+    //return email of account
+    public String validateForgetPassword(ForgetPasswordDTO forgetPasswordDTO){
 
-        util.throwExceptionIfNull(username, "null username");
+        util.throwExceptionIfNull(forgetPasswordDTO, "null forgetPasswordDTO");
+        util.throwExceptionIfNull(forgetPasswordDTO.getUsernameOrEmail(), "null input");
+
+        Account account;
+
+        final String usernameOrEmail = forgetPasswordDTO.getUsernameOrEmail();
+        if(util.isEmail(usernameOrEmail)){
+           account =  accountService.findByEmail(usernameOrEmail);
+
+        }else {
+            account = accountService.findByUsername(usernameOrEmail);
+        }
+
+
+        return account.getEmail();
+
+    }
+
+    public void validateResetPassword(ResetPasswordDTO resetPasswordDTO){
+        final String newPassword = resetPasswordDTO.getNewPassword();
+        final String email = resetPasswordDTO.getEmail();
+        final String resetToken = resetPasswordDTO.getResetToken();
+
+        util.throwExceptionIfNull(email, "null email");
         util.throwExceptionIfNull(newPassword, "null newPassword");
+        util.throwExceptionIfNull(resetToken, "null resetToken");
 
         boolean isValidPassword = util.validatePassword(newPassword);
 
         if(!isValidPassword) {throw new BaseException("invalid password", HttpStatus.BAD_REQUEST); }
 
-        util.throwExceptionIfNotExists(accountService.existsByUsername(username),"no account with username " + username);
+        util.throwExceptionIfNotExists(accountService.existsByEmail(email),"no account with email: " + email);
     }
-
 
 }

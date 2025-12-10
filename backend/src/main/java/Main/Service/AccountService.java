@@ -49,17 +49,21 @@ public class AccountService {
             },
             evict = {
                     @CacheEvict(value = cacheExists, key = "#account.studentCode"),
-
+                    @CacheEvict(value = cacheExists, key = "#account.username"),
+                    @CacheEvict(value = cacheExists, key = "#account.accountName"),
+                    @CacheEvict(value = cacheExists, key = "#account.phoneNumber")
             }
 
     )
-    public Account update(Account account) {
+    public Account save(Account account) {
 
         return accountRepository.save(account);
     }
 
+
+
     @Cacheable(value = cacheData, key = "#username")
-    public Account findByUserName(String username) {
+    public Account findByUsername(String username) {
         return accountRepository.findByUsername(username).orElseThrow
                 (() -> new BaseException("not found account with username : " + username, HttpStatus.NOT_FOUND));
     }
@@ -68,6 +72,12 @@ public class AccountService {
     public Account findByStudentCode(String studentCode){
         return  accountRepository.findByStudentCode(studentCode).orElseThrow
                 (() -> new BaseException("not found account with studentCode : " + studentCode, HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(value = cacheData , key = "#email")
+    public Account findByEmail(String email){
+        return  accountRepository.findByEmail(email).orElseThrow
+                (() -> new BaseException("not found account with email : " + email, HttpStatus.NOT_FOUND));
     }
 
     @Cacheable(value = cacheExists, key = "#studentCode")
@@ -93,6 +103,11 @@ public class AccountService {
     @Cacheable(value = cacheExists, key = "#id")
     public boolean existsById(int id){
         return accountRepository.existsById(id);
+    }
+
+    @Cacheable(value = cacheExists, key = "#email")
+    public boolean existsByEmail(String email) {
+        return accountRepository.existsByEmail(email);
     }
 
 

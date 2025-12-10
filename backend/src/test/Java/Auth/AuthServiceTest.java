@@ -67,23 +67,25 @@ public class AuthServiceTest {
 
         for(int i = 0; i < testCases.size(); i++) {
             Account input = testCases.get(i);
-            String username = input.getUsername();
+            String resetToken = "resetToken";
             String newPassword = "newPassword";
-            ResetPasswordDTO request = new ResetPasswordDTO(newPassword);
-            int expected = 1;
+            String email = input.getEmail();
+            ResetPasswordDTO request = new ResetPasswordDTO(email,resetToken, newPassword);
+            Account expected = new Account();
+            expected.setId(100 + i);
 
             ///  passwordEncoder called --> return current password (mock encode)
             when(passwordEncoder.encode(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
             /// repo called --> return expected
-            when(repository.resetPassword(anyString(), anyString())).thenReturn(expected);
+            when(repository.save(any())).thenReturn(expected);
 
             //if repo called --> result = expected
-            int result = service.resetPassword(request, username);
+            Account result = service.resetPassword(request);
 
             assertEquals(expected, result, "#testCase " + (i + 1) + " failed");
             System.out.println("#testCase " + (i + 1) + " passed");
 
-            verify(repository, times(1)).resetPassword(username, newPassword);
+            verify(repository, times(1)).save(any());
         }
         System.out.println("reset Password passed \n");
 

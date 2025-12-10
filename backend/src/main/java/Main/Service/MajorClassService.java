@@ -22,7 +22,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MajorClassService {
-    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
+    private final int pageSize = 15;
     private final String cacheData = "majorClassData";
     private final String cacheExists = "majorClassExists";
     private final String cacheListData = "listMajorClassData";
@@ -36,7 +36,7 @@ public class MajorClassService {
             },
             evict = {
                     @CacheEvict(value = cacheExists, key = "#majorClass.classCode"),
-                    @CacheEvict(value = cacheListData, key = "'all'"),
+                    @CacheEvict(value = cacheListData, allEntries = true)
             }
     )
     public MajorClass add(MajorClass majorClass) {
@@ -51,19 +51,12 @@ public class MajorClassService {
                     @CachePut(value = cacheData, key = "#majorClass.classCode"),
             },
             evict = {
-                    @CacheEvict(value = cacheExists, key = "#majorClass.classCode")
+                    @CacheEvict(value = cacheExists, key = "#majorClass.classCode"),
+                    @CacheEvict(value = cacheListData, allEntries = true)
             }
     )
     public MajorClass update(MajorClass majorClass) {
-        cacheUtil.updateOneItemToList(cacheListData, "'all'", majorClass);
-
-        MajorClass updateMajorClass = majorClassRepository.save(majorClass);
-
-        String oldSlot = majorClass.getSlot().equals("1,2")  ? "3,4" : "1,2";
-        cacheUtil.deleteOneItemFromList(cacheListData,oldSlot, updateMajorClass);
-        cacheUtil.addOneItemToList(cacheListData, majorClass.getSlot(), updateMajorClass);
-
-        return updateMajorClass;
+        return majorClassRepository.save(majorClass);
     }
 
     @Cacheable(value = cacheData, key = "#classCode")

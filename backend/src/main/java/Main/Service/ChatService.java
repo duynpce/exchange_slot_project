@@ -5,6 +5,7 @@ import Main.Enum.IntConstant;
 import Main.Exception.BaseException;
 import Main.Repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
+    @CacheEvict(value = "chatData", allEntries = true)
     public Chat add(Chat chat) {
         return chatRepository.save(chat);
     }

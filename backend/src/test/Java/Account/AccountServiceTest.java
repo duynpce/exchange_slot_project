@@ -127,8 +127,8 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void testFindByUsername() {
-        System.out.println("Running testFindByUsername...");
+    public void testfindByUsername() {
+        System.out.println("Running testfindByUsername...");
         List<Account> testCases = serviceTestUtil.getTestCase();
 
         for (int i = 0; i < testCases.size(); i++) {
@@ -137,7 +137,7 @@ public class AccountServiceTest {
 
             when(repository.findByUsername(expected.getUsername())).thenReturn(Optional.of(expected));
 
-            Account result = service.findByUserName(expected.getUsername());
+            Account result = service.findByUsername(expected.getUsername());
 
             assertNotNull(result, "#testCase " + (i + 1) + " failed: result is null");
             assertEquals(expected.getUsername(), result.getUsername(), "#testCase " + (i + 1) + " failed: username mismatch");

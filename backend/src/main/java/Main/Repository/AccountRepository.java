@@ -18,16 +18,12 @@
 
         Optional <Account> findByStudentCode(String studentCode);
         Optional <Account> findByUsername(String userName);
+        Optional <Account> findByEmail(String email);
 
         boolean existsByPhoneNumber(String phoneNumber);
         boolean existsByUsername(String userName);
         boolean existsByAccountName(String accountName);
         boolean existsByStudentCode(String studentCode);
-
-        @Modifying
-        @Transactional
-        @Query(value = "update accounts a set a.passwords = :newPassword where a.username = :username",nativeQuery = true)
-        int resetPassword(@Param("username") String userName, @Param("newPassword") String newPassword);
-
+        boolean existsByEmail(String email);
 
     }

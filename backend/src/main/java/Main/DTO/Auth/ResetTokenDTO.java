@@ -1,14 +1,13 @@
 package Main.DTO.Auth;
 
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class ResetPasswordDTO {
+public class ResetTokenDTO {
     private String email;
     private String resetToken;
-    private String newPassword;
 }

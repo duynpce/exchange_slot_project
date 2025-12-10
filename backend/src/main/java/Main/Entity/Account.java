@@ -1,6 +1,7 @@
 package Main.Entity;
 
 
+import Main.Common.BaseEntity;
 import Main.Enum.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 @Table(name = "accounts")
 @Entity
-public class Account {
+public class Account implements BaseEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // generate value , identity --> auto increment
@@ -22,6 +23,9 @@ public class Account {
 
     @Column(name = "phone_number",nullable = false)
     private  String phoneNumber;
+
+    @Column(name = "email" , nullable = false)
+    private String email;
 
     @Column(name = "account_name",nullable = false)
     private String accountName;

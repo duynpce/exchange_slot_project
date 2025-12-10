@@ -25,7 +25,7 @@ public class MajorClassController {
     private final MajorClassService majorClassService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(CreateMajorClassDTO createMajorClassDTO){
+    public ResponseEntity<ResponseDTO<String>> add(@RequestBody  CreateMajorClassDTO createMajorClassDTO){
         MajorClass majorClass = majorClassMapper.toEntity(createMajorClassDTO);
         majorClassValidator.validateAddRequest(majorClass);
         majorClassService.add(majorClass);
@@ -37,7 +37,7 @@ public class MajorClassController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<String>> update(UpdateMajorClassDTO updateMajorClassDTO){
+    public ResponseEntity<ResponseDTO<String>> update(@RequestBody  UpdateMajorClassDTO updateMajorClassDTO){
         MajorClass majorClass = majorClassMapper.toEntity(updateMajorClassDTO);
         majorClassValidator.validateUpdateRequest(majorClass);
         majorClassService.update(majorClass);
@@ -48,7 +48,7 @@ public class MajorClassController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("page/{page}")
+    @GetMapping("/page/{page}")
     public ResponseEntity<ResponseDTO<List<GetMajorClassDTO>>> findAll(@PathVariable int page) {
 
         if(page < 0){

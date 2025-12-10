@@ -6,42 +6,50 @@ import Main.DTO.Auth.*;
 import Main.Entity.Account;
 import Main.Exception.BaseException;
 import Main.Repository.AccountRepository;
+import Main.Utility.CacheUtil;
 import Main.Utility.JwtUtil;
+import Main.Utility.Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
 public class AuthService {
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationContext context;
     private final JwtUtil jwtUtil;
+    private final Util util;
+    private final CacheManager cacheManager;
 
-    @Caching(evict = { ///  if  registered success --> delete accountExists of the account
-            @CacheEvict(value = "accountExists", key = "#account.studentCode"),
-            @CacheEvict(value = "accountExists", key = "#account.username"),
-            @CacheEvict(value = "accountExists", key = "#account.accountName"),
-            @CacheEvict(value = "accountExists", key = "#account.phoneNumber")
-    })
+    private final String cacheExists = "accountExists";
+
+
     public Account register(Account account){
         String encryptedPassword = passwordEncoder.encode(account.getPassword());
         account.setPassword(encryptedPassword);
-        return accountRepository.save(account);
+        return accountService.save(account);
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequest){
         final String username = loginRequest.getUsername();
         final String password = loginRequest.getPassword();
-        Account foundAccount = accountRepository.findByUsername(username)
-                .orElseThrow(() -> new BaseException("Account not found", HttpStatus.UNAUTHORIZED));
+        Account foundAccount = accountService.findByUsername(username);
         final String encryptedPassword = foundAccount.getPassword();
         boolean correctPassword = passwordEncoder.matches(password,encryptedPassword );
 
@@ -58,27 +66,90 @@ public class AuthService {
 
     }
 
-    public int resetPassword(ResetPasswordDTO resetPasswordDTO, String username){
 
-        String encryptedPassword = passwordEncoder.encode(resetPasswordDTO.getNewPassword());
-        return accountRepository.resetPassword(username, encryptedPassword);
+    public String generateOtp(){
+        return String.format("%06d", new Random().nextInt(1000000));
     }
+
+    // Generate and cache OTP for forget password , if OTP already exists in cache, update it
+    @CachePut(value = "OTP", key = "#email")
+    public OtpDTO forgetPassword(String email){
+        return new OtpDTO(generateOtp(), email);
+
+    }
+
+    public  String getOtpFromCache(String email){
+        Cache cache = cacheManager.getCache("OTP");
+        util.throwExceptionIfNull(cache, "OTP cache not found");
+
+        OtpDTO otpDTO = cache.get(email, OtpDTO.class);
+        util.throwExceptionIfNull(otpDTO, "no OTP found for email: " + email);
+
+        return otpDTO.getOtp();
+    }
+
+    public String generateResetToken(){
+        return String.format("%08d", new Random().nextInt(100000000));
+    }
+
+    @Caching(
+            evict = {@CacheEvict(value = "OTP", key = "#otpDTO.email")}, /// delete OTP after verified
+            put   = { @CachePut(value = "ResetToken", key = "#otpDTO.email") }
+    )
+    public ResetTokenDTO verifyOtp(OtpDTO otpDTO){
+        final String email = otpDTO.getEmail();
+        final String inputOtp = otpDTO.getOtp();
+
+        final String cachedOtp = getOtpFromCache(email);
+
+        util.throwExceptionIfNotEquals(inputOtp, cachedOtp, "invalid or expired OTP");
+
+        return new ResetTokenDTO(email, generateResetToken());
+    }
+
+    public String getResetTokenFromCache(String email){
+        Cache cache = cacheManager.getCache("ResetToken");
+        util.throwExceptionIfNull(cache, "ResetToken cache not found");
+
+        ResetTokenDTO resetTokenDTO = cache.get(email, ResetTokenDTO.class);
+        util.throwExceptionIfNull(resetTokenDTO, "no ResetToken found for email: " + email);
+
+        return resetTokenDTO.getResetToken();
+    }
+
+    @CacheEvict(value = "ResetToken", key = "#resetPasswordDTO.email") // delete reset token after used
+    public Account resetPassword(ResetPasswordDTO resetPasswordDTO){
+        final String email = resetPasswordDTO.getEmail();
+        final String resetToken = resetPasswordDTO.getResetToken();
+        final String newPassword = resetPasswordDTO.getNewPassword();
+
+        final String cachedResetToken = getResetTokenFromCache(email);
+
+        util.throwExceptionIfNotEquals(resetToken, cachedResetToken, "invalid or expired reset token");
+
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+
+        Account accountWithNewPassword = accountService.findByEmail(email);
+        accountWithNewPassword.setPassword(encryptedPassword);
+
+        return accountService.save(accountWithNewPassword);
+
+    }
+
 
     public AccessTokenDTO refreshAccessToken(String refreshToken){
         final String refreshSecretKey = jwtUtil.getRefreshSecretKey();
         String username =  jwtUtil.extractUsername(refreshToken, refreshSecretKey);
 
-        if(username != null){
-            UserDetailConfig user = new
-                    UserDetailConfig(context.getBean(UserDetailServiceConfig.class).loadUserByUsername(username));
-            boolean validToken = jwtUtil.validateToken(refreshToken, user, refreshSecretKey);
+        UserDetailConfig user = new
+                UserDetailConfig(context.getBean(UserDetailServiceConfig.class).loadUserByUsername(username));
+        boolean validToken = jwtUtil.validateToken(refreshToken, user, refreshSecretKey);
 
-            if(validToken){
-                final String accessToken = jwtUtil.getAccessToken(user);
-                return new AccessTokenDTO(accessToken);
-            }
+        if(validToken){
+            final String accessToken = jwtUtil.getAccessToken(user);
+            return new AccessTokenDTO(accessToken);
         }
 
-        throw new BaseException("invalid refresh token or access token haven't expired", HttpStatus.UNAUTHORIZED);
+        throw new BaseException("invalid refresh token", HttpStatus.UNAUTHORIZED);
     }
 }

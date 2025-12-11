@@ -93,9 +93,8 @@ public class AuthValidator {
         util.throwExceptionIfNotExists(accountService.existsByEmail(email),"no account with email: " + email);
     }
 
-    public void validateResetPasswordWithJwt(ResetPasswordWithJwtDTO resetPasswordWithJwtDTO){
+    public void validateResetPasswordWithJwt(ResetPasswordWithJwtDTO resetPasswordWithJwtDTO, String refreshToken){
         final String newPassword = resetPasswordWithJwtDTO.getNewPassword();
-        final String refreshToken = resetPasswordWithJwtDTO.getRefreshToken();
         final String username = resetPasswordWithJwtDTO.getUsername();
 
         util.throwExceptionIfNull(newPassword, "null newPassword");

@@ -138,9 +138,9 @@ public class AuthController {
 
     @PatchMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPasswordWithJwt
-            (@RequestBody ResetPasswordWithJwtDTO resetPasswordWithJwtDTO){
-        authValidator.validateResetPasswordWithJwt(resetPasswordWithJwtDTO);
-        authService.resetPasswordWithJwt(resetPasswordWithJwtDTO);
+            (@RequestBody ResetPasswordWithJwtDTO resetPasswordWithJwtDTO, @CookieValue("refreshToken") String refreshToken){
+        authValidator.validateResetPasswordWithJwt(resetPasswordWithJwtDTO, refreshToken);
+        authService.resetPasswordWithJwt(resetPasswordWithJwtDTO, refreshToken);
 
         ResponseDTO<String> responseDTO =
                 new ResponseDTO<>(true,"no error","reset successfully",null);

@@ -324,7 +324,6 @@ URL Params: None
 Data Params:
 
     {
-        refreshToken: String,
         username: String,
         newPassword: String,
         

@@ -136,11 +136,9 @@ public class AuthService {
 
     }
 
-    public void resetPasswordWithJwt(ResetPasswordWithJwtDTO resetPasswordWithJwtDTO){
+    public void resetPasswordWithJwt(ResetPasswordWithJwtDTO resetPasswordWithJwtDTO, String refreshToken){
         final String newPassword = resetPasswordWithJwtDTO.getNewPassword();
         final String enteredUsername = resetPasswordWithJwtDTO.getUsername();
-        final String refreshToken = resetPasswordWithJwtDTO.getRefreshToken();
-
 
         final String refreshSecretKey = jwtUtil.getRefreshSecretKey();
         UserDetailConfig user = new

@@ -17,5 +17,6 @@ public class RegisterRequestDTO {
     private String accountName;
     private String studentCode;
     private String classCode;
+    private String email;
     private Role role;
 }

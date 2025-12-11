@@ -52,25 +52,27 @@ public class Account implements BaseEntity {
 
     //for query data
     public  Account(String username, String password, String phoneNumber
-            , String accountName,String studentCode, MajorClass majorClass,Role role){
+            , String accountName,String studentCode, MajorClass majorClass, String email,Role role){
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountName = accountName;
         this.studentCode = studentCode;
         this.majorClass = majorClass;
+        this.email = email;
         this.role = role;
     }
 
     //for insert data
     public Account(String username, String password, String phoneNumber
-            , String accountName,String studentCode, String classCode,Role role){
+            , String accountName,String studentCode, String classCode, String email,Role role){
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountName = accountName;
         this.studentCode = studentCode;
         this.classCode = classCode;
+        this.email = email;
         this.role = role;
     }
 

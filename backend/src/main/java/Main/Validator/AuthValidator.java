@@ -32,11 +32,13 @@ public class AuthValidator {
         util.throwExceptionIfNull(account.getAccountName(), "null Account name");
         util.throwExceptionIfNull(account.getClassCode(), "null class code");
         util.throwExceptionIfNull(account.getRole().toString(), "null role");
+        util.throwExceptionIfNull(account.getEmail(), "null email");
 
         util.throwExceptionIfExists(accountService.existsByUsername(account.getUsername()), "existed username");
         util.throwExceptionIfExists(accountService.existsByPhoneNumber(account.getPhoneNumber()), "existed phone number");
         util.throwExceptionIfExists(accountService.existsByStudentCode(account.getStudentCode()), "existed student code");
         util.throwExceptionIfExists(accountService.existsByAccountName(account.getAccountName()), "existed account name");
+        util.throwExceptionIfExists(accountService.existsByEmail(account.getEmail()), "existed email");
 
         util.throwExceptionIfNotExists(majorClassService.existsByClassCode(account.getClassCode()),
                 "not class with code: " + account.getClassCode() );

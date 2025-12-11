@@ -999,6 +999,8 @@ không tìm thấy class nào trong hệ thống
 
 # Chat
 
+note :FE phải gọi /ws để kết nối websocket trước khi sử dụng chức năng chat
+
 Chat object
 
     {

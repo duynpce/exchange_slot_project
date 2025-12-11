@@ -943,6 +943,7 @@ GET /class/page/{page}
 
 Description:
 Lấy danh sách lớp (MajorClass) theo trang (phân trang).
+quyền yêu cầu là user hoặc admin
 
 URL Params:
     page : int (>=0)
@@ -950,7 +951,7 @@ URL Params:
 
 Headers:
     Content-Type: application/json
-    Authorization: Bearer <accessToken>   (required — only admin role can access endpoints under /class)
+    Authorization: Bearer <accessToken> 
 
 Data Params: None
 

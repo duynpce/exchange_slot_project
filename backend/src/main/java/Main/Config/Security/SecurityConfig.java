@@ -3,6 +3,7 @@ package Main.Config.Security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,7 +64,9 @@ public class SecurityConfig {
 
 
                                 //admin role required urls
-                                .requestMatchers("/test-access-denied-handler","/class").hasRole("ADMIN")
+                                .requestMatchers("/test-access-denied-handler").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/class").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/class").hasRole("ADMIN")
 
                                 //authenticated required urls
                                 .anyRequest().authenticated()

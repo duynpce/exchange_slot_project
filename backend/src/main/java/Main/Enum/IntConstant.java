@@ -3,11 +3,14 @@ package Main.Enum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public enum IntConstant {
-    DEFAULT_PAGE_SIZE(20);
+    DEFAULT_PAGE_SIZE(20),
+    CLASS_PAGE_SIZE(15);
+
     private final int value;
 
 
 }
+

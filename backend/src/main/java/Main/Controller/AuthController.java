@@ -55,7 +55,7 @@ public class AuthController {
         ResponseCookie responseCookie = ResponseCookie.from("refreshToken", loginResponseDTO.getRefreshToken())
                 .httpOnly(true)
                 .secure(true) /// https
-                .sameSite("Strict")
+                .sameSite("none") // none to allow cross-site, lax can GET ,strict origin only
                 .path("/")
                 .maxAge(7 * 24 * 60 * 60) // 7 days
                 .build();
@@ -78,7 +78,7 @@ public class AuthController {
         ResponseCookie responseCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true) /// https
-                .sameSite("Strict")
+                .sameSite("none")
                 .path("/")
                 .maxAge(0) // Set maxAge to 0 to delete the cookie
                 .build();

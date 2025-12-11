@@ -22,7 +22,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MajorClassService {
-    private final int pageSize = 15;
+    private final int pageSize = IntConstant.CLASS_PAGE_SIZE.getValue();
     private final String cacheData = "majorClassData";
     private final String cacheExists = "majorClassExists";
     private final String cacheListData = "listMajorClassData";

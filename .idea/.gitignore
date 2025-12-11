@@ -4,3 +4,5 @@
 
 # Ignore YAML files
 *.yaml
+
+application.yaml

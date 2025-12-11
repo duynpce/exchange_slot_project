@@ -125,10 +125,22 @@ public class AuthController {
 
 
     @PostMapping("/reset_password")
-    public ResponseEntity<ResponseDTO<String>> resetPassword
+    public ResponseEntity<ResponseDTO<String>> resetPasswordWithOtp
             (@RequestBody ResetPasswordDTO resetPasswordDTO){
-        authValidator.validateResetPassword(resetPasswordDTO);
-        authService.resetPassword(resetPasswordDTO);
+        authValidator.validateResetPasswordWithOtp(resetPasswordDTO);
+        authService.resetPasswordWithOtp(resetPasswordDTO);
+
+        ResponseDTO<String> responseDTO =
+                new ResponseDTO<>(true,"no error","reset successfully",null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+    }
+
+    @PatchMapping("/reset_password")
+    public ResponseEntity<ResponseDTO<String>> resetPasswordWithJwt
+            (@RequestBody ResetPasswordWithJwtDTO resetPasswordWithJwtDTO){
+        authValidator.validateResetPasswordWithJwt(resetPasswordWithJwtDTO);
+        authService.resetPasswordWithJwt(resetPasswordWithJwtDTO);
 
         ResponseDTO<String> responseDTO =
                 new ResponseDTO<>(true,"no error","reset successfully",null);

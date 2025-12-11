@@ -2,8 +2,8 @@ package Main.Validator;
 
 import Main.DTO.Auth.ForgetPasswordDTO;
 import Main.DTO.Auth.LoginRequestDTO;
-import Main.DTO.Account.UpdateAccountDTO;
 import Main.DTO.Auth.ResetPasswordDTO;
+import Main.DTO.Auth.ResetPasswordWithJwtDTO;
 import Main.Exception.BaseException;
 import Main.Entity.Account;
 import Main.Service.AccountService;
@@ -77,7 +77,7 @@ public class AuthValidator {
 
     }
 
-    public void validateResetPassword(ResetPasswordDTO resetPasswordDTO){
+    public void validateResetPasswordWithOtp(ResetPasswordDTO resetPasswordDTO){
         final String newPassword = resetPasswordDTO.getNewPassword();
         final String email = resetPasswordDTO.getEmail();
         final String resetToken = resetPasswordDTO.getResetToken();
@@ -91,6 +91,21 @@ public class AuthValidator {
         if(!isValidPassword) {throw new BaseException("invalid password", HttpStatus.BAD_REQUEST); }
 
         util.throwExceptionIfNotExists(accountService.existsByEmail(email),"no account with email: " + email);
+    }
+
+    public void validateResetPasswordWithJwt(ResetPasswordWithJwtDTO resetPasswordWithJwtDTO){
+        final String newPassword = resetPasswordWithJwtDTO.getNewPassword();
+        final String refreshToken = resetPasswordWithJwtDTO.getRefreshToken();
+        final String username = resetPasswordWithJwtDTO.getUsername();
+
+        util.throwExceptionIfNull(newPassword, "null newPassword");
+        util.throwExceptionIfNull(refreshToken, "null refreshToken");
+        util.throwExceptionIfNull(username, "null username");
+
+        boolean isValidPassword = util.validatePassword(newPassword);
+
+        if(!isValidPassword) {throw new BaseException("invalid password", HttpStatus.BAD_REQUEST); }
+
     }
 
 }

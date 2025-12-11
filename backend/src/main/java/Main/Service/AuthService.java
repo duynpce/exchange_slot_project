@@ -118,22 +118,47 @@ public class AuthService {
     }
 
     @CacheEvict(value = "ResetToken", key = "#resetPasswordDTO.email") // delete reset token after used
-    public Account resetPassword(ResetPasswordDTO resetPasswordDTO){
+    public void resetPasswordWithOtp(ResetPasswordDTO resetPasswordDTO){
         final String email = resetPasswordDTO.getEmail();
         final String resetToken = resetPasswordDTO.getResetToken();
         final String newPassword = resetPasswordDTO.getNewPassword();
 
         final String cachedResetToken = getResetTokenFromCache(email);
 
-        util.throwExceptionIfNotEquals(resetToken, cachedResetToken, "invalid or expired reset token");
+        util.throwExceptionIfNotEquals(resetToken, cachedResetToken, "invalid reset token");
 
         String encryptedPassword = passwordEncoder.encode(newPassword);
 
         Account accountWithNewPassword = accountService.findByEmail(email);
         accountWithNewPassword.setPassword(encryptedPassword);
 
-        return accountService.save(accountWithNewPassword);
+        accountService.save(accountWithNewPassword);
 
+    }
+
+    public void resetPasswordWithJwt(ResetPasswordWithJwtDTO resetPasswordWithJwtDTO){
+        final String newPassword = resetPasswordWithJwtDTO.getNewPassword();
+        final String enteredUsername = resetPasswordWithJwtDTO.getUsername();
+        final String refreshToken = resetPasswordWithJwtDTO.getRefreshToken();
+
+
+        final String refreshSecretKey = jwtUtil.getRefreshSecretKey();
+        UserDetailConfig user = new
+                UserDetailConfig(context.getBean(UserDetailServiceConfig.class).loadUserByUsername(enteredUsername));
+        boolean validToken = jwtUtil.validateToken(refreshToken, user, refreshSecretKey);
+
+        if(!validToken){throw new BaseException("invalid or expired refresh token", HttpStatus.UNAUTHORIZED);}
+
+        final String jwtUsername =  jwtUtil.extractUsername(refreshToken, refreshSecretKey);
+
+        util.throwExceptionIfNotEquals(enteredUsername,jwtUsername , "username in request does not match username in token");
+
+        Account account = accountService.findByUsername(jwtUsername);
+
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        account.setPassword(encryptedPassword);
+
+        accountService.save(account);
     }
 
 

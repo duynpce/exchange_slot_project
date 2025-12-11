@@ -94,7 +94,7 @@ public class JwtUtil {
 
         //if key is not access key or refresh key then return null
         if(!key.equals(accessSecretKey) && !key.equals(refreshSecretKey)) {
-            return null;
+            throw new BaseException("invalid token key", HttpStatus.UNAUTHORIZED);
         }
 
         return Jwts

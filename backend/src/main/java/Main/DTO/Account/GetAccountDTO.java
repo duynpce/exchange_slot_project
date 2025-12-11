@@ -13,5 +13,6 @@ public class GetAccountDTO {
     private String classCode;
     private String studentCode;
     private String accountName;
+    private String email;
     private Role role;
 }

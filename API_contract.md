@@ -14,6 +14,7 @@ Data Params:
             accountName: String,
             studentCode: String,
             classCode: String
+            email: String(must be in format of email)
         }
 
 Headers: Content-Type: application/json
@@ -256,7 +257,6 @@ error response:
     }
 
 POST /auth/reset_password
-
 description : reset mật khẩu bằng reset token (quên mật khẩu)
 
 URL Params: None
@@ -268,6 +268,8 @@ Data Params:
         resetToken: String,
         newPassword: String
     }
+
+
 
 Headers: Content-Type: application/json
 
@@ -299,7 +301,7 @@ error response:
     {
         "processSuccess": false,
         "data": "no data",
-        "error": "invalid or expired reset token",
+        "error": "invalid reset token",
         "message": "reset failed",
     }
 
@@ -310,6 +312,70 @@ error response:
         "processSuccess": false,
         "data": "no data",
         "error": "no existed account with this email",
+        "message": "reset failed",
+    }
+
+PATCH /auth/reset_password
+
+description : đổi mật khẩu (khi đã đăng nhập) bằng jwt
+
+URL Params: None
+
+Data Params:
+
+    {
+        refreshToken: String,
+        username: String,
+        newPassword: String,
+        
+    }
+
+Headers:Content-Type: application/json
+
+success response
+
+    {
+    Http code: 200,
+    message: "reset successfully"
+    }
+
+error response
+
+có giá trị là null thì vẫn thông báo như ở trên
+
+    Http code 401
+    khi mật khẩu không hợp lệ
+    {
+        "processSuccess": false,
+        "data": "no data",
+        "error": "invalid password",
+        "message": "reset failed",
+    }
+
+    khi không tìm thấy tài khoản
+    Http code 404
+    {
+        "processSuccess": false,
+        "data": "no data",
+        "error": "no existed account",
+        "message": "reset failed",
+    }
+
+    khi refresh token không hợp lệ
+    Http code 401 
+    {
+        "processSuccess": false,
+        "data": "no data",
+        "error": "invalid or expired refresh token",
+        "message": "reset failed",
+    }
+
+    khi username nhập vào không khớp với username của token
+    Http code 401 
+    {
+        "processSuccess": false,
+        "data": "no data",
+        "error": "username in request does not match username in token",
         "message": "reset failed",
     }
 

@@ -40,10 +40,8 @@ public class MajorClassService {
             }
     )
     public MajorClass add(MajorClass majorClass) {
-        MajorClass savedMajorClass = majorClassRepository.save(majorClass);
 
-        cacheUtil.addOneItemToList(cacheListData, "'all'", majorClass);
-        return savedMajorClass;
+        return majorClassRepository.save(majorClass);
     }
 
     @Caching(
@@ -82,10 +80,10 @@ public class MajorClassService {
         return majorClassRepository.existsByClassCode(classCode);
     }
 
-    @Cacheable(value = cacheListData, key = "'all'")
+    @Cacheable(value = cacheListData, key = "#page")
     public List<MajorClass> findAll(int page) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<MajorClass> data = majorClassRepository.findAll(pageable).stream().toList();
+        List<MajorClass> data = majorClassRepository.findAll(pageable).getContent();
 
         if (data.isEmpty()) {
             throw new BaseException("no major class found", HttpStatus.NOT_FOUND);

@@ -5,6 +5,7 @@ import Main.DTO.MajorClass.CreateMajorClassDTO;
 import Main.DTO.MajorClass.GetMajorClassDTO;
 import Main.DTO.MajorClass.UpdateMajorClassDTO;
 import Main.Entity.MajorClass;
+import Main.Exception.BaseException;
 import Main.Mapper.MajorClassMapper;
 import Main.Service.MajorClassService;
 import Main.Validator.MajorClassValidator;
@@ -52,7 +53,7 @@ public class MajorClassController {
     public ResponseEntity<ResponseDTO<List<GetMajorClassDTO>>> findAll(@PathVariable int page) {
 
         if(page < 0){
-            throw new RuntimeException("page must >= 0");
+            throw new BaseException("page must >= 0" ,HttpStatus.BAD_REQUEST );
         }
 
         List<GetMajorClassDTO> result =

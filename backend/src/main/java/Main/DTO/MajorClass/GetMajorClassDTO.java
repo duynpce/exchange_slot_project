@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetMajorClassDTO {
-    private String Slot;
     private String classCode;
+    private String slot;
 }

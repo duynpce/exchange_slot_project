@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,21 +24,22 @@ public class JWTAuthenticationConfig extends OncePerRequestFilter {
     private final JwtUtil jwtUtility;
     private final ApplicationContext context;
 
-
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException
     {
-        String authHeader = request.getHeader("Authorization"); ///take data at the row begin with Authorization
+
+        // Get Authorization from header
+        String authHeader = request.getHeader("Authorization");
         String token  = null;
         String username = null;
-        final String accessSecretKey = jwtUtility.getAccessSecretKey();;
+        final String accessSecretKey = jwtUtility.getAccessSecretKey();
 
+        //check token
         if(authHeader != null && authHeader.startsWith("Bearer")){
-            token = authHeader.substring(7); /// format is bearer token, so 7 is position of token
+            token = authHeader.substring(7);
             username = jwtUtility.extractUsername(token, accessSecretKey);
         }
 
@@ -45,6 +47,7 @@ public class JWTAuthenticationConfig extends OncePerRequestFilter {
             UserDetails user = context.getBean(UserDetailServiceConfig.class).loadUserByUsername(username);
             boolean validToken = jwtUtility.validateToken(token , user, accessSecretKey);
 
+            // if token is valid , set authentication to SecurityContextHolder
             if(validToken){
                 UsernamePasswordAuthenticationToken authToken /// create authentication object --> mean this request is authenticated
                         = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()); /// using token --> no password needed
@@ -53,7 +56,8 @@ public class JWTAuthenticationConfig extends OncePerRequestFilter {
                 }
         }
 
-        filterChain.doFilter(request,response); /// do the next filter
+        // do the next filter
+        filterChain.doFilter(request,response);
     }
 
 }

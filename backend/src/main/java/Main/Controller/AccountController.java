@@ -10,6 +10,7 @@ import Main.Service.AccountService;
 import Main.Utility.JwtUtil;
 import Main.Validator.AccountValidator;
 import Main.Validator.AuthValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class AccountController {
 
 
     @PatchMapping
-    public ResponseEntity<ResponseDTO<String>> update(@RequestBody UpdateAccountDTO updateAccountDTO){
+    public ResponseEntity<ResponseDTO<String>> update(@Valid @RequestBody UpdateAccountDTO updateAccountDTO){
         final String username = jwtUtil.getUsername();
         Account account = accountService.findByUsername(username);
         accountValidator.validateUpdateAccount(updateAccountDTO, account);

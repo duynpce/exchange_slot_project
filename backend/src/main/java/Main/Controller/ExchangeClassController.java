@@ -10,6 +10,7 @@ import Main.Entity.ExchangeClassRequest;
 import Main.Mapper.ExchangeClassRequestMapper;
 import Main.Service.ExchangeClassRequestService;
 import Main.Validator.ExchangeClassRequestValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ExchangeClassController {
     private final ExchangeClassRequestMapper exchangeClassRequestMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateExchangeClassRequestDTO request) {
+    public ResponseEntity<ResponseDTO<String>> add(@Valid @RequestBody CreateExchangeClassRequestDTO request) {
 
         ExchangeClassRequest exchangeClassRequest = exchangeClassRequestMapper.toEntity(request);
         classRequestValidator.validateAddRequest(exchangeClassRequest);
@@ -42,7 +43,7 @@ public class ExchangeClassController {
     @PatchMapping("/id/{id}")
     public ResponseEntity<ResponseDTO<GetExchangeClassRequestDTO>> update(
             @PathVariable int id,
-            @RequestBody UpdateExchangeClassRequestDTO request) {
+            @Valid @RequestBody UpdateExchangeClassRequestDTO request) {
 
         ExchangeClassRequest exchangeClassRequest = exchangeClassRequestService.findById(id);
 

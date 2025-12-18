@@ -3,6 +3,8 @@ package Main.Exception;
 
 import Main.DTO.Common.ResponseDTO;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.ConstraintDeclarationException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,11 +14,13 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.stream.Collectors;
 
 
 @RestControllerAdvice
@@ -134,6 +138,23 @@ public class GlobalExceptionHandler {
         response.setMessage("access token expired");
         response.setError("UNAUTHORIZED");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    // for validation
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseDTO<String>>handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        ResponseDTO<String> response = new ResponseDTO<>();
+        // get error message
+        String errorMessage = e.getBindingResult().getAllErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining(", "));
+
+        response.setData(null);
+        response.setProcessSuccess(false);
+        response.setMessage(errorMessage);
+        response.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     /// custom exception

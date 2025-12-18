@@ -9,6 +9,7 @@ import Main.Exception.BaseException;
 import Main.Mapper.MajorClassMapper;
 import Main.Service.MajorClassService;
 import Main.Validator.MajorClassValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class MajorClassController {
     private final MajorClassService majorClassService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody  CreateMajorClassDTO createMajorClassDTO){
+    public ResponseEntity<ResponseDTO<String>> add(@Valid @RequestBody  CreateMajorClassDTO createMajorClassDTO){
         MajorClass majorClass = majorClassMapper.toEntity(createMajorClassDTO);
         majorClassValidator.validateAddRequest(majorClass);
         majorClassService.add(majorClass);
@@ -37,8 +38,8 @@ public class MajorClassController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping
-    public ResponseEntity<ResponseDTO<String>> update(@RequestBody  UpdateMajorClassDTO updateMajorClassDTO){
+    @PatchMapping
+    public ResponseEntity<ResponseDTO<String>> update(@Valid @RequestBody  UpdateMajorClassDTO updateMajorClassDTO){
         MajorClass majorClass = majorClassMapper.toEntity(updateMajorClassDTO);
         majorClassValidator.validateUpdateRequest(majorClass);
         majorClassService.update(majorClass);

@@ -10,6 +10,7 @@ import Main.Utility.JwtUtil;
 import Main.Utility.Util;
 import Main.Validator.AuthValidator;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -31,7 +32,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<String>> register(@RequestBody RegisterRequestDTO registerRequestDTO){
+    public ResponseEntity<ResponseDTO<String>> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO){
         Account account = accountMapper.toEntity(registerRequestDTO);
         authValidator.validateRegister(account);// will put it in service if separate interface
 
@@ -46,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<AccessTokenDTO>> login(@RequestBody LoginRequestDTO loginRequest, HttpServletResponse response) {
+    public ResponseEntity<ResponseDTO<AccessTokenDTO>> login(@Valid @RequestBody LoginRequestDTO loginRequest, HttpServletResponse response) {
 
         authValidator.validateLogin(loginRequest);// will put it in service if separate interface
         LoginResponseDTO loginResponseDTO = authService.login(loginRequest);
@@ -94,8 +95,7 @@ public class AuthController {
 
     @PostMapping("/forget_password")
     public ResponseEntity<ResponseDTO<String>> forgetPassword
-            (@RequestBody ForgetPasswordDTO forgetPasswordDTO){
-
+            (@Valid @RequestBody ForgetPasswordDTO forgetPasswordDTO){
 
         String email = authValidator.validateForgetPassword(forgetPasswordDTO);
         OtpDTO otpDTO = authService.forgetPassword(email);
@@ -109,13 +109,14 @@ public class AuthController {
 
         ResponseDTO<String> responseDTO =
                 new ResponseDTO<>(true,"no error",
-                        "send otp to email:" + email +  ", please check your email:" ,"no data");
+                        "send otp to email:" + email +  ", please check your email:" ,email);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+
     }
 
     @PostMapping("/verify_otp")
-    public ResponseEntity<ResponseDTO<ResetTokenDTO>> verifyOtp(@RequestBody OtpDTO otpDTO){
+    public ResponseEntity<ResponseDTO<ResetTokenDTO>> verifyOtp(@Valid @RequestBody OtpDTO otpDTO){
         ResetTokenDTO resetTokenDTO = authService.verifyOtp(otpDTO);
         ResponseDTO<ResetTokenDTO> responseDTO =
                 new ResponseDTO<>(true,"no error","validate otp successfully",resetTokenDTO);
@@ -126,7 +127,7 @@ public class AuthController {
 
     @PostMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPasswordWithOtp
-            (@RequestBody ResetPasswordDTO resetPasswordDTO){
+            (@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
         authValidator.validateResetPasswordWithOtp(resetPasswordDTO);
         authService.resetPasswordWithOtp(resetPasswordDTO);
 
@@ -138,7 +139,7 @@ public class AuthController {
 
     @PatchMapping("/reset_password")
     public ResponseEntity<ResponseDTO<String>> resetPasswordWithJwt
-            (@RequestBody ResetPasswordWithJwtDTO resetPasswordWithJwtDTO, @CookieValue("refreshToken") String refreshToken){
+            (@Valid @RequestBody ResetPasswordWithJwtDTO resetPasswordWithJwtDTO, @CookieValue("refreshToken") String refreshToken){
         authValidator.validateResetPasswordWithJwt(resetPasswordWithJwtDTO, refreshToken);
         authService.resetPasswordWithJwt(resetPasswordWithJwtDTO, refreshToken);
 

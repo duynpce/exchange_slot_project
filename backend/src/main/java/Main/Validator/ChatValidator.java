@@ -19,11 +19,9 @@ public class ChatValidator {
         int user1Id = dto.getUser1Id();
         int user2Id = dto.getUser2Id();
 
-        util.throwExceptionIfNull(dto, "create chat dto is null");
         util.throwExceptionIfNotExists(accountService.existsById(user1Id), "no account with id: " + user1Id);
         util.throwExceptionIfNotExists(accountService.existsById(user2Id), "no account with id: " + user2Id);
         util.throwExceptionIfEquals(user1Id, user2Id, "cannot create chat with yourself");
-
 
     }
 

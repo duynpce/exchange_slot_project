@@ -1,15 +1,17 @@
 package Main.DTO.MajorClass;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateMajorClassDTO {
+    @NotBlank(message = "blank classCode")
     private String classCode;
+    @NotBlank(message = "blank slot")
     private String slot;
-
 }

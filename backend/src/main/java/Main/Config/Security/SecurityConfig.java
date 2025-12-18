@@ -1,5 +1,6 @@
 package Main.Config.Security;
 
+import Main.Config.RateLimiter.RateLimiterConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ public class SecurityConfig {
     private final JWTAuthenticationConfig JWTauthenticationConfig;
     private final AuthenticationEntryPointConfig authenticationEntryPointConfig;
     private final AccessDeniedHandlerConfig accessDeniedHandlerConfig;
+    private final RateLimiterConfig rateLimiterConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -84,6 +86,7 @@ public class SecurityConfig {
                         return  corsConfiguration;
                     }))
                 .logout(LogoutConfigurer::permitAll)//login -> permitAll()
+                .addFilterBefore(rateLimiterConfig, UsernamePasswordAuthenticationFilter.class )
                 .addFilterBefore(JWTauthenticationConfig, UsernamePasswordAuthenticationFilter.class )
                 .exceptionHandling(handle -> handle /// config exception handler
                         .authenticationEntryPoint(authenticationEntryPointConfig)

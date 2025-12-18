@@ -966,9 +966,7 @@ Data Param:
         "slot": "string"
     }
     Lưu ý:
-    - 1 trong 2 field có thể null nhưng cả 2 không được null.
-    - Nếu cả 2 cùng null → lỗi.
-    - Nếu chỉ có 1 field không null → hệ thống sẽ chỉ update field đó.
+    chỉ được đổi slot cho classCode đã tồn tại
 
 ✅ Success Response:
 

@@ -10,6 +10,7 @@ import Main.Mapper.ChatMapper;
 import Main.Service.AccountService;
 import Main.Service.ChatService;
 import Main.Utility.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class ChatController {
 
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateChatDTO createChatDTO){
+    public ResponseEntity<ResponseDTO<String>> add(@Valid @RequestBody CreateChatDTO createChatDTO){
         Chat chat = chatMapper.toEntity(createChatDTO);
         chatService.add(chat);
 

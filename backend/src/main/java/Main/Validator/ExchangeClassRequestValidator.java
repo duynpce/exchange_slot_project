@@ -27,9 +27,6 @@ public class ExchangeClassRequestValidator {
         final String studentCode  = request.getStudentCode();
         final String desiredClassCode = request.getDesiredClassCode();
 
-        util.throwExceptionIfNull(studentCode, "null student code");
-        util.throwExceptionIfNull(desiredClassCode, "null desired class code");
-
         util.throwExceptionIfExists(exchangeClassRequestService.existsByStudentCode(studentCode)
                 , "existed request with student code: " + studentCode );
 
@@ -58,8 +55,6 @@ public class ExchangeClassRequestValidator {
         final String studentCode  = request.getStudentCode();
         final String desiredClassCode = request.getDesiredClassCode();
 
-        util.throwExceptionIfNull(studentCode, "null student code");
-        util.throwExceptionIfNull(desiredClassCode, "null desired class code");
 
         Account account = accountService.findByStudentCode(studentCode);
         util.throwExceptionIfNull(account, "no account with student code: " + studentCode);

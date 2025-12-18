@@ -9,6 +9,7 @@ import Main.Mapper.ExchangeSlotRequestMapper;
 import Main.Service.ExchangeSlotRequestService;
 import Main.Validator.ExchangeSlotRequestValidator;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ExchangeSlotController {
     private final ExchangeSlotRequestMapper exchangeSlotRequestMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> add(@RequestBody CreateExchangeSlotRequestDTO request) {
+    public ResponseEntity<ResponseDTO<String>> add(@Valid @RequestBody CreateExchangeSlotRequestDTO request) {
 
         ExchangeSlotRequest exchangeSlotRequest = exchangeSlotRequestMapper.toEntity(request);
         slotRequestValidator.validateAddRequest(exchangeSlotRequest);

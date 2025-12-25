@@ -1,0 +1,102 @@
+package main.service;
+
+
+import main.exception.BaseException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import main.entity.Account;
+import main.repository.AccountRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+@Slf4j
+public class AccountService {
+
+    private final String cacheData = "accountData";
+    private final String cacheExists = "accountExists";
+
+    private final AccountRepository accountRepository;
+
+    // cache put to update data in cache and because cacheable will not be called if data is already in cache
+    @Caching(
+            put = {
+                    @CachePut(value = cacheData, key = "#account.username"),
+                    @CachePut(value = cacheData, key = "#account.studentCode"),
+                    @CachePut(value = cacheData, key = "#account.phoneNumber"),
+            },
+            evict = {
+                    @CacheEvict(value = cacheExists, key = "#account.studentCode"),
+                    @CacheEvict(value = cacheExists, key = "#account.username"),
+                    @CacheEvict(value = cacheExists, key = "#account.accountName"),
+                    @CacheEvict(value = cacheExists, key = "#account.phoneNumber"),
+                    @CacheEvict(value = cacheExists, key = "#account.email"),
+                    @CacheEvict(value = cacheExists, key = "#account.id")
+            }
+
+    )
+    public Account save(Account account) {
+
+        return accountRepository.save(account);
+    }
+
+
+
+    @Cacheable(value = cacheData, key = "#username")
+    public Account findByUsername(String username) {
+        return accountRepository.findByUsername(username).orElseThrow
+                (() -> new BaseException("not found account with username : " + username, HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(value = cacheData , key = "#studentCode")
+    public Account findByStudentCode(String studentCode){
+        return  accountRepository.findByStudentCode(studentCode).orElseThrow
+                (() -> new BaseException("not found account with studentCode : " + studentCode, HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(value = cacheData , key = "#email")
+    public Account findByEmail(String email){
+        return  accountRepository.findByEmail(email).orElseThrow
+                (() -> new BaseException("not found account with email : " + email, HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(value = cacheExists, key = "#studentCode")
+    public boolean existsByStudentCode(String studentCode){
+        return accountRepository.existsByStudentCode(studentCode);
+    }
+
+    @Cacheable(value = cacheExists, key = "#username")
+    public boolean existsByUsername(String username){
+        return accountRepository.existsByUsername(username);
+    }
+
+    @Cacheable(value = cacheExists, key = "#accountName")
+    public boolean existsByAccountName(String accountName){
+        return accountRepository.existsByAccountName(accountName);
+    }
+
+    @Cacheable(value = cacheExists, key = "#phoneNumber")
+    public boolean existsByPhoneNumber(String phoneNumber){
+        return accountRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Cacheable(value = cacheExists, key = "#id")
+    public boolean existsById(int id){
+        return accountRepository.existsById(id);
+    }
+
+    @Cacheable(value = cacheExists, key = "#email")
+    public boolean existsByEmail(String email) {
+        return accountRepository.existsByEmail(email);
+    }
+
+
+}

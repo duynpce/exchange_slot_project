@@ -1,0 +1,23 @@
+package main.repository;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.Optional;
+
+import main.entity.ExchangeClassRequest;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ExchangeClassRequestRepository extends JpaRepository<ExchangeClassRequest,Integer> {
+    List<ExchangeClassRequest> findByCurrentClassCode(String classCode, Pageable pageable);
+    List<ExchangeClassRequest> findByCurrentSlot(String slot, Pageable pageable);
+
+
+    Optional<ExchangeClassRequest> findByStudentCode(String studentCode);
+    Optional <ExchangeClassRequest> findByAccountId(int accountId);
+
+    boolean existsByStudentCode(String studentCode);
+
+
+}

@@ -1,0 +1,80 @@
+package main.entity;
+
+
+import main.common.BaseEntity;
+import main.constant.Role;
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
+@Table(name = "accounts")
+@Entity
+public class Account implements BaseEntity {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // generate value , identity --> auto increment
+    private int id;
+
+    @Column(name = "username", nullable = false)
+    private  String username;
+
+    @Column(name = "passwords",nullable = false)
+    private  String password;
+
+    @Column(name = "phone_number",nullable = false)
+    private  String phoneNumber;
+
+    @Column(name = "email" , nullable = false)
+    private String email;
+
+    @Column(name = "account_name",nullable = false)
+    private String accountName;
+
+    @Column(name = "student_code",nullable = false)
+    private String studentCode;
+
+    @Column(name = "class_code",length = 15, nullable = false)
+    private String classCode;   
+
+    //for query data --> read only
+    @ManyToOne
+    @JoinColumn(name = "class_code", referencedColumnName = "class_code", insertable = false, updatable = false)
+    private MajorClass majorClass;
+
+    //for query data --> read only
+    @Column(name = "roles", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public Account(){
+
+    }
+
+    //for query data
+    public  Account(String username, String password, String phoneNumber
+            , String accountName,String studentCode, MajorClass majorClass, String email,Role role){
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.accountName = accountName;
+        this.studentCode = studentCode;
+        this.majorClass = majorClass;
+        this.email = email;
+        this.role = role;
+    }
+
+    //for insert data
+    public Account(String username, String password, String phoneNumber,  String email
+            , String accountName,String studentCode, String classCode, Role role){
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.accountName = accountName;
+        this.studentCode = studentCode;
+        this.classCode = classCode;
+        this.email = email;
+        this.role = role;
+    }
+
+
+}

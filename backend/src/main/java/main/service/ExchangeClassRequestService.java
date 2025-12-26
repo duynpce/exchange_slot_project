@@ -7,7 +7,6 @@ import main.exception.BaseException;
 import main.entity.ExchangeClassRequest;
 import main.repository.ExchangeClassRequestRepository;
 
-import main.utility.CacheUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -25,21 +24,21 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ExchangeClassRequestService {
-    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
-    private final String cacheData = "exchangeClassData";
-    private final String cacheExists = "exchangeClassExists";
-    private final String cacheListData = "listExchangeClassData";
+    private static final int PAGE_SIZE = IntConstant.DEFAULT_PAGE_SIZE.getValue();
+    private static final String CACHE_DATA = "exchangeClassData";
+    private static final String CACHE_EXISTS = "exchangeClassExists";
+    private static final String CACHE_LIST_DATA = "listExchangeClassData";
 
     private final ExchangeClassRequestRepository exchangeClassRequestRepository;
-    private final CacheUtil<ExchangeClassRequest> cacheUtil;
+
     @Caching(
         cacheable = {
-            @Cacheable(value = cacheData, key = "#request.studentCode"),
-            @Cacheable(value = cacheData, key ="#request.id"),
+            @Cacheable(value = CACHE_DATA, key = "#request.studentCode"),
+            @Cacheable(value = CACHE_DATA, key ="#request.id"),
         },
         evict = {
-            @CacheEvict(value = cacheExists, key = "#request.studentCode"),
-            @CacheEvict(value = cacheListData, allEntries = true),
+            @CacheEvict(value = CACHE_EXISTS, key = "#request.studentCode"),
+            @CacheEvict(value = CACHE_LIST_DATA, allEntries = true),
         }
     )
     public ExchangeClassRequest add(ExchangeClassRequest request) {
@@ -48,12 +47,12 @@ public class ExchangeClassRequestService {
 
     @Caching(
             put ={
-                    @CachePut(value = cacheData, key = "#request.studentCode"),
-                    @CachePut(value = cacheData, key ="#request.id"),
+                    @CachePut(value = CACHE_DATA, key = "#request.studentCode"),
+                    @CachePut(value = CACHE_DATA, key ="#request.id"),
             },
             evict = {
-                    @CacheEvict(value = cacheExists, key = "#request.studentCode"),
-                    @CacheEvict(value = cacheListData, allEntries = true),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#request.studentCode"),
+                    @CacheEvict(value = CACHE_LIST_DATA, allEntries = true),
             }
     )
     public ExchangeClassRequest update(ExchangeClassRequest request) {
@@ -61,19 +60,19 @@ public class ExchangeClassRequestService {
     }
 
     @Caching(evict =  {
-            @CacheEvict(value = cacheData, key = "#request.studentCode"),
-            @CacheEvict(value = cacheData, key = "#request.id"),
-            @CacheEvict(value = cacheExists, key = "#request.studentCode"),
-            @CacheEvict(value = cacheListData, allEntries = true),
+            @CacheEvict(value = CACHE_DATA, key = "#request.studentCode"),
+            @CacheEvict(value = CACHE_DATA, key = "#request.id"),
+            @CacheEvict(value = CACHE_EXISTS, key = "#request.studentCode"),
+            @CacheEvict(value = CACHE_LIST_DATA, allEntries = true),
     })
     public void deleteById(ExchangeClassRequest request) {
         exchangeClassRequestRepository.deleteById(request.getId());
     }
 
-    @Cacheable(value = cacheListData, key = "{#classCode, #page}")
+    @Cacheable(value = CACHE_LIST_DATA, key = "{#classCode, #page}")
     public List<ExchangeClassRequest> findByClassCode(String classCode , int page) {
 
-        Pageable pageable = PageRequest.of(page, pageSize); //page is which page, pageSize is number of element in a page
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE); //page is which page, PAGE_SIZE is number of element in a page
         List<ExchangeClassRequest> data = exchangeClassRequestRepository.
                 findByCurrentClassCode(classCode,pageable);
 
@@ -84,9 +83,9 @@ public class ExchangeClassRequestService {
         return data;
     }
 
-    @Cacheable(value = cacheListData, key = "{#slot, #page}")
+    @Cacheable(value = CACHE_LIST_DATA, key = "{#slot, #page}")
     public List<ExchangeClassRequest> findBySlot(String slot, int page) {
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
 
         List<ExchangeClassRequest> data = exchangeClassRequestRepository.findByCurrentSlot(slot,pageable);
 
@@ -97,7 +96,7 @@ public class ExchangeClassRequestService {
         return data;
     }
 
-    @Cacheable(value = cacheData, key = "#studentCode")
+    @Cacheable(value = CACHE_DATA, key = "#studentCode")
     public ExchangeClassRequest findByStudentCode(String studentCode) {
 
         return exchangeClassRequestRepository.findByStudentCode(studentCode)
@@ -106,18 +105,18 @@ public class ExchangeClassRequestService {
     }
 
 
-    @Cacheable(value = cacheData, key ="#id")
+    @Cacheable(value = CACHE_DATA, key ="#id")
     public ExchangeClassRequest findById(int id){
         return exchangeClassRequestRepository.findById(id).
                 orElseThrow(() -> new BaseException(" not found request with id : " + id, HttpStatus.NOT_FOUND));
     }
 
-//    @Cacheable(value = cacheData, key = "#accountId + '-accountId'" )
+//    @Cacheable(value = CACHE_DATA, key = "#accountId + '-accountId'" )
     public ExchangeClassRequest findByAccountId(int accountId){
         return exchangeClassRequestRepository.findByAccountId(accountId).orElse(null);
     }
 
-    @Cacheable(value = cacheExists, key ="#studentCode")
+    @Cacheable(value = CACHE_EXISTS, key ="#studentCode")
     public boolean existsByStudentCode(String studentCode){
         return exchangeClassRequestRepository.existsByStudentCode(studentCode);
     }

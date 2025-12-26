@@ -1,5 +1,6 @@
 package test.Message;
 
+import main.dto.Message.CreateMessageDTO;
 import main.dto.Message.GetMessageDTO;
 import main.entity.Message;
 import main.exception.BaseException;
@@ -43,10 +44,10 @@ public class MessageServiceUnitTest {
     @Test
     public void testSave() {
         System.out.println("Running testSave...");
-        List<GetMessageDTO> dtos = util.getGetMessageDTOs();
+        List<CreateMessageDTO> dtos = util.getGetMessageDTOs();
         List<Message> expectedMessages = util.getTestMessages();
         for (int i = 0; i < dtos.size(); i++) {
-            GetMessageDTO dto = dtos.get(i);
+            CreateMessageDTO dto = dtos.get(i);
             Message expected = expectedMessages.get(i);
 
             when(mapper.toEntity(dto)).thenReturn(expected);

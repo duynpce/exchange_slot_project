@@ -17,16 +17,17 @@ general documents :
   .....
 - Backend:
     - Folder Structure :
-        - DTO(data transfer object): objects used for communicate with client (frontend)
-        - Entity: ORM to perform operations with Database
-        - Mapper: Transfer (map) DTO into Entity and vice versa
-        - Repository(interface): Extends JpaRepository  to interact with Database
-        - Service: Call Repository and contain specific logic for a specific object
-        - Validator: Validate if the request of client (frontend) is valid
-        - Controller: Define url , query method and call Service and Validator
-        - Exception : Contain custom exception and global exception handler
-        - Config: Configuration of security(Spring security), cache (redis) and web socket
-        - Utility : Contain methods for general use
+        - dto(data transfer object): objects used for communicate with client (frontend)
+        - entity: ORM to perform operations with Database
+        - mapper: Transfer (map) DTO into Entity and vice versa
+        - repository(interface): Extends JpaRepository  to interact with Database
+        - service: Call Repository and contain specific logic for a specific object
+        - validator: Validate if the request of client (frontend) is valid
+        - controller: Define url , query method and call Service and Validator
+        - exception : Contain custom exception and global exception handler
+        - config: Configuration of security(Spring security), cache (redis) and web socket
+        - utility : Contain methods for general use
+        - constant: contain enums that contain constant values
     - general flow:
         - Input : Client → Request → Controller(DTO ↔ Mapper ↔ Entity) → Validator → Service → Repository → Database
         - Output : Database → Response → Repository → Service → Controller(Entity ↔ Mapper ↔ DTO) → Client

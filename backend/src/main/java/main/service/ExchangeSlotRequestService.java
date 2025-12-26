@@ -22,21 +22,21 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ExchangeSlotRequestService {
-    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
-    private final String cacheData = "exchangeSlotData";
-    private final String cacheExists = "exchangeSlotExists";
-    private final String cacheListData = "listExchangeSlotData";
+    private final int PAGE_SIZE = IntConstant.DEFAULT_PAGE_SIZE.getValue();
+    private final String CACHE_DATA = "exchangeSlotData";
+    private final String CACHE_EXISTS = "exchangeSlotExists";
+    private final String CACHE_LIST_DATA = "listExchangeSlotData";
 
     private final ExchangeSlotRequestRepository exchangeSlotRequestRepository;
 
     @Caching(
             put = {
-                    @CachePut(value = cacheData, key = "#request.studentCode"),
-                    @CachePut(value = cacheData, key = "#request.id"),
+                    @CachePut(value = CACHE_DATA, key = "#request.studentCode"),
+                    @CachePut(value = CACHE_DATA, key = "#request.id"),
             },
             evict = {
-                    @CacheEvict(value = cacheExists, key = "#request.studentCode"),
-                    @CacheEvict(value = cacheListData, allEntries = true),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#request.studentCode"),
+                    @CacheEvict(value = CACHE_LIST_DATA, allEntries = true),
             }
     )
     public ExchangeSlotRequest add(ExchangeSlotRequest request) {
@@ -45,19 +45,19 @@ public class ExchangeSlotRequestService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = cacheData, key = "#request.studentCode"),
-            @CacheEvict(value = cacheData, key = "#request.id"),
-            @CacheEvict(value = cacheExists, key = "#request.studentCode"),
-            @CacheEvict(value = cacheListData, allEntries = true),
+            @CacheEvict(value = CACHE_DATA, key = "#request.studentCode"),
+            @CacheEvict(value = CACHE_DATA, key = "#request.id"),
+            @CacheEvict(value = CACHE_EXISTS, key = "#request.studentCode"),
+            @CacheEvict(value = CACHE_LIST_DATA, allEntries = true),
     })
     public void deleteById(ExchangeSlotRequest request) {
 
         exchangeSlotRequestRepository.deleteById(request.getId());
     }
 
-    @Cacheable(value = cacheListData, key = "{#classCode, #page}")
+    @Cacheable(value = CACHE_LIST_DATA, key = "{#classCode, #page}")
     public List<ExchangeSlotRequest> findByCurrentClassCode(String classCode, int page) {
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         List<ExchangeSlotRequest> data = exchangeSlotRequestRepository.findByCurrentClassCode(classCode, pageable);
 
         if (data.isEmpty()) {
@@ -67,7 +67,7 @@ public class ExchangeSlotRequestService {
     }
 /// for exchange subject request
 //    public List<ExchangeSlotRequest> findBySubjectCode(String subjectCode, int page) {
-//        Pageable pageable = PageRequest.of(page, pageSize);
+//        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
 //
 //        List<ExchangeSlotRequest> data = exchangeSlotRequestRepository.findByMajorClass_ClassCode(subjectCode, pageable);
 //        if (data.isEmpty()) {
@@ -80,7 +80,7 @@ public class ExchangeSlotRequestService {
 //    }
 
 //    public List<ExchangeSlotRequest> findByClassCodeAndSubjectCode(String classCode, String subjectCode, int page) {
-//        Pageable pageable = PageRequest.of(page, pageSize);
+//        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
 //
 //        List<ExchangeSlotRequest> data =
 //                exchangeSlotRequestRepository.findByMajorClass_ClassCodeAndSubject_SubjectCode(classCode, subjectCode,pageable);
@@ -93,9 +93,9 @@ public class ExchangeSlotRequestService {
 //        return data;
 //    }
 
-    @Cacheable(value = cacheListData, key = "{#slot, #page}")
+    @Cacheable(value = CACHE_LIST_DATA, key = "{#slot, #page}")
     public List<ExchangeSlotRequest> findBySlot(String slot, int page) {
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         List<ExchangeSlotRequest> data = exchangeSlotRequestRepository.findByCurrentSlot(slot, pageable);
 
         if (data.isEmpty()) {
@@ -104,25 +104,19 @@ public class ExchangeSlotRequestService {
         return data;
     }
 
-    @Cacheable(value = cacheData, key = "#id")
+    @Cacheable(value = CACHE_DATA, key = "#id")
     public ExchangeSlotRequest findById(int id) {
         return exchangeSlotRequestRepository.findById(id)
                 .orElseThrow(() -> new BaseException("not found request with id : " + id, HttpStatus.NOT_FOUND));
     }
 
-    @Cacheable(value = cacheData, key = "#studentCode")
+    @Cacheable(value = CACHE_DATA, key = "#studentCode")
     public ExchangeSlotRequest findByStudentCode(String studentCode) {
         return exchangeSlotRequestRepository.findByStudentCode(studentCode)
                 .orElseThrow(() -> new BaseException("no exchange request found", HttpStatus.NOT_FOUND));
     }
 
-
-//    @Cacheable(value = cacheData,   key = "#accountId + '-accountId'" )
-    public ExchangeSlotRequest findByAccountId(int accountId) {
-        return exchangeSlotRequestRepository.findByAccountId(accountId).orElse(null);
-    }
-
-    @Cacheable(value = cacheExists, key = "#studentCode")
+    @Cacheable(value = CACHE_EXISTS, key = "#studentCode")
     public boolean existsByStudentCode(String studentCode) {
         return exchangeSlotRequestRepository.existsByStudentCode(studentCode);
     }

@@ -21,25 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class AccountService {
 
-    private final String cacheData = "accountData";
-    private final String cacheExists = "accountExists";
+    private final String CACHE_DATA = "accountData";
+    private final String CACHE_EXISTS = "accountExists";
 
     private final AccountRepository accountRepository;
 
     // cache put to update data in cache and because cacheable will not be called if data is already in cache
     @Caching(
             put = {
-                    @CachePut(value = cacheData, key = "#account.username"),
-                    @CachePut(value = cacheData, key = "#account.studentCode"),
-                    @CachePut(value = cacheData, key = "#account.phoneNumber"),
+                    @CachePut(value = CACHE_DATA, key = "#account.username"),
+                    @CachePut(value = CACHE_DATA, key = "#account.studentCode"),
+                    @CachePut(value = CACHE_DATA, key = "#account.phoneNumber"),
             },
             evict = {
-                    @CacheEvict(value = cacheExists, key = "#account.studentCode"),
-                    @CacheEvict(value = cacheExists, key = "#account.username"),
-                    @CacheEvict(value = cacheExists, key = "#account.accountName"),
-                    @CacheEvict(value = cacheExists, key = "#account.phoneNumber"),
-                    @CacheEvict(value = cacheExists, key = "#account.email"),
-                    @CacheEvict(value = cacheExists, key = "#account.id")
+                    @CacheEvict(value = CACHE_EXISTS, key = "#account.studentCode"),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#account.username"),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#account.accountName"),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#account.phoneNumber"),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#account.email"),
+                    @CacheEvict(value = CACHE_EXISTS, key = "#account.id")
             }
 
     )
@@ -50,50 +50,50 @@ public class AccountService {
 
 
 
-    @Cacheable(value = cacheData, key = "#username")
+    @Cacheable(value = CACHE_DATA, key = "#username")
     public Account findByUsername(String username) {
         return accountRepository.findByUsername(username).orElseThrow
                 (() -> new BaseException("not found account with username : " + username, HttpStatus.NOT_FOUND));
     }
 
-    @Cacheable(value = cacheData , key = "#studentCode")
+    @Cacheable(value = CACHE_DATA , key = "#studentCode")
     public Account findByStudentCode(String studentCode){
         return  accountRepository.findByStudentCode(studentCode).orElseThrow
                 (() -> new BaseException("not found account with studentCode : " + studentCode, HttpStatus.NOT_FOUND));
     }
 
-    @Cacheable(value = cacheData , key = "#email")
+    @Cacheable(value = CACHE_DATA , key = "#email")
     public Account findByEmail(String email){
         return  accountRepository.findByEmail(email).orElseThrow
                 (() -> new BaseException("not found account with email : " + email, HttpStatus.NOT_FOUND));
     }
 
-    @Cacheable(value = cacheExists, key = "#studentCode")
+    @Cacheable(value = CACHE_EXISTS, key = "#studentCode")
     public boolean existsByStudentCode(String studentCode){
         return accountRepository.existsByStudentCode(studentCode);
     }
 
-    @Cacheable(value = cacheExists, key = "#username")
+    @Cacheable(value = CACHE_EXISTS, key = "#username")
     public boolean existsByUsername(String username){
         return accountRepository.existsByUsername(username);
     }
 
-    @Cacheable(value = cacheExists, key = "#accountName")
+    @Cacheable(value = CACHE_EXISTS, key = "#accountName")
     public boolean existsByAccountName(String accountName){
         return accountRepository.existsByAccountName(accountName);
     }
 
-    @Cacheable(value = cacheExists, key = "#phoneNumber")
+    @Cacheable(value = CACHE_EXISTS, key = "#phoneNumber")
     public boolean existsByPhoneNumber(String phoneNumber){
         return accountRepository.existsByPhoneNumber(phoneNumber);
     }
 
-    @Cacheable(value = cacheExists, key = "#id")
+    @Cacheable(value = CACHE_EXISTS, key = "#id")
     public boolean existsById(int id){
         return accountRepository.existsById(id);
     }
 
-    @Cacheable(value = cacheExists, key = "#email")
+    @Cacheable(value = CACHE_EXISTS, key = "#email")
     public boolean existsByEmail(String email) {
         return accountRepository.existsByEmail(email);
     }

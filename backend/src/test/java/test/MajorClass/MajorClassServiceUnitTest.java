@@ -3,7 +3,6 @@ package test.MajorClass;
 import main.entity.MajorClass;
 import main.repository.MajorClassRepository;
 import main.service.MajorClassService;
-import main.utility.CacheUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,9 +26,6 @@ public class MajorClassServiceUnitTest {
 
     @Mock
     MajorClassRepository repository;
-
-    @Mock
-    CacheUtil<MajorClass> cacheUtil;
 
     @InjectMocks
     MajorClassService service;

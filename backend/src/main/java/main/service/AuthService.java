@@ -110,10 +110,10 @@ public class AuthService {
     }
 
     @CacheEvict(value = "ResetToken", key = "#resetPasswordDTO.email") // delete reset token after used
-    public void resetPasswordWithOtp(ResetPasswordDTO resetPasswordDTO){
-        final String email = resetPasswordDTO.getEmail();
-        final String resetToken = resetPasswordDTO.getResetToken();
-        final String newPassword = resetPasswordDTO.getNewPassword();
+    public void resetPasswordWithOtp(ResetPasswordWithOtpDTO resetPasswordWithOtpDTO){
+        final String email = resetPasswordWithOtpDTO.getEmail();
+        final String resetToken = resetPasswordWithOtpDTO.getResetToken();
+        final String newPassword = resetPasswordWithOtpDTO.getNewPassword();
 
         final String cachedResetToken = getResetTokenFromCache(email);
 

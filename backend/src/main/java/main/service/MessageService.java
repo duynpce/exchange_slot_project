@@ -20,21 +20,20 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MessageService {
-    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
-    private final String cacheData = "messageData";
+    private final String CACHE_DATA = "messageData";
 
     private final MessageRepository messageRepository;
 
 
-    @CacheEvict(value = cacheData, allEntries = true)
+    @CacheEvict(value = CACHE_DATA, allEntries = true)
     public Message save(Message message){
 
         return messageRepository.save(message);
     }
 
-    @Cacheable(value = cacheData, key = "{#chatId, #page}")
+    @Cacheable(value = CACHE_DATA, key = "{#chatId, #page}")
     public List<Message> loadMessageByChatId(int chatId, int page){
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, IntConstant.DEFAULT_PAGE_SIZE.getValue());
         List<Message> data = messageRepository.findByChatIdOrderByIdDesc(chatId, pageable);
 
         if(data.isEmpty()) {

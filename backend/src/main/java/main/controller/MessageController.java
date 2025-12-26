@@ -1,6 +1,7 @@
 package main.controller;
 
 import main.dto.Common.ResponseDTO;
+import main.dto.Message.CreateMessageDTO;
 import main.dto.Message.GetMessageDTO;
 import main.entity.Message;
 import main.mapper.MessageMapper;
@@ -28,13 +29,13 @@ public class MessageController {
 
     // WebSocket endpoint to send messages /app/sendMessage
     @MessageMapping("/sendMessage")
-    public void sendMessage(@Payload GetMessageDTO getMessageDTO){
+    public void sendMessage(@Payload CreateMessageDTO createMessageDTO) {
         // Send the message to the specific chat topic, similar to @SendTo("/topic/{chatId}")
-        int chatId = getMessageDTO.getChatId();
-        messagingTemplate.convertAndSend("/topic/" + chatId, getMessageDTO);
+        int chatId = createMessageDTO.getChatId();
+        messagingTemplate.convertAndSend("/topic/" + chatId, createMessageDTO);
 
         // Save the message to the database
-        Message message = messageMapper.toEntity(getMessageDTO);
+        Message message = messageMapper.toEntity(createMessageDTO);
         messageService.save(message);
     }
 

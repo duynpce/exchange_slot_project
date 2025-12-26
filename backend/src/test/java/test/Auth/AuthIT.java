@@ -213,13 +213,13 @@ public class AuthIT extends IntegrationTest {
         assertNotNull(resetTokenDTO);
 
         // Reset password
-        ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO();
-        resetPasswordDTO.setEmail(account.getEmail());
-        resetPasswordDTO.setNewPassword("NewPassword123!");
-        resetPasswordDTO.setResetToken(resetTokenDTO.getResetToken());
+        ResetPasswordWithOtpDTO resetPasswordWithOtpDTO = new ResetPasswordWithOtpDTO();
+        resetPasswordWithOtpDTO.setEmail(account.getEmail());
+        resetPasswordWithOtpDTO.setNewPassword("NewPassword123!");
+        resetPasswordWithOtpDTO.setResetToken(resetTokenDTO.getResetToken());
 
-        authValidator.validateResetPasswordWithOtp(resetPasswordDTO);
-        authService.resetPasswordWithOtp(resetPasswordDTO);
+        authValidator.validateResetPasswordWithOtp(resetPasswordWithOtpDTO);
+        authService.resetPasswordWithOtp(resetPasswordWithOtpDTO);
 
         System.out.println("Reset password with OTP test passed.");
     }
@@ -233,13 +233,13 @@ public class AuthIT extends IntegrationTest {
         authValidator.validateRegister(account);
         authService.register(account);
 
-        ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO();
-        resetPasswordDTO.setEmail(account.getEmail());
-        resetPasswordDTO.setNewPassword("weak"); // Invalid password
-        resetPasswordDTO.setResetToken("some_token");
+        ResetPasswordWithOtpDTO resetPasswordWithOtpDTO = new ResetPasswordWithOtpDTO();
+        resetPasswordWithOtpDTO.setEmail(account.getEmail());
+        resetPasswordWithOtpDTO.setNewPassword("weak"); // Invalid password
+        resetPasswordWithOtpDTO.setResetToken("some_token");
 
         Exception exception = assertThrows(BaseException.class, () -> {
-            authValidator.validateResetPasswordWithOtp(resetPasswordDTO);
+            authValidator.validateResetPasswordWithOtp(resetPasswordWithOtpDTO);
         });
 
         String expectedMessage = "invalid password";

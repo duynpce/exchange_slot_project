@@ -105,7 +105,7 @@ public class AuthServiceUnitTest {
             String resetToken = "resetToken";
             String newPassword = "newPassword";
             String email = input.getEmail();
-            ResetPasswordDTO request = new ResetPasswordDTO(email,resetToken, newPassword);
+            ResetPasswordWithOtpDTO request = new ResetPasswordWithOtpDTO(email,resetToken, newPassword);
 
             when(cacheManager.getCache("ResetToken")).thenReturn(cache);
             when(cache.get(email, ResetTokenDTO.class)).thenReturn(new ResetTokenDTO(resetToken, email));

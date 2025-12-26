@@ -2,7 +2,7 @@ package main.validator;
 
 import main.dto.Auth.ForgetPasswordDTO;
 import main.dto.Auth.LoginRequestDTO;
-import main.dto.Auth.ResetPasswordDTO;
+import main.dto.Auth.ResetPasswordWithOtpDTO;
 import main.dto.Auth.ResetPasswordWithJwtDTO;
 import main.constant.Role;
 import main.exception.BaseException;
@@ -66,9 +66,9 @@ public class AuthValidator {
 
     }
 
-    public void validateResetPasswordWithOtp(ResetPasswordDTO resetPasswordDTO){
-        final String newPassword = resetPasswordDTO.getNewPassword();
-        final String email = resetPasswordDTO.getEmail();
+    public void validateResetPasswordWithOtp(ResetPasswordWithOtpDTO resetPasswordWithOtpDTO){
+        final String newPassword = resetPasswordWithOtpDTO.getNewPassword();
+        final String email = resetPasswordWithOtpDTO.getEmail();
 
         boolean isValidPassword = util.validatePassword(newPassword);
 

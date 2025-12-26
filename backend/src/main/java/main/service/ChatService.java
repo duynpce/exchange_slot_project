@@ -19,18 +19,18 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ChatService {
-    private final int pageSize = IntConstant.DEFAULT_PAGE_SIZE.getValue();
 
+    private static final String CACHE_NAME = "chatData";
     private final ChatRepository chatRepository;
 
-    @CacheEvict(value = "chatData", allEntries = true)
+    @CacheEvict(value = CACHE_NAME, allEntries = true)
     public Chat add(Chat chat) {
         return chatRepository.save(chat);
     }
 
-    @Cacheable(value = "chatData", key = "{#userId,#page}")
+    @Cacheable(value = CACHE_NAME, key = "{#userId,#page}")
     public List<Chat> findByUserId(int userId, int page) {
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, IntConstant.DEFAULT_PAGE_SIZE.getValue());
         List<Chat> data = chatRepository.findByUserId(userId, pageable);
 
         if(data.isEmpty()) {

@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResetPasswordDTO {
+public class ResetPasswordWithOtpDTO {
     @NotBlank(message = "blank email")
     @Email
     private String email;

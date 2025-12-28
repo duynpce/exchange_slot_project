@@ -13,8 +13,6 @@ main features:
 - Real-time chat application with web socket (implementing).
 
 general documents :
-- Frontend:
-  .....
 - Backend:
     - Folder Structure :
         - dto(data transfer object): objects used for communicate with client (frontend)

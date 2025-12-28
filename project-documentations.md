@@ -31,9 +31,6 @@ features:
 
 general documentations:
 
-    - Frontend:
-    .....
-
     - Backend:
         - Conventions:
             nameing:
@@ -61,9 +58,6 @@ general documentations:
             - Output : Database → Response → Repository → Service → Controller(Entity ↔ Mapper ↔ DTO) → Client
 
 details documentations:
-
-    Frontend:
-    .....
 
     Backend: 
         dto : 
